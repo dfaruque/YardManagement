@@ -14,13 +14,23 @@
     <script src="scripts/Oimo.js"></script>
     <script src="scripts/babylon.js"></script>
 
+    <script src="scripts/babylon.editor.core.js"></script>
+    <script src="scripts/jquery-3.1.0.min.js"></script>
+    <script src="scripts/babylon.editor.transformer.js"></script> 
+    <script src="scripts/babylon.editor.sceneManager.js"></script>
     <script src="scripts/babylon.gridMaterial.js"></script>
+
+
+
+    <script src="scripts/babylon.editor.main.js"></script>
 
     <link rel="stylesheet" href="app.css" type="text/css" />
 
 </head>
 <body>
     <canvas id="renderCanvas"></canvas>
+    <canvas id="BABYLON-EDITOR-MAIN-CANVAS"></canvas>
+
     <div id="divConsole">
         <div>
             Selected Container position: X=
@@ -83,5 +93,17 @@
 
     <script src="scripts/vue.js"></script>
     <script src="app.js"></script>
+
+    <script src="scripts/internal/babylon.editor.event.js"></script>
+    <script type="text/javascript">
+
+        var editorMain = new BABYLON.EDITOR.EditorMain("BABYLON-EDITOR-MAIN");
+        var core = editorMain.core;
+        editorMain.createRenderLoop();
+
+        //core.editor.sceneGraphTool.fillGraph();
+        BABYLON.EDITOR.Event.sendSceneEvent(core.currentScene, BABYLON.EDITOR.SceneEventType.OBJECT_PICKED, core);
+    </script>
+
 </body>
 </html>

@@ -9,12 +9,12 @@ var BABYLON;
             TransformerType[TransformerType["NOTHING"] = 3] = "NOTHING";
         })(EDITOR.TransformerType || (EDITOR.TransformerType = {}));
         var TransformerType = EDITOR.TransformerType;
-        var Transformer /*implements IEventReceiver, ICustomUpdate*/ = (function () {
+        var Transformer = (function () {
             /**
             * Constructor
             * @param core: the editor core instance
             */
-            function Transformer /*implements IEventReceiver, ICustomUpdate*/(core) {
+            function Transformer(core) {
                 var _this = this;
                 // Public members
                 this.core = null;
@@ -64,8 +64,8 @@ var BABYLON;
                     }
                     _this._pickingInfo = null;
                     core.currentScene.activeCamera.attachControl(core.canvas);
-                    //if (this._node)
-                    //    Event.sendSceneEvent(this._node, SceneEventType.OBJECT_CHANGED, core);
+                    if (_this._node)
+                        EDITOR.Event.sendSceneEvent(_this._node, EDITOR.SceneEventType.OBJECT_CHANGED, core);
                 });
                 $(window).keydown(function (event) {
                     if (event.ctrlKey && _this._ctrlIsDown === false) {
@@ -84,10 +84,10 @@ var BABYLON;
                 // Create Transformers
                 this._createTransformers();
                 // Helper
-                this.createHelpers();
+                this.createHelpers(core);
             }
             // Create helpers
-            Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype.createHelpers = function () {
+            Transformer.prototype.createHelpers = function (core) {
                 this._planeMaterial = new BABYLON.StandardMaterial("HelperPlaneMaterial", this._scene);
                 this._planeMaterial.emissiveColor = BABYLON.Color3.White();
                 this._planeMaterial.useAlphaFromDiffuseTexture = true;
@@ -108,26 +108,26 @@ var BABYLON;
                 this._helperPlane.material = this._planeMaterial;
             };
             // Event receiver
-            Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype.onEvent = function (event) {
-                //if (event.eventType === EventType.SCENE_EVENT) {
-                //    if (event.sceneEvent.eventType === SceneEventType.OBJECT_REMOVED) {
-                //        if (event.sceneEvent.data === this._node) {
-                //            this._node = null;
-                //            return false;
-                //        }
-                //    }
-                //    else if (event.sceneEvent.eventType === SceneEventType.OBJECT_PICKED) {
-                //        if (event.sceneEvent.object)
-                //            this._node = event.sceneEvent.object;
-                //        else
-                //            this._node = null;
-                //        return false;
-                //    }
-                //}
+            Transformer.prototype.onEvent = function (event) {
+                if (event.eventType === EDITOR.EventType.SCENE_EVENT) {
+                    if (event.sceneEvent.eventType === EDITOR.SceneEventType.OBJECT_REMOVED) {
+                        if (event.sceneEvent.data === this._node) {
+                            this._node = null;
+                            return false;
+                        }
+                    }
+                    else if (event.sceneEvent.eventType === EDITOR.SceneEventType.OBJECT_PICKED) {
+                        if (event.sceneEvent.object)
+                            this._node = event.sceneEvent.object;
+                        else
+                            this._node = null;
+                        return false;
+                    }
+                }
                 return false;
             };
             // On pre update
-            Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype.onPreUpdate = function () {
+            Transformer.prototype.onPreUpdate = function () {
                 // Update camera
                 this._scene.activeCamera = this.core.currentScene.activeCamera;
                 // Compute node
@@ -165,7 +165,7 @@ var BABYLON;
                     this._updateTransform(distance);
             };
             // On post update
-            Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype.onPostUpdate = function () {
+            Transformer.prototype.onPostUpdate = function () {
                 //this._helperPlane.setEnabled(!this.core.isPlaying && this.core.editor.renderHelpers);
                 var _this = this;
                 if ((this.core.isPlaying && this.core.currentScene.activeCamera !== this.core.camera) || !this.core.editor.renderHelpers)
@@ -207,7 +207,7 @@ var BABYLON;
                     });
                 }
             };
-            Object.defineProperty(Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype, "transformerType", {
+            Object.defineProperty(Transformer.prototype, "transformerType", {
                 // Get transformer type (POSITION, ROTATION or SCALING)
                 get: function () {
                     return this._transformerType;
@@ -230,7 +230,7 @@ var BABYLON;
                 enumerable: true,
                 configurable: true
             });
-            Object.defineProperty(Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype, "node", {
+            Object.defineProperty(Transformer.prototype, "node", {
                 // Get the node to transform
                 get: function () {
                     return this._node;
@@ -243,11 +243,11 @@ var BABYLON;
                 configurable: true
             });
             // Returns the scene
-            Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype.getScene = function () {
+            Transformer.prototype.getScene = function () {
                 return this._scene;
             };
             // Returns the node position
-            Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype._getNodePosition = function () {
+            Transformer.prototype._getNodePosition = function () {
                 var node = this._node;
                 var position = null;
                 /*
@@ -263,7 +263,7 @@ var BABYLON;
                 return position;
             };
             // Render planes
-            Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype._renderHelperPlane = function (array, onConfigure) {
+            Transformer.prototype._renderHelperPlane = function (array, onConfigure) {
                 var effect = this._planeMaterial.getEffect();
                 for (var i = 0; i < array.length; i++) {
                     var obj = array[i];
@@ -280,7 +280,7 @@ var BABYLON;
                 }
             };
             // Updates the transformer (picking + manage movements)
-            Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype._updateTransform = function (distance) {
+            Transformer.prototype._updateTransform = function (distance) {
                 if (this._pickingInfo === null) {
                     // Pick
                     var pickInfo = this._scene.pick(this._scene.pointerX, this._scene.pointerY);
@@ -349,7 +349,7 @@ var BABYLON;
                 }
             };
             // Returns if the ray intersects the transformer plane
-            Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype._getIntersectionWithLine = function (linePoint, lineVect) {
+            Transformer.prototype._getIntersectionWithLine = function (linePoint, lineVect) {
                 var t2 = BABYLON.Vector3.Dot(this._pickingPlane.normal, lineVect);
                 if (t2 === 0)
                     return false;
@@ -358,14 +358,14 @@ var BABYLON;
                 return true;
             };
             // Fins the mouse position in plane
-            Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype._findMousePositionInPlane = function (pickingInfos) {
+            Transformer.prototype._findMousePositionInPlane = function (pickingInfos) {
                 var ray = this._scene.createPickingRay(this._scene.pointerX, this._scene.pointerY, BABYLON.Matrix.Identity(), this._scene.activeCamera);
                 if (this._getIntersectionWithLine(ray.origin, ray.direction))
                     return true;
                 return false;
             };
             // Create transformers
-            Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype._createTransformers = function () {
+            Transformer.prototype._createTransformers = function () {
                 var colors = [
                     new BABYLON.Color3(1, 0, 0),
                     new BABYLON.Color3(0, 1, 0),
@@ -409,7 +409,7 @@ var BABYLON;
                 }
             };
             // Create position transformer
-            Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype._createPositionTransformer = function (color, id) {
+            Transformer.prototype._createPositionTransformer = function (color, id) {
                 var mesh = BABYLON.Mesh.CreateCylinder("PositionTransformer" + id, 8, 0.4, 0.4, 8, 1, this._scene, true);
                 mesh.scaling = this._sharedScale;
                 mesh.isPickable = true;
@@ -425,7 +425,7 @@ var BABYLON;
                 return mesh;
             };
             // Create rotation transformer
-            Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype._createRotationTransformer = function (color, id) {
+            Transformer.prototype._createRotationTransformer = function (color, id) {
                 var mesh = BABYLON.Mesh.CreateTorus("RotationTransformer" + id, 20, 0.75, 35, this._scene, true);
                 mesh.scaling = this._sharedScale;
                 var material = new BABYLON.StandardMaterial("RotationTransformerMaterial" + id, this._scene);
@@ -434,7 +434,7 @@ var BABYLON;
                 return mesh;
             };
             // Create scale transformer
-            Transformer /*implements IEventReceiver, ICustomUpdate*/.prototype._createScalingTransformer = function (color, id) {
+            Transformer.prototype._createScalingTransformer = function (color, id) {
                 var mesh = BABYLON.Mesh.CreateCylinder("ScalingTransformer" + id, 8, 0.4, 0.4, 8, 1, this._scene, true);
                 mesh.scaling = this._sharedScale;
                 mesh.isPickable = true;
@@ -448,9 +448,9 @@ var BABYLON;
                 mesh2.material = material;
                 return mesh;
             };
-            return Transformer /*implements IEventReceiver, ICustomUpdate*/;
+            return Transformer;
         }());
-        EDITOR.Transformer /*implements IEventReceiver, ICustomUpdate*/ = Transformer /*implements IEventReceiver, ICustomUpdate*/;
+        EDITOR.Transformer = Transformer;
     })(EDITOR = BABYLON.EDITOR || (BABYLON.EDITOR = {}));
 })(BABYLON || (BABYLON = {}));
 //# sourceMappingURL=babylon.editor.transformer.js.map

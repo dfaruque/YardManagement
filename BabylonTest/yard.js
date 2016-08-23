@@ -9,6 +9,7 @@ camera.upperBetaLimit = (Math.PI / 2) * 0.99;
 camera.lowerRadiusLimit = 150;
 camera.attachControl(canvas, true);
 scene.clearColor = BABYLON.Color3.Black();
+var cc = { canvas: canvas, engine: engine, currentScene: scene, camera: camera, editor: null, isPlaying: false, playCamera: camera, scenes: [scene] };
 // Light
 var light = new BABYLON.DirectionalLight("dir01", new BABYLON.Vector3(-0.5, -1, -0.5), scene);
 light.diffuse = new BABYLON.Color3(1, 1, 1);
@@ -53,6 +54,7 @@ greenBox.scaling = new BABYLON.Vector3(2, 1, 1);
 greenBox.position.x += 200;
 greenBox.position.z += 100;
 greenBox.position.y = 10;
+//BABYLON.EDITOR.SceneManager.ConfigureObject(greenBox, cc);
 shadowGenerator.getShadowMap().renderList.push(greenBox);
 var blueBox = BABYLON.Mesh.CreateBox("blue", 20, scene);
 var blueMat = new BABYLON.StandardMaterial("ground", scene);
@@ -64,6 +66,7 @@ blueBox.scaling = new BABYLON.Vector3(2, 1, 1);
 blueBox.position.x += 100;
 blueBox.position.z += 100;
 blueBox.position.y = 100;
+//BABYLON.EDITOR.SceneManager.ConfigureObject(blueBox, cc);
 shadowGenerator.getShadowMap().renderList.push(blueBox);
 //Actions
 currentMesh = blueBox;
@@ -81,21 +84,21 @@ var prepareButton = function (mesh, color, light) {
     mesh.actionManager.registerAction(new BABYLON.SetStateAction(BABYLON.ActionManager.OnPickTrigger, light, "off"))
         .then(new BABYLON.SetStateAction(BABYLON.ActionManager.OnPickTrigger, light, "on"));
 };
-prepareButton(greenBox, BABYLON.Color3.Green(), light2);
-prepareButton(blueBox, BABYLON.Color3.Blue(), light3);
+//prepareButton(greenBox, BABYLON.Color3.Green(), light2);
+//prepareButton(blueBox, BABYLON.Color3.Blue(), light3);
 // Conditions
-sphere.actionManager = new BABYLON.ActionManager(scene);
-var condition1 = new BABYLON.StateCondition(sphere.actionManager, light1, "off");
-var condition2 = new BABYLON.StateCondition(sphere.actionManager, light1, "on");
-sphere.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnLeftPickTrigger, camera, "alpha", 0, 500, condition1));
-sphere.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnLeftPickTrigger, camera, "alpha", Math.PI, 500, condition2));
+//sphere.actionManager = new BABYLON.ActionManager(scene);
+//var condition1 = new BABYLON.StateCondition(sphere.actionManager, light1, "off");
+//var condition2 = new BABYLON.StateCondition(sphere.actionManager, light1, "on");
+//sphere.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnLeftPickTrigger, camera, "alpha", 0, 500, condition1));
+//sphere.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnLeftPickTrigger, camera, "alpha", Math.PI, 500, condition2));
 // Over/Out
 var makeOverOut = function (mesh) {
     mesh.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPointerOverTrigger, mesh.material, "emissiveColor", BABYLON.Color3.Black()));
     mesh.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPointerOutTrigger, mesh.material, "emissiveColor", mesh.material.emissiveColor));
 };
-makeOverOut(greenBox);
-makeOverOut(blueBox);
+//makeOverOut(greenBox);
+//makeOverOut(blueBox);
 // scene's actions
 //scene.actionManager = new BABYLON.ActionManager(scene);
 //var rotate = function (mesh) {
@@ -163,16 +166,19 @@ var onPointerMove = function (evt) {
     currentMesh.position.addInPlace(diff);
     startingPoint = current;
 };
-canvas.addEventListener("pointerdown", onPointerDown, false);
-canvas.addEventListener("pointerup", onPointerUp, false);
-canvas.addEventListener("pointermove", onPointerMove, false);
+//canvas.addEventListener("pointerdown", onPointerDown, false);
+//canvas.addEventListener("pointerup", onPointerUp, false);
+//canvas.addEventListener("pointermove", onPointerMove, false);
 scene.onDispose = function () {
     canvas.removeEventListener("pointerdown", onPointerDown);
     canvas.removeEventListener("pointerup", onPointerUp);
     canvas.removeEventListener("pointermove", onPointerMove);
 };
+//var transformer = new BABYLON.EDITOR.Transformer(cc);
+//transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
 engine.runRenderLoop(function () {
-    scene.render();
+    //scene.render();
+    //transformer.getScene().render();
 });
 // Resize
 window.addEventListener("resize", function () {

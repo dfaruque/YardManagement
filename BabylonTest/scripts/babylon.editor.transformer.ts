@@ -6,7 +6,7 @@
         NOTHING = 3
     }
 
-    export class Transformer /*implements IEventReceiver, ICustomUpdate*/ {
+    export class Transformer implements IEventReceiver, ICustomUpdate {
         // Public members
         public core: EditorCore = null;
 
@@ -73,8 +73,8 @@
                 this._pickingInfo = null;
                 core.currentScene.activeCamera.attachControl(core.canvas);
 
-                //if (this._node)
-                //    Event.sendSceneEvent(this._node, SceneEventType.OBJECT_CHANGED, core);
+                if (this._node)
+                    Event.sendSceneEvent(this._node, SceneEventType.OBJECT_CHANGED, core);
             });
 
             $(window).keydown((event: KeyboardEvent) => {
@@ -97,11 +97,11 @@
             this._createTransformers();
 
             // Helper
-            this.createHelpers();
+            this.createHelpers(core);
         }
 
         // Create helpers
-        public createHelpers(): void {
+        public createHelpers(core: EditorCore): void {
             this._planeMaterial = new StandardMaterial("HelperPlaneMaterial", this._scene);
             this._planeMaterial.emissiveColor = Color3.White();
             this._planeMaterial.useAlphaFromDiffuseTexture = true;
@@ -128,21 +128,21 @@
 
         // Event receiver
         public onEvent(event: Event): boolean {
-            //if (event.eventType === EventType.SCENE_EVENT) {
-            //    if (event.sceneEvent.eventType === SceneEventType.OBJECT_REMOVED) {
-            //        if (event.sceneEvent.data === this._node) {
-            //            this._node = null;
-            //            return false;
-            //        }
-            //    }
-            //    else if (event.sceneEvent.eventType === SceneEventType.OBJECT_PICKED) {
-            //        if (event.sceneEvent.object)
-            //            this._node = event.sceneEvent.object;
-            //        else
-            //            this._node = null;
-            //        return false;
-            //    }
-            //}
+            if (event.eventType === EventType.SCENE_EVENT) {
+                if (event.sceneEvent.eventType === SceneEventType.OBJECT_REMOVED) {
+                    if (event.sceneEvent.data === this._node) {
+                        this._node = null;
+                        return false;
+                    }
+                }
+                else if (event.sceneEvent.eventType === SceneEventType.OBJECT_PICKED) {
+                    if (event.sceneEvent.object)
+                        this._node = event.sceneEvent.object;
+                    else
+                        this._node = null;
+                    return false;
+                }
+            }
 
             return false;
         }
@@ -257,7 +257,7 @@
         // Set transformer type
         public set transformerType(type: TransformerType) {
             this._transformerType = type;
-            
+
             // Hide all
             for (var i = 0; i < TransformerType.NOTHING; i++) {
                 this._xTransformers[i].setEnabled(false);
@@ -317,8 +317,8 @@
                     continue;
 
                 var distance = Vector3.Distance(this.core.currentScene.activeCamera.position, this._helperPlane.position) * 0.03;
-                this._helperPlane.scaling = new Vector3(distance, distance, distance), 
-                this._helperPlane.computeWorldMatrix(true);
+                this._helperPlane.scaling = new Vector3(distance, distance, distance),
+                    this._helperPlane.computeWorldMatrix(true);
 
                 this._scene._cachedMaterial = null;
                 this._planeMaterial.bind(this._helperPlane.getWorldMatrix(), this._helperPlane);
@@ -425,7 +425,7 @@
         // Fins the mouse position in plane
         private _findMousePositionInPlane(pickingInfos: PickingInfo): boolean {
             var ray = this._scene.createPickingRay(this._scene.pointerX, this._scene.pointerY, Matrix.Identity(), this._scene.activeCamera);
-            
+
             if (this._getIntersectionWithLine(ray.origin, ray.direction))
                 return true;
 
