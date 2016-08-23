@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>Babylon.js sample code</title>
+    <!-- Babylon.js -->
+    <!--<script src="http://www.babylonjs.com/hand.minified-1.2.js"></script>-->
+    <script src="http://www.babylonjs.com/cannon.js"></script>
+    <!--<script src="http://www.babylonjs.com/oimo.js"></script>
+    <script src="http://www.babylonjs.com/babylon.js"></script>-->
+
+    <script src="scripts/hand.minified-1.2.js"></script>
+    <script src="scripts/Oimo.js"></script>
+    <script src="scripts/babylon.js"></script>
+
+    <script src="scripts/babylon.gridMaterial.js"></script>
+
+    <link rel="stylesheet" href="app.css" type="text/css" />
+
+</head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+    <div id="divConsole">
+        <div>
+            Selected Container position: X=
+            <input type="text" v-model="selectedContainer.position.x" number />
+            Z=
+            <input type="text" v-model="selectedContainer.position.z" number />
+            Y=
+            <input type="text" v-model="selectedContainer.position.y" number/>
+
+        </div>
+        <div>
+            Selected Container location: column=
+            <input type="text" v-model="selectedContainerLocationColumn" number />
+            row=
+            <input type="text" v-model="selectedContainerLocationRow" number />
+            level=
+            <input type="text" v-model="selectedContainerLocationLevel" number />
+
+        </div>
+
+        <div>
+            Position: X=
+            <input type="text" v-model="inputPosition.x" />
+            Z=
+            <input type="text" v-model="inputPosition.z" />
+            Y=
+            <input type="text" v-model="inputPosition.y" />
+
+            <input type="button" @click="addContainer" value="Add Container" />
+        </div>
+
+        <div>
+            location: column=
+            <input type="text" v-model="inputPositionColumn" />
+            row=
+            <input type="text" v-model="inputPositionRow" />
+            level=
+            <input type="text" v-model="inputPositionLevel" />
+
+            <input type="button" @click="addContainer" value="Add Container" />
+        </div>
+        <div>
+            <div>
+                <input type="button" @click="moveUp" value="▲" />
+                <input type="button" @click="moveDown" value="▼" />
+            </div>
+            <div>
+                <input type="button" @click="moveLeft" value="◄" />
+                <input type="button" @click="moveRight" value="►" />
+            </div>
+            <div>
+                <input type="button" @click="moveForward" value="↓" />
+                <input type="button" @click="moveBackword" value="↑" />
+            </div>
+
+        </div>
+    </div>
+
+    <script src="yard.js"></script>
+
+    <script src="scripts/vue.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
