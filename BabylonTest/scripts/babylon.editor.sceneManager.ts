@@ -68,8 +68,6 @@
                 mesh.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickUpTrigger, (evt: ActionEvent) => {
                     if (scene.pointerX === mouseX && scene.pointerY === mouseY) {
                         Event.sendSceneEvent(mesh, SceneEventType.OBJECT_PICKED, core);
-                        //core.editor.sceneGraphTool.sidebar.setSelected(mesh.id);
-                        //core.editor.sceneToolbar.setFocusOnObject(mesh);
                        this.setFocusOnObject(mesh);
                     }
                 }));
@@ -80,10 +78,10 @@
             }
 
             // Send event configured
-            var ev = new Event();
-            ev.eventType = EventType.SCENE_EVENT;
-            ev.sceneEvent = new SceneEvent(object, BABYLON.EDITOR.SceneEventType.OBJECT_PICKED);
-            core.sendEvent(ev);
+            ////var ev = new Event();
+            ////ev.eventType = EventType.SCENE_EVENT;
+            ////ev.sceneEvent = new SceneEvent(object, BABYLON.EDITOR.SceneEventType.OBJECT_PICKED);
+            ////core.sendEvent(ev);
         }
 
         // Sets the focus of the camera

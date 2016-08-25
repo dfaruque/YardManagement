@@ -17,6 +17,7 @@ var BABYLON;
                 this.updates = new Array();
                 this.eventReceivers = new Array();
                 this.editor = null;
+                this.shadowGenerator = null;
             }
             /**
             * Removes a scene

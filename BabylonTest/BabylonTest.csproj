@@ -85,6 +85,7 @@
     <TypeScriptCompile Include="scripts\typings\materials\babylon.skyMaterial.d.ts" />
     <TypeScriptCompile Include="scripts\typings\vue\vue.d.ts" />
     <TypeScriptCompile Include="scripts\typings\w2ui.d.ts" />
+    <TypeScriptCompile Include="yard.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

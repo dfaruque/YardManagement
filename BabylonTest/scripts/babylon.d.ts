@@ -9050,7 +9050,7 @@ declare module BABYLON {
 }
 
 declare module BABYLON {
-    class OimoJSPlugin  {
+    class OimoJSPlugin {
         world: any;
         name: string;
         constructor(iterations?: number);

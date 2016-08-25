@@ -262,6 +262,64 @@ var BABYLON;
                 this.ConfigureObject(skybox, core);
                 return skybox;
             };
+            // Adds a water mesh (with water material)
+            ////static AddWaterMesh(core: EditorCore): Mesh {
+            ////    var waterMaterial = new WaterMaterial("waterMaterail", core.currentScene);
+            ////    var water = WaterMaterial.CreateDefaultMesh("waterMesh", core.currentScene);
+            ////    water.id = this.GenerateUUID();
+            ////    water.material = waterMaterial;
+            ////    this.ConfigureObject(water, core);
+            ////    // Add meshes in reflection automatically
+            ////    for (var i = 0; i < core.currentScene.meshes.length - 1; i++) {
+            ////        waterMaterial.addToRenderList(core.currentScene.meshes[i]);
+            ////    }
+            ////    return water;
+            ////}
+            SceneFactory.AddYardContainer = function (core, id, location, color) {
+                var yardContainer = BABYLON.Mesh.CreateBox("yardContainer" + id, 1, core.currentScene, false);
+                yardContainer.id = "yardContainer" + id;
+                yardContainer.position = new BABYLON.Vector3(location.column * multiplicationFactor, location.level * multiplicationFactor, location.row * multiplicationFactor);
+                yardContainer.scaling = new BABYLON.Vector3(2 * multiplicationFactor, 1 * multiplicationFactor, 1 * multiplicationFactor);
+                var containerMaterial = new BABYLON.StandardMaterial("containerMaterial", core.currentScene);
+                containerMaterial.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+                containerMaterial.specularColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+                containerMaterial.emissiveColor = color;
+                yardContainer.material = containerMaterial;
+                core.shadowGenerator.getShadowMap().renderList.push(yardContainer);
+                yardContainer.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: multiplicationFactor, friction: 0.7, restitution: 0.5 });
+                this.ConfigureObject(yardContainer, core);
+                return yardContainer;
+            };
+            SceneFactory.AddYardBlockGroundMesh = function (core, id, width, height) {
+                var ground = BABYLON.MeshBuilder.CreateGround("block" + id, {
+                    width: width * multiplicationFactor + width * 2,
+                    height: height * multiplicationFactor + height * 2,
+                }, core.currentScene);
+                ground.position = BABYLON.Vector3.Zero();
+                ground.id = "yardContainer" + id;
+                var groundMaterial = new BABYLON.StandardMaterial("ground", core.currentScene);
+                groundMaterial.diffuseColor = new BABYLON.Color3(0.6, 0.5, 0.4);
+                groundMaterial.specularColor = new BABYLON.Color3(0.5, 0.6, 0.7);
+                groundMaterial.emissiveColor = BABYLON.Color3.Black();
+                ground.material = groundMaterial;
+                ground.receiveShadows = true;
+                ground.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: 0 });
+                this.ConfigureObject(ground, core);
+                return ground;
+            };
+            SceneFactory.AddYardSkyMesh = function (core) {
+                var skyboxMaterial = new BABYLON.SkyMaterial("skyMaterial", core.currentScene);
+                skyboxMaterial.backFaceCulling = false;
+                var skybox = BABYLON.Mesh.CreateSphere("skyBox", 3, 10 * multiplicationFactor, core.currentScene);
+                skybox.id = this.GenerateUUID();
+                skybox.material = skyboxMaterial;
+                return skybox;
+            };
+            SceneFactory.AddYardDirectionalLight = function (core) {
+                var light = new BABYLON.DirectionalLight("New DirectionalLight", new BABYLON.Vector3(0, -2, -1), core.currentScene);
+                light.position = new BABYLON.Vector3(10 * multiplicationFactor, 10 * multiplicationFactor, 10 * multiplicationFactor);
+                return light;
+            };
             // Public members
             SceneFactory.HDRPipeline = null;
             SceneFactory.SSAOPipeline = null;

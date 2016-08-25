@@ -185,7 +185,7 @@
                 // Reset UI
                 ////this.sceneGraphTool.createUI();
                 ////this.sceneGraphTool.fillGraph();
-                
+
                 SceneFactory.NodesToStart = [];
                 ////this.timeline.reset();
             };
@@ -217,10 +217,17 @@
         * Creates the editor camera
         */
         private _createBabylonCamera(): void {
-            var camera = new ArcRotateCamera("EditorCamera", 0, 0, 10, Vector3.Zero(), this.core.currentScene);
-            camera.panningSensibility = 50;
-            camera.attachControl(this.core.canvas, false, false);
+            //var camera = new ArcRotateCamera("EditorCamera", 0, 0, 10, Vector3.Zero(), this.core.currentScene);
+            //camera.panningSensibility = 50;
+            //camera.attachControl(this.core.canvas, false, false);
 
+            var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, multiplicationFactor, new BABYLON.Vector3(0, 0, 0), this.core.currentScene);
+
+            camera.lowerBetaLimit = 0.1;
+            camera.upperBetaLimit = (Math.PI / 2) * 0.99;
+            camera.lowerRadiusLimit = multiplicationFactor;
+
+            camera.setPosition(new BABYLON.Vector3(0, multiplicationFactor, multiplicationFactor));
             this.core.camera = camera;
         }
 

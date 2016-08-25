@@ -17,6 +17,8 @@
 
         public editor: EditorMain = null;
 
+        public shadowGenerator = null;
+
         /**
         * Constructor
         */
