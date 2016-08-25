@@ -1,5 +1,5 @@
 ﻿declare class yLocation {
-    column: number;
-    row: number;
-    level: number;
+    column_z: number;
+    row_x: number;
+    level_y: number;
 }

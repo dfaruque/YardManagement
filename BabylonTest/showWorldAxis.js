@@ -15,7 +15,8 @@ function showWorldAxis(size) {
         pmat.backFaceCulling = false;
         pmat.specularColor = new BABYLON.Color3(1, 1, 1);
         pmat.diffuseTexture = dynamicTexture;
-        pmat.emissiveColor = BABYLON.Color3.Yellow();
+        pmat.emissiveColor = new BABYLON.Color3(1, 1, 1);
+        pmat.diffuseColor = color;
         plane.material = pmat;
         return plane;
     };

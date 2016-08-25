@@ -278,7 +278,7 @@ var BABYLON;
             SceneFactory.AddYardContainer = function (core, id, location, color) {
                 var yardContainer = BABYLON.Mesh.CreateBox("yardContainer" + id, 1, core.currentScene, false);
                 yardContainer.id = "yardContainer" + id;
-                yardContainer.position = new BABYLON.Vector3((location.column - 3) * multiplicationFactor * 2, location.level * multiplicationFactor / 2, (location.row - 4.5) * multiplicationFactor);
+                yardContainer.position = new BABYLON.Vector3((location.row_x - 3) * multiplicationFactor * 2, location.level_y * multiplicationFactor / 2, (location.column_z - 4.5) * multiplicationFactor);
                 console.log(yardContainer.position);
                 yardContainer.scaling = new BABYLON.Vector3(2 * multiplicationFactor, 1 * multiplicationFactor, 1 * multiplicationFactor);
                 var containerMaterial = new BABYLON.StandardMaterial("containerMaterial", core.currentScene);

@@ -7,7 +7,7 @@
 /// <reference path="scripts/babylon.editor.main.ts" />
 
 var containerNo = 1;
-var inputLocation: yLocation = { column: 1, row: 1, level:1 };
+var inputLocation: yLocation = { column_z: 1, row_x: 1, level_y:1 };
 
 var yard = {
     name: 'yard1',
@@ -39,7 +39,7 @@ var block = BABYLON.EDITOR.SceneFactory.AddYardBlockGroundMesh(core, '1',9,6);
 core.shadowGenerator = new BABYLON.ShadowGenerator(100, light);
 editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
 
-showWorldAxis(20);
+showWorldAxis(100);
 
 //BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++,
 //    { column: 2, row: 2, level: 1 },
@@ -112,7 +112,7 @@ var vm = new Vue({
     methods: {
         addContainer: () => {
             var con = BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++,
-                { column: inputLocation.column, row: inputLocation.row, level: inputLocation.level },
+                { column_z: inputLocation.column_z, row_x: inputLocation.row_x, level_y: inputLocation.level_y },
                 new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
 
         },
