@@ -69,8 +69,8 @@
         public static CreateFileInpuElement(id: string): JQuery {
             var input = $("#" + id);
 
-            if (!input[0])
-                $("#BABYLON-EDITOR-UTILS").append(GUI.GUIElement.CreateElement("input type=\"file\"", id, "display: none;"));
+            //if (!input[0])
+            //    $("#BABYLON-EDITOR-UTILS").append(GUI.GUIElement.CreateElement("input type=\"file\"", id, "display: none;"));
 
             return input;
         }
@@ -96,7 +96,7 @@
         /**
         * Cleans an editor project
         */
-        public static CleanProject(project: INTERNAL.IProjectRoot): void {
+        public static CleanProject(project): void {
             project.renderTargets = project.renderTargets || [];
         }
 

@@ -292,11 +292,12 @@
             var node: any = this._node;
             var position: Vector3 = null;
 
-            /*
-            if (node.getBoundingInfo && node.geometry) {
-                position = node.getBoundingInfo().boundingSphere.centerWorld;
-            }
-            else */if (node._position) {
+            
+            //if (node.getBoundingInfo && node.geometry) {
+            //    position = node.getBoundingInfo().boundingSphere.centerWorld;
+            //}
+            //else 
+            if (node._position) {
                 position = node._position;
             }
             else if (node.position) {

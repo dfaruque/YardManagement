@@ -9,4 +9,11 @@ html, body {
     width: 100%;
     height: 90%;
     touch-action: none;
+    display:none;
+}
+
+#BABYLON-EDITOR-MAIN-CANVAS {
+width: 100%;
+    height: 90%;
+    touch-action: none;
 }

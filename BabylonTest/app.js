@@ -1,3 +1,4 @@
+var _this = this;
 var containerNo = 1;
 var inputPosition = new BABYLON.Vector3(0, 0, 0);
 var yard = {
@@ -13,27 +14,48 @@ var yard = {
             slots: []
         }]
 };
+var editorMain = new BABYLON.EDITOR.EditorMain("BABYLON-EDITOR-MAIN");
+var core = editorMain.core;
 var vm = new Vue({
     el: '#divConsole',
+    ready: function () {
+        core.currentScene.clearColor = BABYLON.Color3.White();
+        editorMain.createRenderLoop();
+        editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
+        BABYLON.EDITOR.Event.sendSceneEvent(core.currentScene, BABYLON.EDITOR.SceneEventType.OBJECT_PICKED, core);
+        //core.editor.sceneGraphTool.fillGraph();
+        var container = BABYLON.Mesh.CreateBox("container" + containerNo++, 1, core.currentScene);
+        var greenMat = new BABYLON.StandardMaterial("ground", core.currentScene);
+        greenMat.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+        greenMat.specularColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+        greenMat.emissiveColor = BABYLON.Color3.Purple();
+        container.material = greenMat;
+        container.scaling = new BABYLON.Vector3(20, 10, 10);
+        container.position = inputPosition.clone();
+        // Configure meshe
+        BABYLON.EDITOR.SceneManager.ConfigureObject(container, core);
+        BABYLON.EDITOR.SceneFactory.AddBoxMesh(core);
+        BABYLON.EDITOR.SceneFactory.AddSkyMesh(core);
+    },
     data: {
-        scene: scene,
-        startingPoint: startingPoint,
-        selectedContainer: currentMesh,
+        scene: editorMain.core.currentScene,
+        //startingPoint: startingPoint,
+        //selectedContainer: currentMesh,
         inputPosition: inputPosition
     },
     computed: {
-        selectedContainerLocationColumn: {
-            get: function () { return (currentMesh.position.x / 10).toFixed(); },
-            set: function (newValue) { currentMesh.position.x = newValue * 10; }
-        },
-        selectedContainerLocationRow: {
-            get: function () { return (currentMesh.position.z / 10).toFixed(); },
-            set: function (newValue) { currentMesh.position.z = newValue * 10; }
-        },
-        selectedContainerLocationLevel: {
-            get: function () { return (currentMesh.position.y / 10).toFixed(); },
-            set: function (newValue) { currentMesh.position.y = newValue * 10; }
-        },
+        //selectedContainerLocationColumn: {
+        //    get: () => { return (currentMesh.position.x / 10).toFixed(); },
+        //    set: (newValue) => { currentMesh.position.x = newValue * 10; }
+        //},
+        //selectedContainerLocationRow: {
+        //    get: () => { return (currentMesh.position.z / 10).toFixed(); },
+        //    set: (newValue) => { currentMesh.position.z = newValue * 10; }
+        //},
+        //selectedContainerLocationLevel: {
+        //    get: () => { return (currentMesh.position.y / 10).toFixed(); },
+        //    set: (newValue) => { currentMesh.position.y = newValue * 10; }
+        //},
         inputPositionColumn: {
             get: function () { return (inputPosition.x / 10).toFixed(); },
             set: function (newValue) { inputPosition.x = newValue * 10; }
@@ -47,54 +69,21 @@ var vm = new Vue({
             set: function (newValue) { inputPosition.y = newValue * 10; }
         }
     },
-    ready: function () {
-        // block
-        //var block1 = BABYLON.Mesh.CreatePlane("block1", 100, scene, false);
-        //block1.sideOrientation = BABYLON.Mesh.DOUBLESIDE;
-        //var defaultGridMaterial = new BABYLON.GridMaterial("default", scene);
-        //defaultGridMaterial.gridRatio = 1;
-        //defaultGridMaterial.isFrozen = true;
-        //block1.material = defaultGridMaterial;
-        //block1.receiveShadows = true;
-    },
     methods: {
         addContainer: function () {
-            var container = BABYLON.Mesh.CreateBox("container" + containerNo++, 20, scene);
-            var greenMat = new BABYLON.StandardMaterial("ground", scene);
+            var container = BABYLON.Mesh.CreateBox("container" + containerNo++, 1, editorMain.core.currentScene);
+            var greenMat = new BABYLON.StandardMaterial("ground", editorMain.core.currentScene);
             greenMat.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
             greenMat.specularColor = new BABYLON.Color3(0.4, 0.4, 0.4);
-            greenMat.emissiveColor = BABYLON.Color3.Green();
+            greenMat.emissiveColor = BABYLON.Color3.Purple();
             container.material = greenMat;
-            container.scaling = new BABYLON.Vector3(2, 1, 1);
+            container.scaling = new BABYLON.Vector3(20, 10, 10);
             container.position = inputPosition.clone();
-            container.showBoundingBox = true;
+            // Configure meshe
+            BABYLON.EDITOR.SceneManager.ConfigureObject(container, _this.core);
             //greenBox.checkCollisions = true;
-            container.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: 1000 });
-            shadowGenerator.getShadowMap().renderList.push(container);
-        },
-        moveUp: function () {
-            currentMesh.position.y += currentMesh.getBoundingInfo().boundingBox.extendSize.y
-                * currentMesh.scaling.y * 2;
-        },
-        moveDown: function () {
-            currentMesh.position.y -= currentMesh.getBoundingInfo().boundingBox.extendSize.y
-                * currentMesh.scaling.y * 2;
-        },
-        moveLeft: function () {
-            currentMesh.position.x += currentMesh.getBoundingInfo().boundingBox.extendSize.x
-                * currentMesh.scaling.x * 2;
-        },
-        moveRight: function () {
-            currentMesh.position.x -= currentMesh.getBoundingInfo().boundingBox.extendSize.x
-                * currentMesh.scaling.x * 2;
-        },
-        moveForward: function () {
-            currentMesh.position.z += currentMesh.getBoundingInfo().boundingBox.extendSize.z
-                * currentMesh.scaling.z * 2;
-        },
-        moveBackword: function () {
-            currentMesh.position.z -= currentMesh.getBoundingInfo().boundingBox.extendSize.z
-                * currentMesh.scaling.z * 2;
+            //container.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: 1000 });
+            //shadowGenerator.getShadowMap().renderList.push(container);
         },
     },
 });

@@ -86,7 +86,7 @@
         * @param caller: gui element calling the event
         * @param eventType: the gui event type
         */
-        constructor(caller: GUI.GUIElement<W2UI.IElement>, eventType: number, data?: Object)
+        constructor(caller, eventType: number, data?: Object)
         {
             super(data);
 

@@ -145,7 +145,7 @@ var BABYLON;
                     // Reset UI
                     ////this.sceneGraphTool.createUI();
                     ////this.sceneGraphTool.fillGraph();
-                    ////SceneFactory.NodesToStart = [];
+                    EDITOR.SceneFactory.NodesToStart = [];
                     ////this.timeline.reset();
                 };
             };

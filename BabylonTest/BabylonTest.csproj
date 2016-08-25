@@ -64,20 +64,6 @@
     <Content Include="css\images\wireframe.png" />
     <Content Include="index.html" />
     <Content Include="scripts\babylon.core.js" />
-    <Content Include="scripts\babylon.gridMaterial.js" />
-    <Content Include="scripts\babylon.js" />
-    <Content Include="scripts\babylon.max.js" />
-    <Content Include="scripts\babylon.noworker.js" />
-    <Content Include="scripts\hand.minified-1.2.js" />
-    <None Include="scripts\jquery-3.1.0.intellisense.js" />
-    <Content Include="scripts\jquery-3.1.0.js" />
-    <Content Include="scripts\jquery-3.1.0.min.js" />
-    <Content Include="scripts\jquery-3.1.0.slim.js" />
-    <Content Include="scripts\jquery-3.1.0.slim.min.js" />
-    <Content Include="scripts\Oimo.js" />
-    <Content Include="scripts\poly2tri.js" />
-    <Content Include="scripts\vue.js" />
-    <Content Include="scripts\vue.min.js" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -87,34 +73,21 @@
     <TypeScriptCompile Include="scripts\babylon.d.ts" />
     <TypeScriptCompile Include="scripts\babylon.editor.core.ts" />
     <TypeScriptCompile Include="scripts\babylon.editor.main.ts" />
+    <TypeScriptCompile Include="scripts\babylon.editor.sceneFactory.ts" />
     <TypeScriptCompile Include="scripts\babylon.editor.sceneManager.ts" />
     <TypeScriptCompile Include="scripts\babylon.editor.transformer.ts" />
-    <TypeScriptCompile Include="scripts\babylon.gridMaterial.d.ts" />
-    <TypeScriptCompile Include="scripts\gui\babylon.editor.guiDialog.ts" />
-    <TypeScriptCompile Include="scripts\gui\babylon.editor.guiEdit.ts" />
-    <TypeScriptCompile Include="scripts\gui\babylon.editor.guiElement.ts" />
-    <TypeScriptCompile Include="scripts\gui\babylon.editor.guiForm.ts" />
-    <TypeScriptCompile Include="scripts\gui\babylon.editor.guiGraph.ts" />
-    <TypeScriptCompile Include="scripts\gui\babylon.editor.guiGrid.ts" />
-    <TypeScriptCompile Include="scripts\gui\babylon.editor.guiLayouts.ts" />
-    <TypeScriptCompile Include="scripts\gui\babylon.editor.guiList.ts" />
-    <TypeScriptCompile Include="scripts\gui\babylon.editor.guiPanel.ts" />
-    <TypeScriptCompile Include="scripts\gui\babylon.editor.guiToolbar.ts" />
-    <TypeScriptCompile Include="scripts\gui\babylon.editor.guiWindow.ts" />
     <TypeScriptCompile Include="scripts\internal\babylon.editor.event.ts" />
+    <TypeScriptCompile Include="scripts\internal\babylon.editor.tools.ts" />
     <TypeScriptCompile Include="scripts\typings\babylon.editor.d.ts" />
     <TypeScriptCompile Include="scripts\typings\babylon.editor.gui.d.ts" />
     <TypeScriptCompile Include="scripts\typings\dat.gui.d.ts" />
     <TypeScriptCompile Include="scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="scripts\typings\materials\babylon.skyMaterial.d.ts" />
     <TypeScriptCompile Include="scripts\typings\vue\vue.d.ts" />
     <TypeScriptCompile Include="scripts\typings\w2ui.d.ts" />
-    <TypeScriptCompile Include="yard - Copy.ts" />
-    <TypeScriptCompile Include="yard.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="scripts\jquery-3.1.0.slim.min.map" />
-    <Content Include="scripts\jquery-3.1.0.min.map" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
       <SubType>Designer</SubType>

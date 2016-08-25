@@ -61,8 +61,8 @@ var BABYLON;
             */
             Tools.CreateFileInpuElement = function (id) {
                 var input = $("#" + id);
-                if (!input[0])
-                    $("#BABYLON-EDITOR-UTILS").append(GUI.GUIElement.CreateElement("input type=\"file\"", id, "display: none;"));
+                //if (!input[0])
+                //    $("#BABYLON-EDITOR-UTILS").append(GUI.GUIElement.CreateElement("input type=\"file\"", id, "display: none;"));
                 return input;
             };
             /**

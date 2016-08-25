@@ -250,11 +250,11 @@ var BABYLON;
             Transformer.prototype._getNodePosition = function () {
                 var node = this._node;
                 var position = null;
-                /*
-                if (node.getBoundingInfo && node.geometry) {
-                    position = node.getBoundingInfo().boundingSphere.centerWorld;
-                }
-                else */ if (node._position) {
+                //if (node.getBoundingInfo && node.geometry) {
+                //    position = node.getBoundingInfo().boundingSphere.centerWorld;
+                //}
+                //else 
+                if (node._position) {
                     position = node._position;
                 }
                 else if (node.position) {

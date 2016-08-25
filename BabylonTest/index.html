@@ -18,8 +18,8 @@
     <script src="scripts/jquery-3.1.0.min.js"></script>
     <script src="scripts/babylon.editor.transformer.js"></script> 
     <script src="scripts/babylon.editor.sceneManager.js"></script>
-    <script src="scripts/babylon.gridMaterial.js"></script>
 
+    <script src="scripts/babylon.skyMaterial.js"></script>
 
 
     <script src="scripts/babylon.editor.main.js"></script>
@@ -89,21 +89,13 @@
         </div>
     </div>
 
-    <script src="yard.js"></script>
-
     <script src="scripts/vue.js"></script>
-    <script src="app.js"></script>
 
     <script src="scripts/internal/babylon.editor.event.js"></script>
-    <script type="text/javascript">
 
-        var editorMain = new BABYLON.EDITOR.EditorMain("BABYLON-EDITOR-MAIN");
-        var core = editorMain.core;
-        editorMain.createRenderLoop();
-
-        //core.editor.sceneGraphTool.fillGraph();
-        BABYLON.EDITOR.Event.sendSceneEvent(core.currentScene, BABYLON.EDITOR.SceneEventType.OBJECT_PICKED, core);
-    </script>
+    <script src="scripts/babylon.editor.sceneFactory.js"></script>    
+    
+    <script src="app.js"></script>
 
 </body>
 </html>

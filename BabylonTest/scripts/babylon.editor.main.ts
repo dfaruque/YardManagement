@@ -186,7 +186,7 @@
                 ////this.sceneGraphTool.createUI();
                 ////this.sceneGraphTool.fillGraph();
                 
-                ////SceneFactory.NodesToStart = [];
+                SceneFactory.NodesToStart = [];
                 ////this.timeline.reset();
             };
         }
