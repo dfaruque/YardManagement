@@ -292,6 +292,7 @@ var BABYLON;
                 var mesh = this._pickingInfo.pickedMesh.parent || this._pickingInfo.pickedMesh;
                 var node = this._node;
                 var position = this._getNodePosition();
+                currentMesh = mesh;
                 if (this._pickPosition) {
                     // Setup planes
                     if (this._xTransformers.indexOf(mesh) !== -1) {
@@ -338,7 +339,8 @@ var BABYLON;
                         this._vectorToModify.x = (this._mousePositionInPlane.x - this._mousePosition.x);
                     }
                     else if (this._selectedTransform === "y") {
-                        this._vectorToModify.y = (this._mousePositionInPlane.y - this._mousePosition.y);
+                        var ydiff = this._mousePositionInPlane.y - this._mousePosition.y;
+                        this._vectorToModify.y = ydiff > 0 ? ydiff : 1;
                     }
                     else if (this._selectedTransform === "z") {
                         this._vectorToModify.z = (this._mousePositionInPlane.z - this._mousePosition.z);
@@ -367,9 +369,9 @@ var BABYLON;
             // Create transformers
             Transformer.prototype._createTransformers = function () {
                 var colors = [
-                    new BABYLON.Color3(1, 0, 0),
-                    new BABYLON.Color3(0, 1, 0),
-                    new BABYLON.Color3(0, 0, 1)
+                    new BABYLON.Color3(1, 0.3, 0.3),
+                    new BABYLON.Color3(0.3, 1, 0.3),
+                    new BABYLON.Color3(0.3, 0.3, 1)
                 ];
                 var x = null;
                 var y = null;

@@ -64,6 +64,7 @@
     <Content Include="css\images\wireframe.png" />
     <Content Include="index.html" />
     <Content Include="scripts\babylon.core.js" />
+    <Content Include="showWorldAxis.ts" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>

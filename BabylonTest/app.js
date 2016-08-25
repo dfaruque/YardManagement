@@ -1,5 +1,12 @@
+/// <reference path="showworldaxis.ts" />
+/// <reference path="scripts/typings/vue/vue.d.ts" />
+/// <reference path="scripts/babylon.editor.transformer.ts" />
+/// <reference path="scripts/babylon.editor.scenemanager.ts" />
+/// <reference path="scripts/babylon.editor.scenefactory.ts" />
+/// <reference path="yard.d.ts" />
+/// <reference path="scripts/babylon.editor.main.ts" />
 var containerNo = 1;
-var inputPosition = new BABYLON.Vector3(0, 0, 0);
+var inputLocation = { column: 1, row: 1, level: 1 };
 var yard = {
     name: 'yard1',
     blocks: [{
@@ -14,17 +21,36 @@ var yard = {
         }]
 };
 var multiplicationFactor = 10;
+var currentMesh = null;
 var editorMain = new BABYLON.EDITOR.EditorMain("BABYLON-EDITOR-MAIN", true);
 var core = editorMain.core;
 var scene = core.currentScene;
 scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.CannonJSPlugin());
+scene.disablePhysicsEngine();
 scene.clearColor = BABYLON.Color3.Black();
 var light = BABYLON.EDITOR.SceneFactory.AddYardDirectionalLight(core);
 var block = BABYLON.EDITOR.SceneFactory.AddYardBlockGroundMesh(core, '1', 9, 6);
 core.shadowGenerator = new BABYLON.ShadowGenerator(100, light);
 editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
-var yardContainer = BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, { column: 4, row: 4, level: 2 }, new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
-var currentMesh = null;
+showWorldAxis(20);
+//BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++,
+//    { column: 2, row: 2, level: 1 },
+//    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+//BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++,
+//    { column: 2, row: 2, level: 3 },
+//    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+//BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++,
+//    { column: 4, row: 2, level: 1 },
+//    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+//BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++,
+//    { column: 4, row: 2, level: 3 },
+//    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+//BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++,
+//    { column: 6, row: 2, level: 1 },
+//    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+//BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++,
+//    { column: 6, row: 2, level: 3 },
+//    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
 var vm = new Vue({
     el: '#divConsole',
     ready: function () {
@@ -34,37 +60,25 @@ var vm = new Vue({
         scene: scene,
         //startingPoint: startingPoint,
         //selectedContainer: currentMesh,
-        inputPosition: inputPosition
+        inputLocation: inputLocation
     },
     computed: {
         selectedContainerLocationColumn: {
-            get: function () { return (currentMesh.position.x / 10).toFixed(); },
-            set: function (newValue) { currentMesh.position.x = newValue * 10; }
+            get: function () { return (currentMesh.position.x / multiplicationFactor).toFixed(); },
+            set: function (newValue) { currentMesh.position.x = newValue * multiplicationFactor; }
         },
         selectedContainerLocationRow: {
-            get: function () { return (currentMesh.position.z / 10).toFixed(); },
-            set: function (newValue) { currentMesh.position.z = newValue * 10; }
+            get: function () { return (currentMesh.position.z / multiplicationFactor).toFixed(); },
+            set: function (newValue) { currentMesh.position.z = newValue * multiplicationFactor; }
         },
         selectedContainerLocationLevel: {
-            get: function () { return (currentMesh.position.y / 10).toFixed(); },
-            set: function (newValue) { currentMesh.position.y = newValue * 10; }
+            get: function () { return (currentMesh.position.y / multiplicationFactor).toFixed(); },
+            set: function (newValue) { currentMesh.position.y = newValue * multiplicationFactor; }
         },
-        inputPositionColumn: {
-            get: function () { return (inputPosition.x / 10).toFixed(); },
-            set: function (newValue) { inputPosition.x = newValue * 10; }
-        },
-        inputPositionRow: {
-            get: function () { return (inputPosition.z / 10).toFixed(); },
-            set: function (newValue) { inputPosition.z = newValue * 10; }
-        },
-        inputPositionLevel: {
-            get: function () { return (inputPosition.y / 10).toFixed(); },
-            set: function (newValue) { inputPosition.y = newValue * 10; }
-        }
     },
     methods: {
         addContainer: function () {
-            var con = BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, { column: 3, row: 3, level: 2 }, new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+            var con = BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, { column: inputLocation.column, row: inputLocation.row, level: inputLocation.level }, new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
         },
         moveUp: function () {
             currentMesh.position.y += currentMesh.getBoundingInfo().boundingBox.extendSize.y

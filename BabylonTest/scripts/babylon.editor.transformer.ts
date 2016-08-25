@@ -346,7 +346,7 @@
             var mesh = <AbstractMesh>this._pickingInfo.pickedMesh.parent || this._pickingInfo.pickedMesh;
             var node: any = this._node;
             var position = this._getNodePosition();
-
+            currentMesh = mesh;
             if (this._pickPosition) {
                 // Setup planes
                 if (this._xTransformers.indexOf(mesh) !== -1) {
@@ -400,7 +400,8 @@
                     this._vectorToModify.x = (this._mousePositionInPlane.x - this._mousePosition.x);
                 }
                 else if (this._selectedTransform === "y") {
-                    this._vectorToModify.y = (this._mousePositionInPlane.y - this._mousePosition.y);
+                    var ydiff = this._mousePositionInPlane.y - this._mousePosition.y;
+                    this._vectorToModify.y = ydiff > 0 ? ydiff : 1;
                 }
                 else if (this._selectedTransform === "z") {
                     this._vectorToModify.z = (this._mousePositionInPlane.z - this._mousePosition.z);
@@ -436,9 +437,9 @@
         // Create transformers
         private _createTransformers(): void {
             var colors = [
-                new Color3(1, 0, 0),
-                new Color3(0, 1, 0),
-                new Color3(0, 0, 1)
+                new Color3(1, 0.3, 0.3),
+                new Color3(0.3, 1, 0.3),
+                new Color3(0.3, 0.3, 1)
             ];
 
             var x: Mesh = null;

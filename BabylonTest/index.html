@@ -32,7 +32,7 @@
     <canvas id="BABYLON-EDITOR-MAIN-CANVAS"></canvas>
 
     <div id="divConsole">
-        <div>
+        <!--<div>
             Selected Container position: X=
             <input type="text" v-model="selectedContainer.position.x" number />
             Z=
@@ -40,7 +40,7 @@
             Y=
             <input type="text" v-model="selectedContainer.position.y" number/>
 
-        </div>
+        </div>-->
         <div>
             Selected Container location: column=
             <input type="text" v-model="selectedContainerLocationColumn" number />
@@ -51,7 +51,7 @@
 
         </div>
 
-        <div>
+        <!--<div>
             Position: X=
             <input type="text" v-model="inputPosition.x" />
             Z=
@@ -60,15 +60,15 @@
             <input type="text" v-model="inputPosition.y" />
 
             <input type="button" @click="addContainer" value="Add Container" />
-        </div>
+        </div>-->
 
         <div>
             location: column=
-            <input type="text" v-model="inputPositionColumn" />
+            <input type="text" v-model="inputLocation.column" />
             row=
-            <input type="text" v-model="inputPositionRow" />
+            <input type="text" v-model="inputLocation.row" />
             level=
-            <input type="text" v-model="inputPositionLevel" />
+            <input type="text" v-model="inputLocation.level" />
 
             <input type="button" @click="addContainer" value="Add Container" />
         </div>
@@ -92,9 +92,9 @@
     <script src="scripts/vue.js"></script>
 
     <script src="scripts/internal/babylon.editor.event.js"></script>
-
     <script src="scripts/babylon.editor.sceneFactory.js"></script>    
-    
+    <script src="showWorldAxis.js"></script>
+
     <script src="app.js"></script>
 
 </body>

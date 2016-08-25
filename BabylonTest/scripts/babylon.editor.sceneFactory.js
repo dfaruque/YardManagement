@@ -278,7 +278,8 @@ var BABYLON;
             SceneFactory.AddYardContainer = function (core, id, location, color) {
                 var yardContainer = BABYLON.Mesh.CreateBox("yardContainer" + id, 1, core.currentScene, false);
                 yardContainer.id = "yardContainer" + id;
-                yardContainer.position = new BABYLON.Vector3(location.column * multiplicationFactor, location.level * multiplicationFactor, location.row * multiplicationFactor);
+                yardContainer.position = new BABYLON.Vector3((location.column - 3) * multiplicationFactor * 2, location.level * multiplicationFactor / 2, (location.row - 4.5) * multiplicationFactor);
+                console.log(yardContainer.position);
                 yardContainer.scaling = new BABYLON.Vector3(2 * multiplicationFactor, 1 * multiplicationFactor, 1 * multiplicationFactor);
                 var containerMaterial = new BABYLON.StandardMaterial("containerMaterial", core.currentScene);
                 containerMaterial.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
@@ -286,14 +287,14 @@ var BABYLON;
                 containerMaterial.emissiveColor = color;
                 yardContainer.material = containerMaterial;
                 core.shadowGenerator.getShadowMap().renderList.push(yardContainer);
-                yardContainer.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: multiplicationFactor, friction: 0.7, restitution: 0.5 });
+                //yardContainer.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: multiplicationFactor, friction: 0.7, restitution: 0.5 });
                 this.ConfigureObject(yardContainer, core);
                 return yardContainer;
             };
             SceneFactory.AddYardBlockGroundMesh = function (core, id, width, height) {
                 var ground = BABYLON.MeshBuilder.CreateGround("block" + id, {
-                    width: width * multiplicationFactor + width * 2,
-                    height: height * multiplicationFactor + height * 2,
+                    width: width * multiplicationFactor,
+                    height: height * multiplicationFactor,
                 }, core.currentScene);
                 ground.position = BABYLON.Vector3.Zero();
                 ground.id = "yardContainer" + id;
@@ -339,4 +340,4 @@ var BABYLON;
         EDITOR.SceneFactory = SceneFactory;
     })(EDITOR = BABYLON.EDITOR || (BABYLON.EDITOR = {}));
 })(BABYLON || (BABYLON = {}));
-//# sourceMappingURL=babylon.editor.sceneFactory.js.map
+//# sourceMappingURL=babylon.editor.scenefactory.js.map
