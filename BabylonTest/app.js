@@ -25,13 +25,13 @@ var currentMesh = null;
 var editorMain = new BABYLON.EDITOR.EditorMain("BABYLON-EDITOR-MAIN", true);
 var core = editorMain.core;
 var scene = core.currentScene;
-scene.debugLayer.show();
+//scene.debugLayer.show();
 scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.CannonJSPlugin());
 //scene.disablePhysicsEngine();
 //scene.collisionsEnabled = true;
 scene.clearColor = BABYLON.Color3.Black();
 var light = BABYLON.EDITOR.SceneFactory.AddYardDirectionalLight(core);
-var block = BABYLON.EDITOR.SceneFactory.AddYardBlockGroundMesh(core, 1, 6, 9);
+var block = BABYLON.EDITOR.SceneFactory.AddYardBlockGroundMesh(core, 1, 6, 9, 2);
 core.shadowGenerator = new BABYLON.ShadowGenerator(256 * multiplicationFactor, light);
 editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
 var vm = new Vue({
@@ -62,11 +62,12 @@ var vm = new Vue({
         },
         arrange: function () {
             var yardContainers = core.currentScene.meshes.filter(function (f) { return f.name.indexOf('yardContainer') >= 0; });
+            var nextPosition = { column_z: 1, row_x: 1, level_y: 1 };
             for (var _i = 0, yardContainers_1 = yardContainers; _i < yardContainers_1.length; _i++) {
-                var con = yardContainers_1[_i];
-                block._boundingInfo.maximum.x;
-                block._boundingInfo.maximum.z;
-                con.position.x += 10;
+                var yardContainer = yardContainers_1[_i];
+                yardContainer.position.x = nextPosition.row_x * yardContainer.scaling.x - block._boundingInfo.maximum.x + nextPosition.row_x * multiplicationFactor / 4;
+                yardContainer.position.y = (nextPosition.level_y - 1) * yardContainer.scaling.y + yardContainer.scaling.y / 2;
+                yardContainer.position.z = nextPosition.column_z * yardContainer.scaling.z - block._boundingInfo.maximum.z + nextPosition.column_z * multiplicationFactor / 4;
             }
         },
         moveUp: function () {

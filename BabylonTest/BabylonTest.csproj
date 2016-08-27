@@ -69,6 +69,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="index.html" />
     <Content Include="scripts\babylon.core.js" />
+    <TypeScriptCompile Include="extends.ts" />
     <TypeScriptCompile Include="ManipulationHelpers.d.ts" />
     <TypeScriptCompile Include="showAngleSector.ts" />
     <TypeScriptCompile Include="showNormals.ts" />

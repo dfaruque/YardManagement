@@ -292,13 +292,16 @@ var BABYLON;
                 this.ConfigureObject(yardContainer, core);
                 return yardContainer;
             };
-            SceneFactory.AddYardBlockGroundMesh = function (core, id, width, height) {
-                var ground = BABYLON.MeshBuilder.CreateGround("block" + id, {
-                    width: width * multiplicationFactor * 2,
-                    height: height * multiplicationFactor * 2,
-                }, core.currentScene);
-                ground.position = BABYLON.Vector3.Zero();
+            SceneFactory.AddYardBlockGroundMesh = function (core, id, column, row, level) {
+                var opt = {
+                    width: column * multiplicationFactor * 2,
+                    height: row * multiplicationFactor * 2,
+                };
+                var ground = BABYLON.MeshBuilder.CreateGround("block" + id, opt, core.currentScene);
                 ground.id = "yardContainer" + id;
+                ground.capacity = { column_z: column, row_x: row, level_y: level };
+                ground.size = { width_z: opt.width, length_x: opt.height, height_y: 1 };
+                ground.position = BABYLON.Vector3.Zero();
                 var groundMaterial = new BABYLON.StandardMaterial("ground", core.currentScene);
                 groundMaterial.diffuseColor = new BABYLON.Color3(0.6, 0.5, 0.4);
                 groundMaterial.specularColor = new BABYLON.Color3(0.5, 0.6, 0.7);

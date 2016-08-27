@@ -7,7 +7,7 @@
 /// <reference path="scripts/babylon.editor.main.ts" />
 
 var containerNo = 1;
-var inputLocation: yardContainerLocation = { column_z: 1, row_x: 1, level_y: 1 };
+var inputLocation: yardLocationVector = { column_z: 1, row_x: 1, level_y: 1 };
 
 var yard = {
     name: 'yard1',
@@ -30,14 +30,17 @@ var editorMain = new BABYLON.EDITOR.EditorMain("BABYLON-EDITOR-MAIN", true);
 
 var core = editorMain.core;
 var scene = core.currentScene;
-scene.debugLayer.show();
+//scene.debugLayer.show();
 scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.CannonJSPlugin());
 //scene.disablePhysicsEngine();
 //scene.collisionsEnabled = true;
 
 scene.clearColor = BABYLON.Color3.Black();
+
 var light = BABYLON.EDITOR.SceneFactory.AddYardDirectionalLight(core);
-var block = BABYLON.EDITOR.SceneFactory.AddYardBlockGroundMesh(core, 1, 6, 9);
+
+var block = BABYLON.EDITOR.SceneFactory.AddYardBlockGroundMesh(core, 1, 6, 9, 2);
+
 core.shadowGenerator = new BABYLON.ShadowGenerator(256 * multiplicationFactor, light);
 editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
 
@@ -92,13 +95,15 @@ var vm = new Vue({
         },
         arrange: () => {
             var yardContainers = core.currentScene.meshes.filter(f => f.name.indexOf('yardContainer') >= 0);
-            for (var con of yardContainers)
-            {
 
-                block._boundingInfo.maximum.x
-                block._boundingInfo.maximum.z
+            var nextPosition: yardLocationVector = { column_z: 1, row_x: 1, level_y: 1 };
 
-                con.position.x += 10;
+            for (var yardContainer of yardContainers) {
+
+                yardContainer.position.x = nextPosition.row_x * yardContainer.scaling.x - block._boundingInfo.maximum.x + nextPosition.row_x * multiplicationFactor / 4;
+                yardContainer.position.y = (nextPosition.level_y - 1) * yardContainer.scaling.y + yardContainer.scaling.y / 2;
+                yardContainer.position.z = nextPosition.column_z * yardContainer.scaling.z - block._boundingInfo.maximum.z + nextPosition.column_z * multiplicationFactor / 4;
+
             }
         },
 
