@@ -96,9 +96,16 @@ var vm = new Vue({
         arrange: () => {
             var yardContainers = core.currentScene.meshes.filter(f => f.name.indexOf('yardContainer') >= 0);
 
-            var nextPosition: yardLocationVector = { column_z: 1, row_x: 1, level_y: 1 };
+            var yardLocations: yardLocationVector[]=[];
 
-            for (var yardContainer of yardContainers) {
+            for (var row = 1; row <= block.capacity.row_x; row++)
+                for (var col = 1; col <= block.capacity.column_z; col++)
+                    for (var level = 1; level <= block.capacity.level_y; level++)
+                        yardLocations.push({ column_z: col, row_x: row, level_y: level });
+
+            for (var i = 0; i < yardContainers.length; i++) {
+                var yardContainer = yardContainers[i];
+                var nextPosition = yardLocations[i];
 
                 yardContainer.position.x = nextPosition.row_x * yardContainer.scaling.x - block._boundingInfo.maximum.x + nextPosition.row_x * multiplicationFactor / 4;
                 yardContainer.position.y = (nextPosition.level_y - 1) * yardContainer.scaling.y + yardContainer.scaling.y / 2;

@@ -62,9 +62,14 @@ var vm = new Vue({
         },
         arrange: function () {
             var yardContainers = core.currentScene.meshes.filter(function (f) { return f.name.indexOf('yardContainer') >= 0; });
-            var nextPosition = { column_z: 1, row_x: 1, level_y: 1 };
-            for (var _i = 0, yardContainers_1 = yardContainers; _i < yardContainers_1.length; _i++) {
-                var yardContainer = yardContainers_1[_i];
+            var yardLocations = [];
+            for (var row = 1; row <= block.capacity.row_x; row++)
+                for (var col = 1; col <= block.capacity.column_z; col++)
+                    for (var level = 1; level <= block.capacity.level_y; level++)
+                        yardLocations.push({ column_z: col, row_x: row, level_y: level });
+            for (var i = 0; i < yardContainers.length; i++) {
+                var yardContainer = yardContainers[i];
+                var nextPosition = yardLocations[i];
                 yardContainer.position.x = nextPosition.row_x * yardContainer.scaling.x - block._boundingInfo.maximum.x + nextPosition.row_x * multiplicationFactor / 4;
                 yardContainer.position.y = (nextPosition.level_y - 1) * yardContainer.scaling.y + yardContainer.scaling.y / 2;
                 yardContainer.position.z = nextPosition.column_z * yardContainer.scaling.z - block._boundingInfo.maximum.z + nextPosition.column_z * multiplicationFactor / 4;
