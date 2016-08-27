@@ -88,15 +88,36 @@ var vm = new Vue({
 
     methods: {
         addContainer: () => {
+            console.log( scene.getTransformMatrix());
             var con = BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block,
                 { column_z: inputLocation.column_z, row_x: inputLocation.row_x, level_y: inputLocation.level_y },
                 new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
 
         },
-        arrange: () => {
+        arrangeAll: () => {
             var yardContainers = core.currentScene.meshes.filter(f => f.name.indexOf('yardContainer') >= 0);
 
             var yardLocations: yardLocationVector[]=[];
+
+            for (var row = 1; row <= block.capacity.row_x; row++)
+                for (var col = 1; col <= block.capacity.column_z; col++)
+                    for (var level = 1; level <= block.capacity.level_y; level++)
+                        yardLocations.push({ column_z: col, row_x: row, level_y: level });
+
+            for (var i = 0; i < yardContainers.length; i++) {
+                var yardContainer = yardContainers[i];
+                var nextPosition = yardLocations[i];
+
+                yardContainer.position.x = nextPosition.row_x * yardContainer.scaling.x - block._boundingInfo.maximum.x + nextPosition.row_x * multiplicationFactor / 4;
+                yardContainer.position.y = (nextPosition.level_y - 1) * yardContainer.scaling.y + yardContainer.scaling.y / 2;
+                yardContainer.position.z = nextPosition.column_z * yardContainer.scaling.z - block._boundingInfo.maximum.z + nextPosition.column_z * multiplicationFactor / 4;
+
+            }
+        },
+        alignSelected: () => {
+            var yardContainers = core.currentScene.meshes.filter(f => f.name.indexOf('yardContainer') >= 0);
+
+            var yardLocations: yardLocationVector[] = [];
 
             for (var row = 1; row <= block.capacity.row_x; row++)
                 for (var col = 1; col <= block.capacity.column_z; col++)
