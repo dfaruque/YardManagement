@@ -22,7 +22,8 @@
 
 
     <script src="scripts/babylon.editor.main.js"></script>
-    <script src="ManipulationHelpers.js"></script>
+
+    <script src="showBlockGrid.js"></script>
 
     <link rel="stylesheet" href="app.css" type="text/css" />
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
@@ -47,12 +48,12 @@
                     <div class="panel-body">
                         <div class="form-horizontal">
                             <label>Column</label>
-                            <input type="text" v-model="inputLocation.column_z" number class="form-control" />
+                            <input type="text" v-model="inputLocation.column_z" number class="form-control input-sm" />
                             <label>Row</label>
-                            <input type="text" v-model="inputLocation.row_x" number class="form-control" />
+                            <input type="text" v-model="inputLocation.row_x" number class="form-control input-sm" />
                             <label>Level</label>
-                            <input type="text" v-model="inputLocation.level_y" number class="form-control" />
-                            <div>
+                            <input type="text" v-model="inputLocation.level_y" number class="form-control input-sm" />
+                            <div class="btn-block">
                                 <input type="button" @click="addContainer" value="Add Container" class="btn btn-default" />
                             </div>
                         </div>
@@ -68,7 +69,7 @@
                         <div>
                             <div>
                                 <input type="button" @click="moveForward" value="▲" />
-                                <input type="button" @click="moveBackword"  value="▼" />
+                                <input type="button" @click="moveBackword" value="▼" />
                             </div>
                             <div>
                                 <input type="button" @click="moveLeft" value="◄" />
@@ -78,13 +79,22 @@
                                 <input type="button" @click="moveUp" value=" ↓ " />
                                 <input type="button" @click="moveDown" value=" ↑ " />
                             </div>
-                            <div class="btn-block">
+                            <div class="btn-group">
                                 <input type="button" @click="arrangeAll" value="Arrange All" class="btn btn-default" />
+                                <input type="button" @click="arrangeSelected" value="Arrange Selected" class="btn btn-default" />
+
+
                             </div>
+                            <div>
+                                <label>Show Grid Lines?</label>
+                                <input type="checkbox" @change="showGridLines" class="checkbox checkbox-inline" />
+
+                            </div>
+
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="btn-group">
 
                     <button class="btn btn-default">

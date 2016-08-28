@@ -108,17 +108,17 @@
             this._planeMaterial.disableDepthWrite = false;
             this._scene.materials.pop();
 
-            this._cameraTexture = new Texture("../css/images/camera.png", this._scene);
-            this._cameraTexture.hasAlpha = true;
-            this._scene.textures.pop();
+            //this._cameraTexture = new Texture("../css/images/camera.png", this._scene);
+            //this._cameraTexture.hasAlpha = true;
+            //this._scene.textures.pop();
 
-            this._soundTexture = new Texture("../css/images/sound.png", this._scene);
-            this._soundTexture.hasAlpha = true;
-            this._scene.textures.pop();
+            //this._soundTexture = new Texture("../css/images/sound.png", this._scene);
+            //this._soundTexture.hasAlpha = true;
+            //this._scene.textures.pop();
 
-            this._lightTexture = new Texture("../css/images/light.png", this._scene);
-            this._lightTexture.hasAlpha = true;
-            this._scene.textures.pop();
+            //this._lightTexture = new Texture("../css/images/light.png", this._scene);
+            //this._lightTexture.hasAlpha = true;
+            //this._scene.textures.pop();
 
             this._helperPlane = Mesh.CreatePlane("HelperPlane", 1, this._scene, false);
             this._helperPlane.billboardMode = Mesh.BILLBOARDMODE_ALL;

@@ -401,25 +401,28 @@
 
             core.shadowGenerator.getShadowMap().renderList.push(yardContainer);
 
-            yardContainer.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: multiplicationFactor, friction: 0.7, restitution: 0.5 });
-            //yardContainer.checkCollisions = true;
             this.ConfigureObject(yardContainer, core);
+
+            //yardContainer.checkCollisions = true;
+            yardContainer.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: multiplicationFactor, friction: 0.7, restitution: 0.5 });
+
+            location.isEmpty = false;
             return yardContainer;
         }
 
-        static AddYardBlockGroundMesh(core: EditorCore, id, column, row, level): yardBlock {
+        static AddYardBlockGroundMesh(core: EditorCore, id, columns, rows, levels): yardBlock {
             var opt = {
-                width: column * multiplicationFactor * 2,
-                height: row * multiplicationFactor * 2,
+                width: columns * multiplicationFactor * 2,
+                height: rows * multiplicationFactor * 2,
                 //subdivisions: multiplicationFactor,
                 //updatable: false
             };
 
             var ground = MeshBuilder.CreateGround("block" + id,
                 opt, core.currentScene) as yardBlock;
-            ground.id = "yardContainer" + id;
+            ground.id = "block" + id;
 
-            ground.capacity = { column_z: column, row_x: row, level_y: level };
+            ground.capacity = { column_z: columns, row_x: rows, level_y: levels, isEmpty: false };
 
             ground.size = { width_z: opt.width, length_x: opt.height, height_y: 1 };
 
@@ -430,10 +433,20 @@
             groundMaterial.emissiveColor = BABYLON.Color3.Black();
             ground.material = groundMaterial;
             ground.receiveShadows = true;
-            //ground.checkCollisions = true;
-            ground.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: 0 });
 
             this.ConfigureObject(ground, core);
+
+            //physics
+            ground.checkCollisions = true;
+            ground.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: 0 });
+
+            //yardlocations
+            ground.yardLocations = [];
+            for (var r = 1; r <= rows; r++)
+                for (var c = 1; c <= columns; c++)
+                    for (var l = 1; l <= levels; l++)
+                        ground.yardLocations.push({ column_z: c, row_x: r, level_y: l, isEmpty: true });
+
 
             return ground;
         }

@@ -16,5 +16,9 @@
         //    this._yardContainerSize = theValue;
         //};
 
+        yardLocations: yardLocationVector[];
+
+
+
     }
 }

@@ -86,6 +86,9 @@
             //this.filesInput.monitorElementForDragNDrop(this.core.canvas);
             // Override renderFunction to get full control on the render function
             //(<any>this.filesInput).renderFunction = () => { };
+
+
+
         }
 
         /**

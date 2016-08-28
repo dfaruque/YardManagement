@@ -287,19 +287,20 @@ var BABYLON;
                 containerMaterial.emissiveColor = color;
                 yardContainer.material = containerMaterial;
                 core.shadowGenerator.getShadowMap().renderList.push(yardContainer);
-                yardContainer.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: multiplicationFactor, friction: 0.7, restitution: 0.5 });
-                //yardContainer.checkCollisions = true;
                 this.ConfigureObject(yardContainer, core);
+                //yardContainer.checkCollisions = true;
+                yardContainer.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: multiplicationFactor, friction: 0.7, restitution: 0.5 });
+                location.isEmpty = false;
                 return yardContainer;
             };
-            SceneFactory.AddYardBlockGroundMesh = function (core, id, column, row, level) {
+            SceneFactory.AddYardBlockGroundMesh = function (core, id, columns, rows, levels) {
                 var opt = {
-                    width: column * multiplicationFactor * 2,
-                    height: row * multiplicationFactor * 2,
+                    width: columns * multiplicationFactor * 2,
+                    height: rows * multiplicationFactor * 2,
                 };
                 var ground = BABYLON.MeshBuilder.CreateGround("block" + id, opt, core.currentScene);
-                ground.id = "yardContainer" + id;
-                ground.capacity = { column_z: column, row_x: row, level_y: level };
+                ground.id = "block" + id;
+                ground.capacity = { column_z: columns, row_x: rows, level_y: levels, isEmpty: false };
                 ground.size = { width_z: opt.width, length_x: opt.height, height_y: 1 };
                 ground.position = BABYLON.Vector3.Zero();
                 var groundMaterial = new BABYLON.StandardMaterial("ground", core.currentScene);
@@ -308,9 +309,16 @@ var BABYLON;
                 groundMaterial.emissiveColor = BABYLON.Color3.Black();
                 ground.material = groundMaterial;
                 ground.receiveShadows = true;
-                //ground.checkCollisions = true;
-                ground.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: 0 });
                 this.ConfigureObject(ground, core);
+                //physics
+                ground.checkCollisions = true;
+                ground.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: 0 });
+                //yardlocations
+                ground.yardLocations = [];
+                for (var r = 1; r <= rows; r++)
+                    for (var c = 1; c <= columns; c++)
+                        for (var l = 1; l <= levels; l++)
+                            ground.yardLocations.push({ column_z: c, row_x: r, level_y: l, isEmpty: true });
                 return ground;
             };
             SceneFactory.AddYardSkyMesh = function (core) {
