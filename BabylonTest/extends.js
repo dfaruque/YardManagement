@@ -13,5 +13,13 @@ var BABYLON;
         return yardBlock;
     }(BABYLON.Mesh));
     BABYLON.yardBlock = yardBlock;
+    var yardContainer = (function (_super) {
+        __extends(yardContainer, _super);
+        function yardContainer() {
+            _super.apply(this, arguments);
+        }
+        return yardContainer;
+    }(BABYLON.Mesh));
+    BABYLON.yardContainer = yardContainer;
 })(BABYLON || (BABYLON = {}));
 //# sourceMappingURL=extends.js.map

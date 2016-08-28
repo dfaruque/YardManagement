@@ -2,7 +2,8 @@ var blockGrid = function (block) {
     var i, strip, stripx, stripz, rsm, sm, parent, parmat;
     var gridwidth = block.size.width_z; // must be increments of 10
     var griddepth = block.size.length_x;
-    var step = 5;
+    var step_z = block.capacity.column_z;
+    var step_x = block.capacity.row_x;
     var linewidth = 0.3;
     var ypos = 10;
     // make the red center square
@@ -26,32 +27,32 @@ var blockGrid = function (block) {
     rsm.specularColor = new BABYLON.Color3(0, 0, 0);
     rsm.backFaceCulling = false;
     // create a bunch of z lines.
-    for (i = 0; i < gridwidth / step; i++) {
+    for (i = 0; i < gridwidth / step_z; i++) {
         strip = BABYLON.Mesh.CreateGround("sx", linewidth, griddepth, 1, scene);
         strip.parent = parent;
         // strip.position.y = ypos;
-        strip.position.x = -(gridwidth / 2) + i * step;
+        strip.position.x = -(gridwidth / 2) + i * step_z;
         strip.material = sm;
     }
     // make and install the final red positive-z gridline
     strip = BABYLON.Mesh.CreateGround("sx", linewidth, griddepth, 1, scene);
     strip.parent = parent;
     // strip.position.y = ypos;
-    strip.position.x = -(gridwidth / 2) + i * step;
+    strip.position.x = -(gridwidth / 2) + i * step_z;
     strip.material = rsm;
     // create a bunch of x lines.
-    for (i = 0; i < griddepth / step; i++) {
+    for (i = 0; i < griddepth / step_x; i++) {
         strip = BABYLON.Mesh.CreateGround("sz", gridwidth, linewidth, 1, scene);
         strip.parent = parent;
         // strip.position.y = ypos;
-        strip.position.z = -(griddepth / 2) + i * step;
+        strip.position.z = -(griddepth / 2) + i * step_x;
         strip.material = sm;
     }
     // make and install the final red positive-x gridline
     strip = BABYLON.Mesh.CreateGround("sz", gridwidth, linewidth, 1, scene);
     strip.parent = parent;
     // strip.position.y = ypos;
-    strip.position.z = -(griddepth / 2) + i * step;
+    strip.position.z = -(griddepth / 2) + i * step_x;
     strip.material = rsm;
     parent.getChildMeshes().forEach(function (f) { return f.setEnabled(false); });
     return parent;

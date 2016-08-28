@@ -292,8 +292,8 @@ var BABYLON;
                 var mesh = this._pickingInfo.pickedMesh.parent || this._pickingInfo.pickedMesh;
                 var node = this._node;
                 var position = this._getNodePosition();
-                currentMesh = mesh;
                 if (this._pickPosition) {
+                    currentMesh = mesh;
                     // Setup planes
                     if (this._xTransformers.indexOf(mesh) !== -1) {
                         this._pickingPlane = BABYLON.Plane.FromPositionAndNormal(position, new BABYLON.Vector3(0, 0, -1));

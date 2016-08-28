@@ -39,7 +39,7 @@
                     </h3>
                 </div>
 
-                <div class="panel panel-default">
+                <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">
                             Container location
@@ -47,11 +47,11 @@
                     </div>
                     <div class="panel-body">
                         <div class="form-horizontal">
-                            <label>Column</label>
+                            <label class="control-label">Column</label>
                             <input type="text" v-model="inputLocation.column_z" number class="form-control input-sm" />
-                            <label>Row</label>
+                            <label class="control-label">Row</label>
                             <input type="text" v-model="inputLocation.row_x" number class="form-control input-sm" />
-                            <label>Level</label>
+                            <label class="control-label">Level</label>
                             <input type="text" v-model="inputLocation.level_y" number class="form-control input-sm" />
                             <div class="btn-block">
                                 <input type="button" @click="addContainer" value="Add Container" class="btn btn-default" />
@@ -62,11 +62,12 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-                            Movement Controls
+                            Selected Container
                         </h3>
                     </div>
                     <div class="panel-body">
                         <div>
+                            <div>Name: <span class="label label-info" v-text="currentMesh.name"></span></div>
                             <div>
                                 <input type="button" @click="moveForward" value="▲" />
                                 <input type="button" @click="moveBackword" value="▼" />

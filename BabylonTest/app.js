@@ -22,7 +22,7 @@ var yard = {
         }]
 };
 var multiplicationFactor = 10;
-var currentMesh = null;
+var currentMesh;
 var editorMain = new BABYLON.EDITOR.EditorMain("BABYLON-EDITOR-MAIN", true);
 var core = editorMain.core;
 var scene = core.currentScene;
@@ -38,6 +38,7 @@ var block = BABYLON.EDITOR.SceneFactory.AddYardBlockGroundMesh(core, 1, 6, 9, 2)
 core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light);
 editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
 var yardLocations = block.yardLocations;
+currentMesh = block;
 var vm = new Vue({
     el: '#divConsole',
     ready: function () {
@@ -54,7 +55,16 @@ var vm = new Vue({
     },
     data: {
         scene: scene,
+        currentMesh: currentMesh,
         inputLocation: inputLocation
+    },
+    watch: {
+        currentMesh: {
+            handler: function (val, oldVal) {
+                alert('a thing changed');
+            },
+            deep: false
+        }
     },
     computed: {},
     methods: {

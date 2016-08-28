@@ -3,6 +3,7 @@
         capacity: yardLocationVector;
 
         size: yardSizeVector;
+        yardLocations: yardLocationVector[];
 
         //private _yardContainerSize: yardSizeVector;
         //get yardContainerSize(): yardSizeVector {
@@ -16,9 +17,19 @@
         //    this._yardContainerSize = theValue;
         //};
 
-        yardLocations: yardLocationVector[];
+
+
+        //get yardContainers(): yardContainer[] {
+        //    return {
+        //        };
+        //}
+
+
+    }
+    export class yardContainer extends BABYLON.Mesh {
 
 
 
     }
+
 }
