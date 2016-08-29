@@ -52,9 +52,9 @@
                             <input type="text" v-model="inputLocation.row_x" number class="form-control" />
                             <label>Level</label>
                             <input type="text" v-model="inputLocation.level_y" number class="form-control" />
-
-                            <input type="button" @click="addContainer" value="Add Container" class="btn btn-default" />
-
+                            <div>
+                                <input type="button" @click="addContainer" value="Add Container" class="btn btn-default" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -78,8 +78,9 @@
                                 <input type="button" @click="moveUp" value=" ↓ " />
                                 <input type="button" @click="moveDown" value=" ↑ " />
                             </div>
-                            <input type="button" @click="arrange" value="Arrange" class="btn btn-default" />
-
+                            <div>
+                                <input type="button" @click="arrange" value="Arrange" class="btn btn-default" />
+                            </div>
                         </div>
                     </div>
                 </div>

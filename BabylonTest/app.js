@@ -25,6 +25,7 @@ var currentMesh = null;
 var editorMain = new BABYLON.EDITOR.EditorMain("BABYLON-EDITOR-MAIN", true);
 var core = editorMain.core;
 var scene = core.currentScene;
+scene.debugLayer.show();
 scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.CannonJSPlugin());
 //scene.disablePhysicsEngine();
 //scene.collisionsEnabled = true;
@@ -60,7 +61,13 @@ var vm = new Vue({
             var con = BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block, { column_z: inputLocation.column_z, row_x: inputLocation.row_x, level_y: inputLocation.level_y }, new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
         },
         arrange: function () {
-            //core.currentScene.meshes
+            var yardContainers = core.currentScene.meshes.filter(function (f) { return f.name.indexOf('yardContainer') >= 0; });
+            for (var _i = 0, yardContainers_1 = yardContainers; _i < yardContainers_1.length; _i++) {
+                var con = yardContainers_1[_i];
+                block._boundingInfo.maximum.x;
+                block._boundingInfo.maximum.z;
+                con.position.x += 10;
+            }
         },
         moveUp: function () {
             currentMesh.position.y -= currentMesh.getBoundingInfo().boundingBox.extendSize.y

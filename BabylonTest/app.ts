@@ -30,6 +30,7 @@ var editorMain = new BABYLON.EDITOR.EditorMain("BABYLON-EDITOR-MAIN", true);
 
 var core = editorMain.core;
 var scene = core.currentScene;
+scene.debugLayer.show();
 scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.CannonJSPlugin());
 //scene.disablePhysicsEngine();
 //scene.collisionsEnabled = true;
@@ -90,8 +91,15 @@ var vm = new Vue({
 
         },
         arrange: () => {
+            var yardContainers = core.currentScene.meshes.filter(f => f.name.indexOf('yardContainer') >= 0);
+            for (var con of yardContainers)
+            {
 
-            //core.currentScene.meshes
+                block._boundingInfo.maximum.x
+                block._boundingInfo.maximum.z
+
+                con.position.x += 10;
+            }
         },
 
         moveUp: () => {
