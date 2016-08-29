@@ -31,7 +31,8 @@ var editorMain = new BABYLON.EDITOR.EditorMain("BABYLON-EDITOR-MAIN", true);
 var core = editorMain.core;
 var scene = core.currentScene;
 scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.CannonJSPlugin());
-scene.disablePhysicsEngine();
+//scene.disablePhysicsEngine();
+//scene.collisionsEnabled = true;
 
 scene.clearColor = BABYLON.Color3.Black();
 var light = BABYLON.EDITOR.SceneFactory.AddYardDirectionalLight(core);
@@ -43,10 +44,20 @@ editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION
 var vm = new Vue({
     el: '#divConsole',
     ready: () => {
-        for (var i = 1; i <= 6; i++) {
-            BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block,
-                { column_z: i, row_x: 1, level_y: 1 },
-                new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+        for (var i = 1; i < 9; i++) {
+            if (i <= 6) {
+                BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block,
+                    { column_z: i, row_x: 1, level_y: 1 },
+                    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+            }
+            if (i <= 5) {
+                BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block,
+                    { column_z: i, row_x: 2, level_y: 1 },
+                    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+                BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block,
+                    { column_z: i, row_x: 1, level_y: 2 },
+                    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+            }
 
             BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block,
                 { column_z: 1, row_x: i + 1, level_y: 1 },
@@ -54,9 +65,6 @@ var vm = new Vue({
 
 
         }
-        BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block,
-            { column_z: 1, row_x: 7, level_y: 1 },
-            new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
 
         editorMain.createRenderLoop();
 
@@ -80,6 +88,10 @@ var vm = new Vue({
                 { column_z: inputLocation.column_z, row_x: inputLocation.row_x, level_y: inputLocation.level_y },
                 new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
 
+        },
+        arrange: () => {
+
+            //core.currentScene.meshes
         },
 
         moveUp: () => {

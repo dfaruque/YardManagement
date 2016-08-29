@@ -391,9 +391,6 @@
                 location.row_x * yardContainer.scaling.x - block._boundingInfo.maximum.x + location.row_x * multiplicationFactor/4,
                 (location.level_y - 1) * yardContainer.scaling.y + yardContainer.scaling.y/2,
                 location.column_z * yardContainer.scaling.z - block._boundingInfo.maximum.z + location.column_z * multiplicationFactor/4);
-            console.log(yardContainer.position);
-
-
             var containerMaterial = new StandardMaterial("containerMaterial", core.currentScene);
             containerMaterial.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
             containerMaterial.specularColor = new BABYLON.Color3(0.4, 0.4, 0.4);
@@ -403,8 +400,8 @@
 
             core.shadowGenerator.getShadowMap().renderList.push(yardContainer);
 
-            //yardContainer.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: multiplicationFactor, friction: 0.7, restitution: 0.5 });
-
+            yardContainer.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: multiplicationFactor, friction: 0.7, restitution: 0.5 });
+            //yardContainer.checkCollisions = true;
             this.ConfigureObject(yardContainer, core);
             return yardContainer;
         }
@@ -425,7 +422,7 @@
             groundMaterial.emissiveColor = BABYLON.Color3.Black();
             ground.material = groundMaterial;
             ground.receiveShadows = true;
-
+            //ground.checkCollisions = true;
             ground.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: 0 });
 
             this.ConfigureObject(ground, core);

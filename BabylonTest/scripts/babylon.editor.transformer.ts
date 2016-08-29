@@ -401,7 +401,7 @@
                 }
                 else if (this._selectedTransform === "y") {
                     var ydiff = this._mousePositionInPlane.y - this._mousePosition.y;
-                    this._vectorToModify.y = ydiff > 0 ? ydiff : 1;
+                    this._vectorToModify.y = ydiff > multiplicationFactor / 2 ? ydiff : multiplicationFactor / 2;
                 }
                 else if (this._selectedTransform === "z") {
                     this._vectorToModify.z = (this._mousePositionInPlane.z - this._mousePosition.z);
@@ -437,9 +437,9 @@
         // Create transformers
         private _createTransformers(): void {
             var colors = [
-                new Color3(1, 0.3, 0.3),
-                new Color3(0.3, 1, 0.3),
-                new Color3(0.3, 0.3, 1)
+                new Color3(1, 0.5, 0.5),
+                new Color3(0.5, 1, 0.5),
+                new Color3(0.5, 0.5, 1)
             ];
 
             var x: Mesh = null;

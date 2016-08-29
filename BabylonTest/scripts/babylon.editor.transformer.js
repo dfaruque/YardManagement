@@ -340,7 +340,7 @@ var BABYLON;
                     }
                     else if (this._selectedTransform === "y") {
                         var ydiff = this._mousePositionInPlane.y - this._mousePosition.y;
-                        this._vectorToModify.y = ydiff > 0 ? ydiff : 1;
+                        this._vectorToModify.y = ydiff > multiplicationFactor / 2 ? ydiff : multiplicationFactor / 2;
                     }
                     else if (this._selectedTransform === "z") {
                         this._vectorToModify.z = (this._mousePositionInPlane.z - this._mousePosition.z);
@@ -369,9 +369,9 @@ var BABYLON;
             // Create transformers
             Transformer.prototype._createTransformers = function () {
                 var colors = [
-                    new BABYLON.Color3(1, 0.3, 0.3),
-                    new BABYLON.Color3(0.3, 1, 0.3),
-                    new BABYLON.Color3(0.3, 0.3, 1)
+                    new BABYLON.Color3(1, 0.5, 0.5),
+                    new BABYLON.Color3(0.5, 1, 0.5),
+                    new BABYLON.Color3(0.5, 0.5, 1)
                 ];
                 var x = null;
                 var y = null;
