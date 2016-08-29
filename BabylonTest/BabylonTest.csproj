@@ -23,6 +23,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="css\images\abstract_mesh.png" />
     <Content Include="css\images\abstract_mesh2.png" />
     <Content Include="css\images\add.png" />
@@ -62,11 +66,15 @@
     <Content Include="css\images\sphere.png" />
     <Content Include="css\images\water.png" />
     <Content Include="css\images\wireframe.png" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="index.html" />
     <Content Include="scripts\babylon.core.js" />
+    <TypeScriptCompile Include="ManipulationHelpers.d.ts" />
     <TypeScriptCompile Include="showAngleSector.ts" />
     <TypeScriptCompile Include="showNormals.ts" />
     <TypeScriptCompile Include="showPath3D.ts" />
+    <Content Include="scripts\bootstrap.js" />
+    <Content Include="scripts\bootstrap.min.js" />
     <Content Include="showWorldAxis.ts" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
@@ -93,6 +101,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
       <SubType>Designer</SubType>

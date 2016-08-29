@@ -227,7 +227,7 @@
             camera.upperBetaLimit = (Math.PI / 2) * 0.99;
             camera.lowerRadiusLimit = multiplicationFactor;
 
-            //camera.setPosition(new BABYLON.Vector3(0, 1, 0));
+            camera.setPosition(new BABYLON.Vector3(multiplicationFactor * multiplicationFactor, multiplicationFactor * multiplicationFactor*2, 0));
             this.core.camera = camera;
         }
 

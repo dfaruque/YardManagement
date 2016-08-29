@@ -36,10 +36,8 @@ scene.disablePhysicsEngine();
 scene.clearColor = BABYLON.Color3.Black();
 var light = BABYLON.EDITOR.SceneFactory.AddYardDirectionalLight(core);
 var block = BABYLON.EDITOR.SceneFactory.AddYardBlockGroundMesh(core, 1, 6, 9);
-core.shadowGenerator = new BABYLON.ShadowGenerator(100, light);
+core.shadowGenerator = new BABYLON.ShadowGenerator(256 * multiplicationFactor, light);
 editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
-
-//showWorldAxis(50);
 
 
 var vm = new Vue({
@@ -50,9 +48,9 @@ var vm = new Vue({
                 { column_z: i, row_x: 1, level_y: 1 },
                 new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
 
-                BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block,
-                    { column_z: 1, row_x: i + 1, level_y: 1 },
-                    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+            BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block,
+                { column_z: 1, row_x: i + 1, level_y: 1 },
+                new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
 
 
         }
@@ -61,44 +59,19 @@ var vm = new Vue({
             new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
 
         editorMain.createRenderLoop();
+
+        //var sih = new ManipulationHelpers.SimpleInteractionHelper(scene);
+        //showWorldAxis(50);
+
     },
     data: {
         scene: scene,
-        //startingPoint: startingPoint,
-        //selectedContainer: currentMesh,
         inputLocation: inputLocation
     },
 
     computed: {
-        selectedContainerLocationColumn: {
-            get: () => { return (currentMesh.position.x / multiplicationFactor).toFixed(); },
-            set: (newValue) => { currentMesh.position.x = newValue * multiplicationFactor; }
-        },
-        selectedContainerLocationRow: {
-            get: () => { return (currentMesh.position.z / multiplicationFactor).toFixed(); },
-            set: (newValue) => { currentMesh.position.z = newValue * multiplicationFactor; }
-        },
-        selectedContainerLocationLevel: {
-            get: () => { return (currentMesh.position.y / multiplicationFactor).toFixed(); },
-            set: (newValue) => { currentMesh.position.y = newValue * multiplicationFactor; }
-        },
-
-
-        //inputPositionColumn: {
-        //    get: () => { return (inputLocation.x / multiplicationFactor).toFixed(); },
-        //    set: (newValue) => { inputLocation.x = newValue * multiplicationFactor; }
-        //},
-        //inputPositionRow: {
-        //    get: () => { return (inputLocation.z / 10).toFixed(); },
-        //    set: (newValue) => { inputLocation.z = newValue * multiplicationFactor; }
-        //},
-        //inputPositionLevel: {
-        //    get: () => { return (inputLocation.y / 10).toFixed(); },
-        //    set: (newValue) => { inputLocation.y = newValue * multiplicationFactor; }
-        //}
 
     },
-
 
 
     methods: {
@@ -110,31 +83,30 @@ var vm = new Vue({
         },
 
         moveUp: () => {
-            currentMesh.position.y += currentMesh.getBoundingInfo().boundingBox.extendSize.y
-                * currentMesh.scaling.y * 3;
+            currentMesh.position.y -= currentMesh.getBoundingInfo().boundingBox.extendSize.y
+                * currentMesh.scaling.y * 2;
         },
         moveDown: () => {
-            currentMesh.position.y -= currentMesh.getBoundingInfo().boundingBox.extendSize.y
+            currentMesh.position.y += currentMesh.getBoundingInfo().boundingBox.extendSize.y
                 * currentMesh.scaling.y * 2;
 
         },
         moveLeft: () => {
-
-            currentMesh.position.x += currentMesh.getBoundingInfo().boundingBox.extendSize.x
-                * currentMesh.scaling.x * 2;
+            currentMesh.position.z -= currentMesh.getBoundingInfo().boundingBox.extendSize.z
+                * currentMesh.scaling.z * 2;
         },
         moveRight: () => {
-            currentMesh.position.x -= currentMesh.getBoundingInfo().boundingBox.extendSize.x
-                * currentMesh.scaling.x * 2;
-        },
-        moveForward: () => {
             currentMesh.position.z += currentMesh.getBoundingInfo().boundingBox.extendSize.z
                 * currentMesh.scaling.z * 2;
+        },
+        moveForward: () => {
+            currentMesh.position.x -= currentMesh.getBoundingInfo().boundingBox.extendSize.x
+                * currentMesh.scaling.x * 2;
 
         },
         moveBackword: () => {
-            currentMesh.position.z -= currentMesh.getBoundingInfo().boundingBox.extendSize.z
-                * currentMesh.scaling.z * 2;
+            currentMesh.position.x += currentMesh.getBoundingInfo().boundingBox.extendSize.x
+                * currentMesh.scaling.x * 2;
 
         },
     },

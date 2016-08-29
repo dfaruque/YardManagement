@@ -30,9 +30,8 @@ scene.disablePhysicsEngine();
 scene.clearColor = BABYLON.Color3.Black();
 var light = BABYLON.EDITOR.SceneFactory.AddYardDirectionalLight(core);
 var block = BABYLON.EDITOR.SceneFactory.AddYardBlockGroundMesh(core, 1, 6, 9);
-core.shadowGenerator = new BABYLON.ShadowGenerator(100, light);
+core.shadowGenerator = new BABYLON.ShadowGenerator(256 * multiplicationFactor, light);
 editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
-//showWorldAxis(50);
 var vm = new Vue({
     el: '#divConsole',
     ready: function () {
@@ -42,54 +41,41 @@ var vm = new Vue({
         }
         BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block, { column_z: 1, row_x: 7, level_y: 1 }, new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
         editorMain.createRenderLoop();
+        //var sih = new ManipulationHelpers.SimpleInteractionHelper(scene);
+        //showWorldAxis(50);
     },
     data: {
         scene: scene,
-        //startingPoint: startingPoint,
-        //selectedContainer: currentMesh,
         inputLocation: inputLocation
     },
-    computed: {
-        selectedContainerLocationColumn: {
-            get: function () { return (currentMesh.position.x / multiplicationFactor).toFixed(); },
-            set: function (newValue) { currentMesh.position.x = newValue * multiplicationFactor; }
-        },
-        selectedContainerLocationRow: {
-            get: function () { return (currentMesh.position.z / multiplicationFactor).toFixed(); },
-            set: function (newValue) { currentMesh.position.z = newValue * multiplicationFactor; }
-        },
-        selectedContainerLocationLevel: {
-            get: function () { return (currentMesh.position.y / multiplicationFactor).toFixed(); },
-            set: function (newValue) { currentMesh.position.y = newValue * multiplicationFactor; }
-        },
-    },
+    computed: {},
     methods: {
         addContainer: function () {
             var con = BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block, { column_z: inputLocation.column_z, row_x: inputLocation.row_x, level_y: inputLocation.level_y }, new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
         },
         moveUp: function () {
-            currentMesh.position.y += currentMesh.getBoundingInfo().boundingBox.extendSize.y
-                * currentMesh.scaling.y * 3;
-        },
-        moveDown: function () {
             currentMesh.position.y -= currentMesh.getBoundingInfo().boundingBox.extendSize.y
                 * currentMesh.scaling.y * 2;
         },
+        moveDown: function () {
+            currentMesh.position.y += currentMesh.getBoundingInfo().boundingBox.extendSize.y
+                * currentMesh.scaling.y * 2;
+        },
         moveLeft: function () {
-            currentMesh.position.x += currentMesh.getBoundingInfo().boundingBox.extendSize.x
-                * currentMesh.scaling.x * 2;
+            currentMesh.position.z -= currentMesh.getBoundingInfo().boundingBox.extendSize.z
+                * currentMesh.scaling.z * 2;
         },
         moveRight: function () {
-            currentMesh.position.x -= currentMesh.getBoundingInfo().boundingBox.extendSize.x
-                * currentMesh.scaling.x * 2;
-        },
-        moveForward: function () {
             currentMesh.position.z += currentMesh.getBoundingInfo().boundingBox.extendSize.z
                 * currentMesh.scaling.z * 2;
         },
+        moveForward: function () {
+            currentMesh.position.x -= currentMesh.getBoundingInfo().boundingBox.extendSize.x
+                * currentMesh.scaling.x * 2;
+        },
         moveBackword: function () {
-            currentMesh.position.z -= currentMesh.getBoundingInfo().boundingBox.extendSize.z
-                * currentMesh.scaling.z * 2;
+            currentMesh.position.x += currentMesh.getBoundingInfo().boundingBox.extendSize.x
+                * currentMesh.scaling.x * 2;
         },
     },
 });

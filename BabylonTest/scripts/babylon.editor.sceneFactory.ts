@@ -445,7 +445,7 @@
         }
 
         static AddYardDirectionalLight(core: EditorCore): DirectionalLight {
-            var light = new DirectionalLight("New DirectionalLight", new Vector3(0, -2, -1), core.currentScene);
+            var light = new DirectionalLight("New DirectionalLight", new Vector3(1, -1, -1), core.currentScene);
             light.position = new Vector3(10 * multiplicationFactor, 10 * multiplicationFactor, 10 * multiplicationFactor);
 
             return light;

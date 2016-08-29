@@ -318,7 +318,7 @@ var BABYLON;
                 return skybox;
             };
             SceneFactory.AddYardDirectionalLight = function (core) {
-                var light = new BABYLON.DirectionalLight("New DirectionalLight", new BABYLON.Vector3(0, -2, -1), core.currentScene);
+                var light = new BABYLON.DirectionalLight("New DirectionalLight", new BABYLON.Vector3(1, -1, -1), core.currentScene);
                 light.position = new BABYLON.Vector3(10 * multiplicationFactor, 10 * multiplicationFactor, 10 * multiplicationFactor);
                 return light;
             };

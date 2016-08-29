@@ -9,7 +9,7 @@
     export class Transformer implements IEventReceiver, ICustomUpdate {
         // Public members
         public core: EditorCore = null;
-
+        
         // Private members
         private _scene: Scene = null;
         private _node: any = null;
