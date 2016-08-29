@@ -388,9 +388,9 @@
             yardContainer.scaling = new Vector3(multiplicationFactor, multiplicationFactor, 2 * multiplicationFactor)
 
             yardContainer.position = new Vector3(
-                location.row_x * yardContainer.scaling.x - block._boundingInfo.maximum.x,
-                location.level_y * yardContainer.scaling.y,
-                location.column_z * yardContainer.scaling.z - block._boundingInfo.maximum.z);
+                location.row_x * yardContainer.scaling.x - block._boundingInfo.maximum.x + location.row_x * multiplicationFactor/4,
+                (location.level_y - 1) * yardContainer.scaling.y + yardContainer.scaling.y/2,
+                location.column_z * yardContainer.scaling.z - block._boundingInfo.maximum.z + location.column_z * multiplicationFactor/4);
             console.log(yardContainer.position);
 
 
