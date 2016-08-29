@@ -64,6 +64,9 @@
     <Content Include="css\images\wireframe.png" />
     <Content Include="index.html" />
     <Content Include="scripts\babylon.core.js" />
+    <TypeScriptCompile Include="showAngleSector.ts" />
+    <TypeScriptCompile Include="showNormals.ts" />
+    <TypeScriptCompile Include="showPath3D.ts" />
     <Content Include="showWorldAxis.ts" />
     <Content Include="web.config">
       <SubType>Designer</SubType>

@@ -280,7 +280,7 @@ var BABYLON;
                 yardContainer.id = "yardContainer" + id;
                 yardContainer.parent = block;
                 yardContainer.scaling = new BABYLON.Vector3(multiplicationFactor, multiplicationFactor, 2 * multiplicationFactor);
-                yardContainer.position = new BABYLON.Vector3(location.row_x * yardContainer.scaling.x - block.scaling.x / 2, location.level_y * yardContainer.scaling.y, (location.column_z) * yardContainer.scaling.z - block.scaling.y / 2);
+                yardContainer.position = new BABYLON.Vector3(location.row_x * yardContainer.scaling.x - block._boundingInfo.maximum.x, location.level_y * yardContainer.scaling.y, location.column_z * yardContainer.scaling.z - block._boundingInfo.maximum.z);
                 console.log(yardContainer.position);
                 var containerMaterial = new BABYLON.StandardMaterial("containerMaterial", core.currentScene);
                 containerMaterial.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
