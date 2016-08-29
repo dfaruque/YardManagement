@@ -316,9 +316,55 @@ var BABYLON;
                 //yardlocations
                 ground.yardLocations = [];
                 for (var r = 1; r <= rows; r++)
-                    for (var c = 1; c <= columns; c++)
-                        for (var l = 1; l <= levels; l++)
+                    for (var c = 1; c <= columns; c++) {
+                        for (var l = 1; l <= levels; l++) {
                             ground.yardLocations.push({ column_z: c, row_x: r, level_y: l, isEmpty: true });
+                        }
+                    }
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // Tiled Ground Tutorial
+                // Part 1 : Creation of Tiled Ground
+                // Parameters
+                var xmin = ground._boundingInfo.minimum.x;
+                var zmin = ground._boundingInfo.minimum.z;
+                var xmax = ground._boundingInfo.maximum.x;
+                var zmax = ground._boundingInfo.maximum.z;
+                var precision = {
+                    w: 2,
+                    h: 2
+                };
+                var subdivisions = {
+                    h: columns,
+                    w: rows
+                };
+                // Create the Tiled Ground
+                var tiledGround = BABYLON.Mesh.CreateTiledGround("Tiled Ground", xmin, zmin, xmax, zmax, subdivisions, precision, scene);
+                tiledGround.position.y = 1;
+                // Part 2 : Create the multi material
+                // Create differents materials
+                var whiteMaterial = new BABYLON.StandardMaterial("White", scene);
+                whiteMaterial.diffuseColor = new BABYLON.Color3(1, 1, 1);
+                var blackMaterial = groundMaterial;
+                // Create Multi Material
+                var multimat = new BABYLON.MultiMaterial("multi", scene);
+                multimat.subMaterials.push(whiteMaterial);
+                multimat.subMaterials.push(blackMaterial);
+                // Part 3 : Apply the multi material
+                // Define multimat as material of the tiled ground
+                tiledGround.material = multimat;
+                // Needed variables to set subMeshes
+                var verticesCount = tiledGround.getTotalVertices();
+                var tileIndicesLength = tiledGround.getIndices().length / (subdivisions.w * subdivisions.h);
+                // Set subMeshes of the tiled ground
+                tiledGround.subMeshes = [];
+                var base = 0;
+                for (var row = 0; row < subdivisions.h; row++) {
+                    for (var col = 0; col < subdivisions.w; col++) {
+                        tiledGround.subMeshes.push(new BABYLON.SubMesh(row % 2 ^ col % 2, 0, verticesCount, base, tileIndicesLength, tiledGround));
+                        base += tileIndicesLength;
+                    }
+                }
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 return ground;
             };
             SceneFactory.AddYardSkyMesh = function (core) {

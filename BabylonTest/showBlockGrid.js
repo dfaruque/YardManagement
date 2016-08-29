@@ -1,11 +1,11 @@
 var blockGrid = function (block) {
     var i, strip, stripx, stripz, rsm, sm, parent, parmat;
-    var gridwidth = block.size.width_z; // must be increments of 10
-    var griddepth = block.size.length_x;
-    var step_z = block.capacity.column_z;
-    var step_x = block.capacity.row_x;
+    var gridwidth = block.size.width_z - multiplicationFactor; // must be increments of 10
+    var griddepth = block.size.length_x - multiplicationFactor;
+    var step_z = block.capacity.column_z * 2;
+    var step_x = block.capacity.row_x * 2;
     var linewidth = 0.3;
-    var ypos = 10;
+    var ypos = 1;
     // make the red center square
     parent = BABYLON.Mesh.CreateGround("gridParent", 1, 1, 1, scene, true);
     parmat = new BABYLON.StandardMaterial("par_mat", scene);
