@@ -381,19 +381,20 @@
         ////    return water;
         ////}
 
-        static AddYardContainer(core: EditorCore, id, location: yLocation, color: Color3): Mesh {
+        static AddYardContainer(core: EditorCore, id, block: AbstractMesh, location: yardContainerLocation, color: Color3): Mesh {
             var yardContainer = Mesh.CreateBox("yardContainer" + id, 1, core.currentScene, false);
             yardContainer.id = "yardContainer" + id;
+            yardContainer.parent = block;
+            yardContainer.scaling = new Vector3(multiplicationFactor, multiplicationFactor, 2 * multiplicationFactor)
 
-            yardContainer.position = new BABYLON.Vector3(
-                (location.row_x - 3) * multiplicationFactor * 2,
-                location.level_y * multiplicationFactor / 2,
-                (location.column_z - 4.5) * multiplicationFactor);
+            yardContainer.position = new Vector3(
+                location.row_x * yardContainer.scaling.x - block.scaling.x / 2,
+                location.level_y * yardContainer.scaling.y,
+                (location.column_z) * yardContainer.scaling.z - block.scaling.y / 2);
             console.log(yardContainer.position);
 
-            yardContainer.scaling = new BABYLON.Vector3(2 * multiplicationFactor, 1 * multiplicationFactor, 1 * multiplicationFactor)
 
-            var containerMaterial = new BABYLON.StandardMaterial("containerMaterial", core.currentScene);
+            var containerMaterial = new StandardMaterial("containerMaterial", core.currentScene);
             containerMaterial.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
             containerMaterial.specularColor = new BABYLON.Color3(0.4, 0.4, 0.4);
             containerMaterial.emissiveColor = color;
@@ -409,15 +410,14 @@
         }
 
         static AddYardBlockGroundMesh(core: EditorCore, id, width, height): Mesh {
-            var ground = BABYLON.MeshBuilder.CreateGround("block" + id,
+            var ground = MeshBuilder.CreateGround("block" + id,
                 {
-                    width: width * multiplicationFactor,
-                    height: height * multiplicationFactor,
+                    width: width * multiplicationFactor * 2,
+                    height: height * multiplicationFactor * 2,
                     //subdivisions: multiplicationFactor,
                     //updatable: false
                 },core.currentScene);
-            ground.position = BABYLON.Vector3.Zero();
-
+            ground.position = Vector3.Zero();
             ground.id = "yardContainer" + id;
             var groundMaterial = new BABYLON.StandardMaterial("ground", core.currentScene);
             groundMaterial.diffuseColor = new BABYLON.Color3(0.6, 0.5, 0.4);

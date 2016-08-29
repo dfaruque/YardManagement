@@ -29,31 +29,18 @@ scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.CannonJSPlugin
 scene.disablePhysicsEngine();
 scene.clearColor = BABYLON.Color3.Black();
 var light = BABYLON.EDITOR.SceneFactory.AddYardDirectionalLight(core);
-var block = BABYLON.EDITOR.SceneFactory.AddYardBlockGroundMesh(core, '1', 9, 6);
+var block = BABYLON.EDITOR.SceneFactory.AddYardBlockGroundMesh(core, 1, 6, 9);
 core.shadowGenerator = new BABYLON.ShadowGenerator(100, light);
 editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
-showWorldAxis(100);
-//BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++,
-//    { column: 2, row: 2, level: 1 },
-//    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
-//BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++,
-//    { column: 2, row: 2, level: 3 },
-//    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
-//BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++,
-//    { column: 4, row: 2, level: 1 },
-//    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
-//BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++,
-//    { column: 4, row: 2, level: 3 },
-//    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
-//BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++,
-//    { column: 6, row: 2, level: 1 },
-//    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
-//BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++,
-//    { column: 6, row: 2, level: 3 },
-//    new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+//showWorldAxis(50);
 var vm = new Vue({
     el: '#divConsole',
     ready: function () {
+        for (var i = 1; i <= 6; i++) {
+            BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block, { column_z: i, row_x: 1, level_y: 1 }, new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+            BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block, { column_z: 1, row_x: i + 1, level_y: 1 }, new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+        }
+        BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block, { column_z: 1, row_x: 7, level_y: 1 }, new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
         editorMain.createRenderLoop();
     },
     data: {
@@ -78,7 +65,7 @@ var vm = new Vue({
     },
     methods: {
         addContainer: function () {
-            var con = BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, { column_z: inputLocation.column_z, row_x: inputLocation.row_x, level_y: inputLocation.level_y }, new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+            var con = BABYLON.EDITOR.SceneFactory.AddYardContainer(core, containerNo++, block, { column_z: inputLocation.column_z, row_x: inputLocation.row_x, level_y: inputLocation.level_y }, new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
         },
         moveUp: function () {
             currentMesh.position.y += currentMesh.getBoundingInfo().boundingBox.extendSize.y

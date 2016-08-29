@@ -275,12 +275,13 @@ var BABYLON;
             ////    }
             ////    return water;
             ////}
-            SceneFactory.AddYardContainer = function (core, id, location, color) {
+            SceneFactory.AddYardContainer = function (core, id, block, location, color) {
                 var yardContainer = BABYLON.Mesh.CreateBox("yardContainer" + id, 1, core.currentScene, false);
                 yardContainer.id = "yardContainer" + id;
-                yardContainer.position = new BABYLON.Vector3((location.row_x - 3) * multiplicationFactor * 2, location.level_y * multiplicationFactor / 2, (location.column_z - 4.5) * multiplicationFactor);
+                yardContainer.parent = block;
+                yardContainer.scaling = new BABYLON.Vector3(multiplicationFactor, multiplicationFactor, 2 * multiplicationFactor);
+                yardContainer.position = new BABYLON.Vector3(location.row_x * yardContainer.scaling.x - block.scaling.x / 2, location.level_y * yardContainer.scaling.y, (location.column_z) * yardContainer.scaling.z - block.scaling.y / 2);
                 console.log(yardContainer.position);
-                yardContainer.scaling = new BABYLON.Vector3(2 * multiplicationFactor, 1 * multiplicationFactor, 1 * multiplicationFactor);
                 var containerMaterial = new BABYLON.StandardMaterial("containerMaterial", core.currentScene);
                 containerMaterial.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
                 containerMaterial.specularColor = new BABYLON.Color3(0.4, 0.4, 0.4);
@@ -293,8 +294,8 @@ var BABYLON;
             };
             SceneFactory.AddYardBlockGroundMesh = function (core, id, width, height) {
                 var ground = BABYLON.MeshBuilder.CreateGround("block" + id, {
-                    width: width * multiplicationFactor,
-                    height: height * multiplicationFactor,
+                    width: width * multiplicationFactor * 2,
+                    height: height * multiplicationFactor * 2,
                 }, core.currentScene);
                 ground.position = BABYLON.Vector3.Zero();
                 ground.id = "yardContainer" + id;
