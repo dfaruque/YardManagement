@@ -69,11 +69,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="index.html" />
     <Content Include="scripts\babylon.core.js" />
-    <TypeScriptCompile Include="showBlockGrid.ts" />
     <TypeScriptCompile Include="Yard\block.ts" />
     <TypeScriptCompile Include="Yard\container.ts" />
-    <TypeScriptCompile Include="ManipulationHelpers.d.ts" />
-    <TypeScriptCompile Include="showNormals.ts" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
     <Content Include="showWorldAxis.ts" />

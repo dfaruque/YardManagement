@@ -1,6 +1,4 @@
 ﻿/// <reference path="babylon.d.ts" />
-declare var blockGrid: (block: YARD.YARDBlock) => any;
-declare function showNormals(mesh: any, size: any, color: any, sc: any): BABYLON.LinesMesh;
 declare function showWorldAxis(size: any, scene: any): void;
 declare const multiplicationFactor: number;
 declare namespace YARD {
