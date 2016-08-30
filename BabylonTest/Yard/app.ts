@@ -1,4 +1,5 @@
-﻿    const multiplicationFactor = 10;
+﻿const multiplicationFactor = 10;
+
 namespace YARD {
     export class main {
 
@@ -27,6 +28,15 @@ namespace YARD {
 
             var core = editorMain.core;
             var scene = core.scene;
+            core.eventReceivers.push({
+                onEvent: (event: BABYLON.EDITOR.IEvent): boolean => {
+                    if (event.sceneEvent.eventType == BABYLON.EDITOR.SceneEventType.OBJECT_PICKED) {
+                        if (event.sceneEvent.object.container)
+                            selectedContainer = event.sceneEvent.object.container;
+                    }
+                    return false;
+                }
+            });
             //scene.debugLayer.show();
             scene.collisionsEnabled = true;
             scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
@@ -99,7 +109,7 @@ namespace YARD {
                             var nextPosition = yardLocations[i];
                             nextPosition.isEmpty = false;
 
-                            block.containers[i].yardLocation = nextPosition ;
+                            block.containers[i].yardLocation = nextPosition;
                         }
                     },
                     arrangeSelected: () => {
@@ -109,59 +119,53 @@ namespace YARD {
                     },
                     showGridLines: (event) => {
 
-                        var par = scene.getMeshByName('gridParent');
-                        if (par)
-                            par.getChildMeshes().forEach(f => f.setEnabled(event.target.checked));
+                        block.showTiles = event.target.checked;
 
                     },
 
                     moveUp: () => {
-                        //selectedContainer.position.y -= selectedContainer.getBoundingInfo().boundingBox.extendSize.y
-                        //    * selectedContainer.scaling.y * 2;
+                        moveContainer(0, 0, -1);
                     },
                     moveDown: () => {
-                        //selectedContainer.position.y += selectedContainer.getBoundingInfo().boundingBox.extendSize.y
-                        //    * selectedContainer.scaling.y * 2;
+                        moveContainer(0, 0, 1);
 
                     },
                     moveLeft: () => {
-                        //selectedContainer.position.z -= selectedContainer.getBoundingInfo().boundingBox.extendSize.z
-                        //    * selectedContainer.scaling.z * 2;
+                        moveContainer(0, -1, 0);
                     },
                     moveRight: () => {
-                        //selectedContainer.position.z += selectedContainer.getBoundingInfo().boundingBox.extendSize.z
-                        //    * selectedContainer.scaling.z * 2;
+                        moveContainer(0, 1, 0);
                     },
                     moveForward: () => {
-                        //selectedContainer.position.x -= selectedContainer.getBoundingInfo().boundingBox.extendSize.x
-                        //    * selectedContainer.scaling.x * 2;
+                        moveContainer(-1, 0, 0);
 
                     },
                     moveBackword: () => {
-                        //selectedContainer.position.x += selectedContainer.getBoundingInfo().boundingBox.extendSize.x
-                        //    * selectedContainer.scaling.x * 2;
+                        moveContainer(1, 0, 0);
 
                     },
                 },
             });
 
-            //var setPositionInBlock = function (yardContainer: BABYLON.AbstractMesh) {
-            //    if (selectedContainer) {
-            //        var nextPosition = yardLocations.filter(f => f.isEmpty == true)[0];
-            //        if (nextPosition) {
-            //            nextPosition.isEmpty = false;
+            var moveContainer = (row_x, column_z, level_y) => {
+                var yardLocation = yardLocations.filter(f => f.isEmpty == true
+                    && f.row_x == selectedContainer.yardLocation.row_x + row_x
+                    && f.column_z == selectedContainer.yardLocation.column_z + column_z
+                    && f.level_y == selectedContainer.yardLocation.level_y + level_y)[0];
 
-            //            yardContainer.position.x = nextPosition.row_x * yardContainer.scaling.x - block._boundingInfo.maximum.x + nextPosition.row_x * multiplicationFactor / 4;
-            //            yardContainer.position.y = (nextPosition.level_y - 1) * yardContainer.scaling.y + yardContainer.scaling.y / 2;
-            //            yardContainer.position.z = nextPosition.column_z * yardContainer.scaling.z - block._boundingInfo.maximum.z + nextPosition.column_z * multiplicationFactor / 4;
-            //        }
-            //        else {
-            //            alert('There is no room...');
-            //        }
-            //    } else {
-            //        alert('No selected container.');
-            //    }
-            //};
+                if (yardLocation) {
+
+                    var currentYardLocation = yardLocations.filter(f =>
+                        f.row_x == selectedContainer.yardLocation.row_x
+                        && f.column_z == selectedContainer.yardLocation.column_z
+                        && f.level_y == selectedContainer.yardLocation.level_y)[0];
+                    currentYardLocation.isEmpty = true;
+
+                    selectedContainer.yardLocation = yardLocation;
+                }
+                else
+                    alert('Invalid move.');
+            };
         }
     }
 }

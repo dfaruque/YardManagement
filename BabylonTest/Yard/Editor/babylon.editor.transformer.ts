@@ -347,7 +347,7 @@
             var node: any = this._node;
             var position = this._getNodePosition();
             if (this._pickPosition) {
-            ///currentMesh = mesh;
+
                 // Setup planes
                 if (this._xTransformers.indexOf(mesh) !== -1) {
                     this._pickingPlane = Plane.FromPositionAndNormal(position, new Vector3(0, 0, -1));

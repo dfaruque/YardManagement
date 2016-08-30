@@ -13,18 +13,26 @@ declare namespace YARD {
         capacity: YARDLocationVector;
         size: YARDSizeVector;
         yardLocations: YARDLocationVector[];
+        showTiles: boolean;
+        private groundMaterial;
+        private multimat;
         constructor(core: BABYLON.EDITOR.EditorCore, id: any, containerSize: any, columns: any, rows: any, levels: any);
     }
 }
 declare namespace YARD {
     class YARDContainer {
         name: string;
-        mesh: BABYLON.Mesh;
+        mesh: BABYLON.MyMesh;
         _block: YARD.YARDBlock;
         block: YARD.YARDBlock;
         private _yardLocation;
         yardLocation: YARDLocationVector;
         constructor(core: BABYLON.EDITOR.EditorCore, id: any, block: YARD.YARDBlock, size: number, yardLocation: YARDLocationVector, color: BABYLON.Color3);
+    }
+}
+declare module BABYLON {
+    class MyMesh extends Mesh {
+        container: YARD.YARDContainer;
     }
 }
 declare namespace BABYLON.EDITOR {

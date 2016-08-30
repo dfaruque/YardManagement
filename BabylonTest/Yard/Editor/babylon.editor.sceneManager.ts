@@ -68,7 +68,6 @@
                 mesh.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickUpTrigger, (evt: ActionEvent) => {
                     if (scene.pointerX === mouseX && scene.pointerY === mouseY) {
                         Event.sendSceneEvent(mesh, SceneEventType.OBJECT_PICKED, core);
-                        ///currentMesh = mesh;
                         this.setFocusOnObject(mesh, core);
                     }
                 }));

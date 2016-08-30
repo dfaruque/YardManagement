@@ -2,7 +2,7 @@
 
     export class YARDContainer {
         name: string;
-        mesh: BABYLON.Mesh;
+        mesh: BABYLON.MyMesh;
 
         _block: YARD.YARDBlock;
         get block(): YARD.YARDBlock {
@@ -51,7 +51,9 @@
             yContainer.scaling = new BABYLON.Vector3(8, 8.6, size);
 
 
-            this.mesh = yContainer;
+            this.mesh = yContainer as BABYLON.MyMesh;
+            this.mesh.container = this;
+
             this.block = block;
             block.containers.push(this);
             yardLocation.isEmpty = false;
@@ -60,4 +62,10 @@
 
     }
 
+}
+
+declare module BABYLON {
+    class MyMesh extends Mesh {
+        container: YARD.YARDContainer;
+    }
 }

@@ -72,6 +72,15 @@ var YARD;
             var editorMain = new BABYLON.EDITOR.EditorMain("BABYLON-EDITOR-MAIN", true);
             var core = editorMain.core;
             var scene = core.scene;
+            core.eventReceivers.push({
+                onEvent: function (event) {
+                    if (event.sceneEvent.eventType == BABYLON.EDITOR.SceneEventType.OBJECT_PICKED) {
+                        if (event.sceneEvent.object.container)
+                            selectedContainer = event.sceneEvent.object.container;
+                    }
+                    return false;
+                }
+            });
             //scene.debugLayer.show();
             scene.collisionsEnabled = true;
             scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
@@ -132,52 +141,45 @@ var YARD;
                         //setPositionInBlock(selectedContainer);
                     },
                     showGridLines: function (event) {
-                        var par = scene.getMeshByName('gridParent');
-                        if (par)
-                            par.getChildMeshes().forEach(function (f) { return f.setEnabled(event.target.checked); });
+                        block.showTiles = event.target.checked;
                     },
                     moveUp: function () {
-                        //selectedContainer.position.y -= selectedContainer.getBoundingInfo().boundingBox.extendSize.y
-                        //    * selectedContainer.scaling.y * 2;
+                        moveContainer(0, 0, -1);
                     },
                     moveDown: function () {
-                        //selectedContainer.position.y += selectedContainer.getBoundingInfo().boundingBox.extendSize.y
-                        //    * selectedContainer.scaling.y * 2;
+                        moveContainer(0, 0, 1);
                     },
                     moveLeft: function () {
-                        //selectedContainer.position.z -= selectedContainer.getBoundingInfo().boundingBox.extendSize.z
-                        //    * selectedContainer.scaling.z * 2;
+                        moveContainer(0, -1, 0);
                     },
                     moveRight: function () {
-                        //selectedContainer.position.z += selectedContainer.getBoundingInfo().boundingBox.extendSize.z
-                        //    * selectedContainer.scaling.z * 2;
+                        moveContainer(0, 1, 0);
                     },
                     moveForward: function () {
-                        //selectedContainer.position.x -= selectedContainer.getBoundingInfo().boundingBox.extendSize.x
-                        //    * selectedContainer.scaling.x * 2;
+                        moveContainer(-1, 0, 0);
                     },
                     moveBackword: function () {
-                        //selectedContainer.position.x += selectedContainer.getBoundingInfo().boundingBox.extendSize.x
-                        //    * selectedContainer.scaling.x * 2;
+                        moveContainer(1, 0, 0);
                     },
                 },
             });
-            //var setPositionInBlock = function (yardContainer: BABYLON.AbstractMesh) {
-            //    if (selectedContainer) {
-            //        var nextPosition = yardLocations.filter(f => f.isEmpty == true)[0];
-            //        if (nextPosition) {
-            //            nextPosition.isEmpty = false;
-            //            yardContainer.position.x = nextPosition.row_x * yardContainer.scaling.x - block._boundingInfo.maximum.x + nextPosition.row_x * multiplicationFactor / 4;
-            //            yardContainer.position.y = (nextPosition.level_y - 1) * yardContainer.scaling.y + yardContainer.scaling.y / 2;
-            //            yardContainer.position.z = nextPosition.column_z * yardContainer.scaling.z - block._boundingInfo.maximum.z + nextPosition.column_z * multiplicationFactor / 4;
-            //        }
-            //        else {
-            //            alert('There is no room...');
-            //        }
-            //    } else {
-            //        alert('No selected container.');
-            //    }
-            //};
+            var moveContainer = function (row_x, column_z, level_y) {
+                var yardLocation = yardLocations.filter(function (f) { return f.isEmpty == true
+                    && f.row_x == selectedContainer.yardLocation.row_x + row_x
+                    && f.column_z == selectedContainer.yardLocation.column_z + column_z
+                    && f.level_y == selectedContainer.yardLocation.level_y + level_y; })[0];
+                if (yardLocation) {
+                    var currentYardLocation = yardLocations.filter(function (f) {
+                        return f.row_x == selectedContainer.yardLocation.row_x
+                            && f.column_z == selectedContainer.yardLocation.column_z
+                            && f.level_y == selectedContainer.yardLocation.level_y;
+                    })[0];
+                    currentYardLocation.isEmpty = true;
+                    selectedContainer.yardLocation = yardLocation;
+                }
+                else
+                    alert('Invalid move.');
+            };
         }
         return main;
     }());
@@ -186,21 +188,6 @@ var YARD;
 var YARD;
 (function (YARD) {
     var YARDBlock = (function () {
-        //private _yardContainerSize: yardSizeVector;
-        //get yardContainerSize(): yardSizeVector {
-        //    return {
-        //        width_z: this.size.width_z / this.capacity.column_z,
-        //        length_x: this.size.length_x / this.capacity.row_x,
-        //        height_y: this.size.height_y / this.capacity.level_y
-        //    };
-        //}
-        //set yardContainerSize(theValue: yardSizeVector) {
-        //    this._yardContainerSize = theValue;
-        //};
-        //get yardContainers(): yardContainer[] {
-        //    return {
-        //        };
-        //}
         function YARDBlock(core, id, containerSize, columns, rows, levels) {
             var scene = core.scene;
             // Tiled Ground Tutorial
@@ -222,21 +209,21 @@ var YARD;
             var tiledGround = BABYLON.Mesh.CreateTiledGround("Tiled Ground", xmin, zmin, xmax, zmax, subdivisions, precision, scene);
             tiledGround.position.y = -1;
             // Part 2 : Create the multi material
-            var groundMaterial = new BABYLON.StandardMaterial("ground", core.scene);
-            groundMaterial.diffuseColor = new BABYLON.Color3(0.6, 0.5, 0.4);
-            groundMaterial.specularColor = new BABYLON.Color3(0.5, 0.6, 0.7);
-            groundMaterial.emissiveColor = BABYLON.Color3.Black();
+            this.groundMaterial = new BABYLON.StandardMaterial("ground", core.scene);
+            this.groundMaterial.diffuseColor = new BABYLON.Color3(0.6, 0.5, 0.4);
+            this.groundMaterial.specularColor = new BABYLON.Color3(0.5, 0.6, 0.7);
+            this.groundMaterial.emissiveColor = BABYLON.Color3.Black();
             // Create differents materials
             var whiteMaterial = new BABYLON.StandardMaterial("White", scene);
             whiteMaterial.diffuseColor = new BABYLON.Color3(1, 1, 1);
-            var blackMaterial = groundMaterial;
+            var blackMaterial = this.groundMaterial;
             // Create Multi Material
-            var multimat = new BABYLON.MultiMaterial("multi", scene);
-            multimat.subMaterials.push(whiteMaterial);
-            multimat.subMaterials.push(blackMaterial);
+            this.multimat = new BABYLON.MultiMaterial("multi", scene);
+            this.multimat.subMaterials.push(whiteMaterial);
+            this.multimat.subMaterials.push(blackMaterial);
             // Part 3 : Apply the multi material
             // Define multimat as material of the tiled ground
-            tiledGround.material = multimat;
+            tiledGround.material = this.groundMaterial;
             // Needed variables to set subMeshes
             var verticesCount = tiledGround.getTotalVertices();
             var tileIndicesLength = tiledGround.getIndices().length / (subdivisions.w * subdivisions.h);
@@ -264,6 +251,17 @@ var YARD;
             this.size = { length_z: zmax + (-zmin), width_x: xmax + (-xmin), height_y: 1 };
             this.containers = [];
         }
+        Object.defineProperty(YARDBlock.prototype, "showTiles", {
+            set: function (val) {
+                if (val == true)
+                    this.mesh.material = this.multimat;
+                else
+                    this.mesh.material = this.groundMaterial;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        ;
         return YARDBlock;
     }());
     YARD.YARDBlock = YARDBlock;
@@ -286,6 +284,7 @@ var YARD;
             //yContainer.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: multiplicationFactor, friction: 0.7, restitution: 0.5 });
             yContainer.scaling = new BABYLON.Vector3(8, 8.6, size);
             this.mesh = yContainer;
+            this.mesh.container = this;
             this.block = block;
             block.containers.push(this);
             yardLocation.isEmpty = false;
@@ -729,7 +728,6 @@ var BABYLON;
                     mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function (evt) {
                         if (scene.pointerX === mouseX && scene.pointerY === mouseY) {
                             EDITOR.Event.sendSceneEvent(mesh, EDITOR.SceneEventType.OBJECT_PICKED, core);
-                            ///currentMesh = mesh;
                             _this.setFocusOnObject(mesh, core);
                         }
                     }));
@@ -1196,7 +1194,6 @@ var BABYLON;
                 var node = this._node;
                 var position = this._getNodePosition();
                 if (this._pickPosition) {
-                    ///currentMesh = mesh;
                     // Setup planes
                     if (this._xTransformers.indexOf(mesh) !== -1) {
                         this._pickingPlane = BABYLON.Plane.FromPositionAndNormal(position, new BABYLON.Vector3(0, 0, -1));

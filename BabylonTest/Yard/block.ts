@@ -8,25 +8,14 @@
         size: YARDSizeVector;
         yardLocations: YARDLocationVector[];
 
-        //private _yardContainerSize: yardSizeVector;
-        //get yardContainerSize(): yardSizeVector {
-        //    return {
-        //        width_z: this.size.width_z / this.capacity.column_z,
-        //        length_x: this.size.length_x / this.capacity.row_x,
-        //        height_y: this.size.height_y / this.capacity.level_y
-        //    };
-        //}
-        //set yardContainerSize(theValue: yardSizeVector) {
-        //    this._yardContainerSize = theValue;
-        //};
-
-
-
-        //get yardContainers(): yardContainer[] {
-        //    return {
-        //        };
-        //}
-
+        set showTiles(val: boolean) {
+            if (val == true)
+                this.mesh.material = this.multimat;
+            else
+                this.mesh.material = this.groundMaterial;
+        };
+        private groundMaterial: BABYLON.StandardMaterial;
+        private multimat: BABYLON.MultiMaterial;
         constructor(core: BABYLON.EDITOR.EditorCore, id, containerSize, columns, rows, levels) {
             var scene = core.scene;
             // Tiled Ground Tutorial
@@ -50,26 +39,26 @@
             tiledGround.position.y = -1
 
             // Part 2 : Create the multi material
-            var groundMaterial = new BABYLON.StandardMaterial("ground", core.scene);
-            groundMaterial.diffuseColor = new BABYLON.Color3(0.6, 0.5, 0.4);
-            groundMaterial.specularColor = new BABYLON.Color3(0.5, 0.6, 0.7);
-            groundMaterial.emissiveColor = BABYLON.Color3.Black();
+            this.groundMaterial = new BABYLON.StandardMaterial("ground", core.scene);
+            this.groundMaterial.diffuseColor = new BABYLON.Color3(0.6, 0.5, 0.4);
+            this.groundMaterial.specularColor = new BABYLON.Color3(0.5, 0.6, 0.7);
+            this.groundMaterial.emissiveColor = BABYLON.Color3.Black();
 
             // Create differents materials
             var whiteMaterial = new BABYLON.StandardMaterial("White", scene);
             whiteMaterial.diffuseColor = new BABYLON.Color3(1, 1, 1);
 
-            var blackMaterial = groundMaterial;
+            var blackMaterial = this.groundMaterial;
 
             // Create Multi Material
-            var multimat = new BABYLON.MultiMaterial("multi", scene);
-            multimat.subMaterials.push(whiteMaterial);
-            multimat.subMaterials.push(blackMaterial);
+            this.multimat = new BABYLON.MultiMaterial("multi", scene);
+            this.multimat.subMaterials.push(whiteMaterial);
+            this.multimat.subMaterials.push(blackMaterial);
 
 
             // Part 3 : Apply the multi material
             // Define multimat as material of the tiled ground
-            tiledGround.material = multimat;
+            tiledGround.material = this.groundMaterial;
 
             // Needed variables to set subMeshes
             var verticesCount = tiledGround.getTotalVertices();
