@@ -86,11 +86,11 @@
         }
 
         // Sets the focus of the camera
-        static setFocusOnObject(object: any, core): void {
+        static setFocusOnObject(object: any, core: EditorCore): void {
             if (!object || !object.position)
                 return;
 
-            var scene = core.currentScene;
+            var scene = core.scene;
             var camera = core.camera;
             var position = object.position;
 

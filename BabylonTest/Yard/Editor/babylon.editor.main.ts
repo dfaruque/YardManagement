@@ -65,7 +65,7 @@
         * Creates the UI
         */
         private _createUI() {
-            
+
         }
 
         /**
@@ -103,10 +103,7 @@
                     SceneManager.ConfigureObject(scene.meshes[i], this.core, parent);
                 }
 
-                
 
-                SceneFactory.NodesToStart = [];
-                
             };
         }
 
@@ -146,7 +143,7 @@
             camera.upperBetaLimit = (Math.PI / 2) * 0.99;
             camera.lowerRadiusLimit = multiplicationFactor;
 
-            camera.setPosition(new BABYLON.Vector3(multiplicationFactor * multiplicationFactor, multiplicationFactor * multiplicationFactor*2, 0));
+            camera.setPosition(new BABYLON.Vector3(multiplicationFactor * 8, multiplicationFactor * 8 * 2, 0));
             this.core.camera = camera;
         }
 

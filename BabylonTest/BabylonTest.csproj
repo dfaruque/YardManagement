@@ -70,7 +70,8 @@
     <Content Include="index.html" />
     <Content Include="scripts\babylon.core.js" />
     <TypeScriptCompile Include="showBlockGrid.ts" />
-    <TypeScriptCompile Include="extends.ts" />
+    <TypeScriptCompile Include="Yard\block.ts" />
+    <TypeScriptCompile Include="Yard\container.ts" />
     <TypeScriptCompile Include="ManipulationHelpers.d.ts" />
     <TypeScriptCompile Include="showNormals.ts" />
     <Content Include="scripts\bootstrap.js" />
@@ -82,15 +83,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="Yard\app.ts" />
     <TypeScriptCompile Include="scripts\babylon.d.ts" />
-    <TypeScriptCompile Include="scripts\babylon.editor.core.ts" />
-    <TypeScriptCompile Include="scripts\babylon.editor.main.ts" />
-    <TypeScriptCompile Include="scripts\babylon.editor.sceneFactory.ts" />
-    <TypeScriptCompile Include="scripts\babylon.editor.sceneManager.ts" />
-    <TypeScriptCompile Include="scripts\babylon.editor.transformer.ts" />
-    <TypeScriptCompile Include="scripts\internal\babylon.editor.event.ts" />
-    <TypeScriptCompile Include="scripts\internal\babylon.editor.tools.ts" />
+    <TypeScriptCompile Include="Yard\Editor\babylon.editor.core.ts" />
+    <TypeScriptCompile Include="Yard\Editor\babylon.editor.main.ts" />
+    <TypeScriptCompile Include="Yard\Editor\babylon.editor.sceneManager.ts" />
+    <TypeScriptCompile Include="Yard\Editor\babylon.editor.transformer.ts" />
+    <TypeScriptCompile Include="Yard\Editor\babylon.editor.event.ts" />
+    <TypeScriptCompile Include="Yard\Editor\babylon.editor.tools.ts" />
     <TypeScriptCompile Include="scripts\typings\babylon.editor.d.ts" />
     <TypeScriptCompile Include="scripts\typings\babylon.editor.gui.d.ts" />
     <TypeScriptCompile Include="scripts\typings\dat.gui.d.ts" />
@@ -98,7 +98,7 @@
     <TypeScriptCompile Include="scripts\typings\materials\babylon.skyMaterial.d.ts" />
     <TypeScriptCompile Include="scripts\typings\vue\vue.d.ts" />
     <TypeScriptCompile Include="scripts\typings\w2ui.d.ts" />
-    <TypeScriptCompile Include="yard.d.ts" />
+    <TypeScriptCompile Include="Yard\yard.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

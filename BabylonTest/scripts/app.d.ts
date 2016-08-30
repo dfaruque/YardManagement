@@ -1,4 +1,7 @@
 ﻿/// <reference path="babylon.d.ts" />
+declare var blockGrid: (block: YARD.YARDBlock) => any;
+declare function showNormals(mesh: any, size: any, color: any, sc: any): BABYLON.LinesMesh;
+declare function showWorldAxis(size: any, scene: any): void;
 declare const multiplicationFactor: number;
 declare namespace YARD {
     class main {
@@ -14,6 +17,8 @@ declare namespace YARD {
         yardLocations: YARDLocationVector[];
         constructor(core: BABYLON.EDITOR.EditorCore, id: any, containerSize: any, columns: any, rows: any, levels: any);
     }
+}
+declare namespace YARD {
     class YARDContainer {
         name: string;
         mesh: BABYLON.Mesh;
@@ -24,9 +29,6 @@ declare namespace YARD {
         constructor(core: BABYLON.EDITOR.EditorCore, id: any, block: YARD.YARDBlock, size: number, yardLocation: YARDLocationVector, color: BABYLON.Color3);
     }
 }
-declare var blockGrid: (block: YARD.YARDBlock) => any;
-declare function showNormals(mesh: any, size: any, color: any, sc: any): BABYLON.LinesMesh;
-declare function showWorldAxis(size: any, scene: any): void;
 declare namespace BABYLON.EDITOR {
     class EditorCore implements ICustomUpdate, IDisposable {
         engine: Engine;
@@ -68,165 +70,6 @@ declare namespace BABYLON.EDITOR {
         * IDisposable
         */
         dispose(): void;
-    }
-}
-declare namespace BABYLON.EDITOR {
-    class EditorMain implements IDisposable, IEventReceiver {
-        core: EditorCore;
-        transformer: Transformer;
-        container: string;
-        mainContainer: string;
-        antialias: boolean;
-        options: any;
-        filesInput: FilesInput;
-        renderMainScene: boolean;
-        renderHelpers: boolean;
-        static DummyNodeID: string;
-        /**
-        * Constructor
-        */
-        constructor(containerID: string, antialias?: boolean, options?: any);
-        /**
-        * Event receiver
-        */
-        onEvent(event: Event): boolean;
-        /**
-        * Creates the UI
-        */
-        private _createUI();
-        /**
-        * Handles just opened scenes
-        */
-        private _handleSceneLoaded();
-        /**
-        * Creates the babylon engine
-        */
-        private _createBabylonEngine();
-        /**
-        * Creates the editor camera
-        */
-        private _createBabylonCamera();
-        /**
-        * Creates the render loop
-        */
-        createRenderLoop(): void;
-        /**
-        * Simply update the scenes and updates
-        */
-        update(): void;
-        dispose(): void;
-    }
-}
-declare namespace BABYLON.EDITOR {
-    interface IEnabledPostProcesses {
-        hdr: boolean;
-        attachHDR: boolean;
-        ssao: boolean;
-        ssaoOnly: boolean;
-        attachSSAO: boolean;
-        vls: boolean;
-    }
-    class SceneFactory {
-        static GenerateUUID(): string;
-        static ConfigureObject(object: any, core: EditorCore): void;
-        static HDRPipeline: HDRRenderingPipeline;
-        static SSAOPipeline: SSAORenderingPipeline;
-        static VLSPostProcess: VolumetricLightScatteringPostProcess;
-        static EnabledPostProcesses: IEnabledPostProcesses;
-        static NodesToStart: IAnimatable[];
-        static AnimationSpeed: number;
-        /**
-        * Post-Processes
-        */
-        static CreateSSAOPipeline(core: EditorCore, serializationObject?: any): SSAORenderingPipeline;
-        static CreateVLSPostProcess(core: EditorCore, mesh?: Mesh, serializationObject?: any): VolumetricLightScatteringPostProcess;
-        /**
-        * Nodes
-        */
-        static AddPointLight(core: EditorCore): PointLight;
-        static AddDirectionalLight(core: EditorCore): DirectionalLight;
-        static AddSpotLight(core: EditorCore): SpotLight;
-        static AddHemisphericLight(core: EditorCore): HemisphericLight;
-        static AddBoxMesh(core: EditorCore): Mesh;
-        static AddSphereMesh(core: EditorCore): Mesh;
-        static AddPlaneMesh(core: EditorCore): Mesh;
-        static AddGroundMesh(core: EditorCore): Mesh;
-        static AddHeightMap(core: EditorCore): Mesh;
-        static AddLensFlare(core: EditorCore, system: LensFlareSystem, size: number, position: number, color: any): LensFlare;
-        static AddReflectionProbe(core: EditorCore): ReflectionProbe;
-        static AddRenderTargetTexture(core: EditorCore): RenderTargetTexture;
-        static AddSkyMesh(core: EditorCore): Mesh;
-        static AddYardSkyMesh(core: EditorCore): Mesh;
-        static AddYardDirectionalLight(core: EditorCore): DirectionalLight;
-    }
-}
-declare namespace BABYLON.EDITOR {
-    class SceneManager {
-        /**
-        * Objects configuration
-        */
-        private static _alreadyConfiguredObjectsIDs;
-        static ResetConfiguredObjects(): void;
-        static SwitchActionManager(): void;
-        static ConfigureObject(object: AbstractMesh | Scene, core: EditorCore, parentNode?: Node): void;
-        static setFocusOnObject(object: any, core: any): void;
-    }
-}
-declare namespace BABYLON.EDITOR {
-    enum TransformerType {
-        POSITION = 0,
-        ROTATION = 1,
-        SCALING = 2,
-        NOTHING = 3,
-    }
-    class Transformer implements IEventReceiver, ICustomUpdate {
-        core: EditorCore;
-        private _scene;
-        private _node;
-        private _helperPlane;
-        private _planeMaterial;
-        private _subMesh;
-        private _batch;
-        private _cameraTexture;
-        private _soundTexture;
-        private _lightTexture;
-        private _transformerType;
-        private _xTransformers;
-        private _yTransformers;
-        private _zTransformers;
-        private _sharedScale;
-        private _pickingPlane;
-        private _mousePositionInPlane;
-        private _mousePosition;
-        private _mouseDown;
-        private _pickPosition;
-        private _pickingInfo;
-        private _vectorToModify;
-        private _selectedTransform;
-        private _distance;
-        private _multiplier;
-        private _ctrlIsDown;
-        /**
-        * Constructor
-        * @param core: the editor core instance
-        */
-        constructor(core: EditorCore);
-        createHelpers(core: EditorCore): void;
-        onEvent(event: Event): boolean;
-        onPreUpdate(): void;
-        onPostUpdate(): void;
-        transformerType: TransformerType;
-        node: Node;
-        getScene(): Scene;
-        private _getNodePosition();
-        private _renderHelperPlane(array, onConfigure);
-        private _updateTransform(distance);
-        private _getIntersectionWithLine(linePoint, lineVect);
-        private _findMousePositionInPlane(pickingInfos);
-        private _createTransformers();
-        private _createPositionTransformer(color, id);
-        private _createRotationTransformer(color, id);
-        private _createScalingTransformer(color, id);
     }
 }
 declare namespace BABYLON.EDITOR {
@@ -310,6 +153,65 @@ declare namespace BABYLON.EDITOR {
     }
 }
 declare namespace BABYLON.EDITOR {
+    class EditorMain implements IDisposable, IEventReceiver {
+        core: EditorCore;
+        transformer: Transformer;
+        container: string;
+        mainContainer: string;
+        antialias: boolean;
+        options: any;
+        filesInput: FilesInput;
+        renderMainScene: boolean;
+        renderHelpers: boolean;
+        static DummyNodeID: string;
+        /**
+        * Constructor
+        */
+        constructor(containerID: string, antialias?: boolean, options?: any);
+        /**
+        * Event receiver
+        */
+        onEvent(event: Event): boolean;
+        /**
+        * Creates the UI
+        */
+        private _createUI();
+        /**
+        * Handles just opened scenes
+        */
+        private _handleSceneLoaded();
+        /**
+        * Creates the babylon engine
+        */
+        private _createBabylonEngine();
+        /**
+        * Creates the editor camera
+        */
+        private _createBabylonCamera();
+        /**
+        * Creates the render loop
+        */
+        createRenderLoop(): void;
+        /**
+        * Simply update the scenes and updates
+        */
+        update(): void;
+        dispose(): void;
+    }
+}
+declare namespace BABYLON.EDITOR {
+    class SceneManager {
+        /**
+        * Objects configuration
+        */
+        private static _alreadyConfiguredObjectsIDs;
+        static ResetConfiguredObjects(): void;
+        static SwitchActionManager(): void;
+        static ConfigureObject(object: AbstractMesh | Scene, core: EditorCore, parentNode?: Node): void;
+        static setFocusOnObject(object: any, core: EditorCore): void;
+    }
+}
+declare namespace BABYLON.EDITOR {
     class Tools {
         /**
         * Returns a vector3 string from a vector3
@@ -360,5 +262,62 @@ declare namespace BABYLON.EDITOR {
         * Returns a particle system by its name
         */
         static GetParticleSystemByName(scene: Scene, name: string): ParticleSystem;
+    }
+}
+declare namespace BABYLON.EDITOR {
+    enum TransformerType {
+        POSITION = 0,
+        ROTATION = 1,
+        SCALING = 2,
+        NOTHING = 3,
+    }
+    class Transformer implements IEventReceiver, ICustomUpdate {
+        core: EditorCore;
+        private _scene;
+        private _node;
+        private _helperPlane;
+        private _planeMaterial;
+        private _subMesh;
+        private _batch;
+        private _cameraTexture;
+        private _soundTexture;
+        private _lightTexture;
+        private _transformerType;
+        private _xTransformers;
+        private _yTransformers;
+        private _zTransformers;
+        private _sharedScale;
+        private _pickingPlane;
+        private _mousePositionInPlane;
+        private _mousePosition;
+        private _mouseDown;
+        private _pickPosition;
+        private _pickingInfo;
+        private _vectorToModify;
+        private _selectedTransform;
+        private _distance;
+        private _multiplier;
+        private _ctrlIsDown;
+        /**
+        * Constructor
+        * @param core: the editor core instance
+        */
+        constructor(core: EditorCore);
+        createHelpers(core: EditorCore): void;
+        onEvent(event: Event): boolean;
+        onPreUpdate(): void;
+        onPostUpdate(): void;
+        transformerType: TransformerType;
+        node: Node;
+        getScene(): Scene;
+        private _getNodePosition();
+        private _renderHelperPlane(array, onConfigure);
+        private _updateTransform(distance);
+        private _getIntersectionWithLine(linePoint, lineVect);
+        private _findMousePositionInPlane(pickingInfos);
+        private _createTransformers();
+        private _createPositionTransformer(color, id);
+        private _createRotationTransformer(color, id);
+        private _createScalingTransformer(color, id);
     }
 }

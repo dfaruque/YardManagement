@@ -1,4 +1,3 @@
-/// <reference path="app.ts" />
 /// <reference path="scripts/babylon.d.ts" />
 
 // Displays World axis with red, green, blue arrows and X, Y, Z letters.

@@ -36,7 +36,8 @@ namespace YARD {
 
             scene.clearColor = BABYLON.Color3.Black();
 
-            var light = BABYLON.EDITOR.SceneFactory.AddYardDirectionalLight(core);
+            var light = new BABYLON.DirectionalLight("New DirectionalLight", new BABYLON.Vector3(1, -1, -1), scene);
+            light.position = new BABYLON.Vector3(10 * multiplicationFactor, 10 * multiplicationFactor, 10 * multiplicationFactor);
 
             var block = new YARD.YARDBlock(core, 1, 20, 6, 9, 2);
 
