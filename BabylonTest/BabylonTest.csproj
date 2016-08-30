@@ -68,11 +68,8 @@
     <Content Include="css\images\wireframe.png" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="index.html" />
-    <Content Include="scripts\babylon.core.js" />
     <TypeScriptCompile Include="Yard\block.ts" />
     <TypeScriptCompile Include="Yard\container.ts" />
-    <Content Include="scripts\bootstrap.js" />
-    <Content Include="scripts\bootstrap.min.js" />
     <Content Include="showWorldAxis.ts" />
     <Content Include="tsconfig.json" />
     <Content Include="web.config">
@@ -90,7 +87,6 @@
     <TypeScriptCompile Include="Yard\Editor\babylon.editor.tools.ts" />
     <TypeScriptCompile Include="Yard\Editor\babylon.editor.d.ts" />
     <TypeScriptCompile Include="scripts\typings\jquery\jquery.d.ts" />
-    <TypeScriptCompile Include="scripts\typings\materials\babylon.skyMaterial.d.ts" />
     <TypeScriptCompile Include="scripts\typings\vue\vue.d.ts" />
     <TypeScriptCompile Include="Yard\yard.d.ts" />
   </ItemGroup>
