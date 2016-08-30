@@ -1,5 +1,5 @@
-﻿var blockGrid = function (block: BABYLON.yardBlock) {
-    var scene = block.getScene();
+﻿var blockGrid = function (block: YARD.YARDBlock) {
+    var scene = block.mesh.getScene();
 
     var i, strip, stripx, stripz, rsm, sm, parent, parmat;
     var gridwidth = block.size.length_z - multiplicationFactor;  // must be increments of 10

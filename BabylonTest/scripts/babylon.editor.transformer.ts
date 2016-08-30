@@ -71,7 +71,7 @@
                 }
 
                 this._pickingInfo = null;
-                core.currentScene.activeCamera.attachControl(core.canvas);
+                core.scene.activeCamera.attachControl(core.canvas);
 
                 if (this._node)
                     Event.sendSceneEvent(this._node, SceneEventType.OBJECT_CHANGED, core);
@@ -150,7 +150,7 @@
         // On pre update
         public onPreUpdate(): void {
             // Update camera
-            this._scene.activeCamera = this.core.currentScene.activeCamera;
+            this._scene.activeCamera = this.core.scene.activeCamera;
 
             // Compute node
             var node: any = this._node;
@@ -200,7 +200,7 @@
         public onPostUpdate(): void {
             //this._helperPlane.setEnabled(!this.core.isPlaying && this.core.editor.renderHelpers);
 
-            if ((this.core.isPlaying && this.core.currentScene.activeCamera !== this.core.camera) || !this.core.editor.renderHelpers)
+            if ((this.core.isPlaying && this.core.scene.activeCamera !== this.core.camera) || !this.core.editor.renderHelpers)
                 return;
 
             var engine = this._scene.getEngine();
@@ -216,8 +216,8 @@
 
                 // Cameras
                 this._planeMaterial.diffuseTexture = this._cameraTexture;
-                this._renderHelperPlane(this.core.currentScene.cameras, (obj: Camera) => {
-                    if (obj === this.core.currentScene.activeCamera)
+                this._renderHelperPlane(this.core.scene.cameras, (obj: Camera) => {
+                    if (obj === this.core.scene.activeCamera)
                         return false;
 
                     this._helperPlane.position.copyFrom(obj.position);
@@ -226,8 +226,8 @@
 
                 // Sounds
                 this._planeMaterial.diffuseTexture = this._soundTexture;
-                for (var i = 0; i < this.core.currentScene.soundTracks.length; i++) {
-                    var soundTrack = this.core.currentScene.soundTracks[i];
+                for (var i = 0; i < this.core.scene.soundTracks.length; i++) {
+                    var soundTrack = this.core.scene.soundTracks[i];
                     this._renderHelperPlane(soundTrack.soundCollection, (obj: Sound) => {
                         if (!obj.spatialSound)
                             return false;
@@ -239,7 +239,7 @@
 
                 // Lights
                 this._planeMaterial.diffuseTexture = this._lightTexture;
-                this._renderHelperPlane(this.core.currentScene.lights, (obj: Light) => {
+                this._renderHelperPlane(this.core.scene.lights, (obj: Light) => {
                     if (!obj.getAbsolutePosition)
                         return false;
 
@@ -317,7 +317,7 @@
                 if (!onConfigure(obj))
                     continue;
 
-                var distance = Vector3.Distance(this.core.currentScene.activeCamera.position, this._helperPlane.position) * 0.03;
+                var distance = Vector3.Distance(this.core.scene.activeCamera.position, this._helperPlane.position) * 0.03;
                 this._helperPlane.scaling = new Vector3(distance, distance, distance),
                     this._helperPlane.computeWorldMatrix(true);
 
@@ -362,7 +362,7 @@
                     this._selectedTransform = "z";
                 }
 
-                this.core.currentScene.activeCamera.detachControl(this.core.canvas);
+                this.core.scene.activeCamera.detachControl(this.core.canvas);
 
                 if (this._findMousePositionInPlane(this._pickingInfo)) {
                     this._mousePosition.copyFrom(this._mousePositionInPlane);

@@ -5,18 +5,26 @@ declare namespace YARD {
         constructor();
     }
 }
-declare namespace BABYLON {
-    class yardBlock extends BABYLON.Mesh {
-        capacity: yardLocationVector;
-        size: yardSizeVector;
-        yardLocations: yardLocationVector[];
+declare namespace YARD {
+    class YARDBlock {
+        mesh: BABYLON.Mesh;
+        containers: YARD.YARDContainer[];
+        capacity: YARDLocationVector;
+        size: YARDSizeVector;
+        yardLocations: YARDLocationVector[];
+        constructor(core: BABYLON.EDITOR.EditorCore, id: any, containerSize: any, columns: any, rows: any, levels: any);
     }
-    class yardContainer extends BABYLON.Mesh {
+    class YARDContainer {
+        name: string;
+        mesh: BABYLON.Mesh;
+        _block: YARD.YARDBlock;
+        block: YARD.YARDBlock;
         private _yardLocation;
-        yardLocation: yardLocationVector;
+        yardLocation: YARDLocationVector;
+        constructor(core: BABYLON.EDITOR.EditorCore, id: any, block: YARD.YARDBlock, size: number, yardLocation: YARDLocationVector, color: BABYLON.Color3);
     }
 }
-declare var blockGrid: (block: BABYLON.yardBlock) => any;
+declare var blockGrid: (block: YARD.YARDBlock) => any;
 declare function showNormals(mesh: any, size: any, color: any, sc: any): BABYLON.LinesMesh;
 declare function showWorldAxis(size: any, scene: any): void;
 declare namespace BABYLON.EDITOR {
@@ -27,7 +35,7 @@ declare namespace BABYLON.EDITOR {
         playCamera: Camera;
         isPlaying: boolean;
         scenes: Array<ICustomScene>;
-        currentScene: Scene;
+        scene: Scene;
         updates: Array<ICustomUpdate>;
         eventReceivers: Array<IEventReceiver>;
         editor: EditorMain;
@@ -148,8 +156,6 @@ declare namespace BABYLON.EDITOR {
         static AddReflectionProbe(core: EditorCore): ReflectionProbe;
         static AddRenderTargetTexture(core: EditorCore): RenderTargetTexture;
         static AddSkyMesh(core: EditorCore): Mesh;
-        static AddYardContainer(core: EditorCore, id: any, block: yardBlock, size: number, yardLocation: yardLocationVector, color: Color3): Mesh;
-        static AddYardBlockGroundMesh(core: EditorCore, id: any, containerSize: any, columns: any, rows: any, levels: any): yardBlock;
         static AddYardSkyMesh(core: EditorCore): Mesh;
         static AddYardDirectionalLight(core: EditorCore): DirectionalLight;
     }

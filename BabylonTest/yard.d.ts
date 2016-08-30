@@ -1,4 +1,4 @@
-﻿declare class yardLocationVector{
+﻿declare class YARDLocationVector{
     column_z: number;
     row_x: number;
     level_y: number;
@@ -6,7 +6,7 @@
     isEmpty: boolean;
 }
 
-declare class yardSizeVector {
+declare class YARDSizeVector {
     length_z: number;
     height_y: number;
     width_x: number;

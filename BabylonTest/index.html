@@ -14,16 +14,6 @@
     <script src="scripts/babylon.js"></script>
 
     <script src="scripts/jquery-3.1.0.min.js"></script>
-    <!--<script src="scripts/babylon.editor.core.js"></script>
-    <script src="scripts/babylon.editor.transformer.js"></script>
-    <script src="scripts/babylon.editor.sceneManager.js"></script>
-
-    <script src="scripts/babylon.skyMaterial.js"></script>
-
-
-    <script src="scripts/babylon.editor.main.js"></script>
-
-    <script src="showBlockGrid.js"></script>-->
 
     <link rel="stylesheet" href="app.css" type="text/css" />
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
@@ -67,7 +57,7 @@
                     </div>
                     <div class="panel-body">
                         <div>
-                            <div>Name: <span class="label label-info" v-text="currentMesh.name"></span></div>
+                            <div>Name: <span class="label label-info" text="currentMesh.name"></span></div>
                             <div>
                                 <input type="button" @click="moveForward" value="▲" />
                                 <input type="button" @click="moveBackword" value="▼" />

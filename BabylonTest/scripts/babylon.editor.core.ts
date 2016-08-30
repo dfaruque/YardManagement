@@ -10,7 +10,7 @@
         public isPlaying: boolean = false;
 
         public scenes: Array<ICustomScene> = new Array<ICustomScene>();
-        public currentScene: Scene;
+        public scene: Scene;
 
         public updates: Array<ICustomUpdate> = new Array<ICustomUpdate>();
         public eventReceivers: Array<IEventReceiver> = new Array<IEventReceiver>();
