@@ -48,10 +48,10 @@ namespace YARD {
 
             var light = new BABYLON.DirectionalLight("New DirectionalLight", new BABYLON.Vector3(1, -1, -1), scene);
             light.position = new BABYLON.Vector3(10 * multiplicationFactor, 10 * multiplicationFactor, 10 * multiplicationFactor);
+            core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light);
 
             var block = new YARD.YARDBlock(core, 1, 20, 6, 9, 2);
 
-            core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light);
             editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
 
             var yardLocations = block.yardLocations;
@@ -105,6 +105,8 @@ namespace YARD {
                         }
                     },
                     arrangeAll: () => {
+                        yardLocations.forEach(f => f.isEmpty = true);
+
                         for (var i = 0; i < block.containers.length; i++) {
                             var nextPosition = yardLocations[i];
                             nextPosition.isEmpty = false;
