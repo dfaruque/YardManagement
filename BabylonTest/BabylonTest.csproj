@@ -88,13 +88,10 @@
     <TypeScriptCompile Include="Yard\Editor\babylon.editor.transformer.ts" />
     <TypeScriptCompile Include="Yard\Editor\babylon.editor.event.ts" />
     <TypeScriptCompile Include="Yard\Editor\babylon.editor.tools.ts" />
-    <TypeScriptCompile Include="scripts\typings\babylon.editor.d.ts" />
-    <TypeScriptCompile Include="scripts\typings\babylon.editor.gui.d.ts" />
-    <TypeScriptCompile Include="scripts\typings\dat.gui.d.ts" />
+    <TypeScriptCompile Include="Yard\Editor\babylon.editor.d.ts" />
     <TypeScriptCompile Include="scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="scripts\typings\materials\babylon.skyMaterial.d.ts" />
     <TypeScriptCompile Include="scripts\typings\vue\vue.d.ts" />
-    <TypeScriptCompile Include="scripts\typings\w2ui.d.ts" />
     <TypeScriptCompile Include="Yard\yard.d.ts" />
   </ItemGroup>
   <ItemGroup>

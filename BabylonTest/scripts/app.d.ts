@@ -129,23 +129,12 @@ declare namespace BABYLON.EDITOR {
     /**
     * GUI Event
     */
-    class GUIEvent extends BaseEvent {
-        caller: GUI.IGUIElement;
-        eventType: GUIEventType;
-        /**
-        * Constructor
-        * @param caller: gui element calling the event
-        * @param eventType: the gui event type
-        */
-        constructor(caller: any, eventType: number, data?: Object);
-    }
     /**
     * IEvent implementation
     */
     class Event implements IEvent {
         eventType: EventType;
         sceneEvent: SceneEvent;
-        guiEvent: GUIEvent;
         static sendSceneEvent(object: any, type: SceneEventType, core: EditorCore): void;
         static sendGUIEvent(object: any, type: GUIEventType, core: EditorCore): void;
     }

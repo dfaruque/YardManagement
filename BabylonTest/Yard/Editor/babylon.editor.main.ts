@@ -51,12 +51,12 @@
         * Event receiver
         */
         public onEvent(event: Event): boolean {
-            if (event.eventType === EventType.GUI_EVENT) {
-                if (event.guiEvent.eventType === GUIEventType.LAYOUT_CHANGED) {
-                    this.core.engine.resize();
-                    return true;
-                }
-            }
+            //if (event.eventType === EventType.GUI_EVENT) {
+            //    if (event.guiEvent.eventType === GUIEventType.LAYOUT_CHANGED) {
+            //        this.core.engine.resize();
+            //        return true;
+            //    }
+            //}
 
             return false;
         }

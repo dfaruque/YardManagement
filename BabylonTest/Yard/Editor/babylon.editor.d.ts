@@ -35,7 +35,7 @@
         eventType: EventType;
 
         // GUI
-        guiEvent: GUIEvent;
+        //guiEvent: GUIEvent;
 
         // Scene
         sceneEvent: SceneEvent;

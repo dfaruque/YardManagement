@@ -77,23 +77,23 @@
     /**
     * GUI Event
     */
-    export class GUIEvent extends BaseEvent {
-        public caller: GUI.IGUIElement;
-        public eventType: GUIEventType;
+    //export class GUIEvent extends BaseEvent {
+    //    public caller: GUI.IGUIElement;
+    //    public eventType: GUIEventType;
 
-        /**
-        * Constructor
-        * @param caller: gui element calling the event
-        * @param eventType: the gui event type
-        */
-        constructor(caller, eventType: number, data?: Object)
-        {
-            super(data);
+    //    /**
+    //    * Constructor
+    //    * @param caller: gui element calling the event
+    //    * @param eventType: the gui event type
+    //    */
+    //    constructor(caller, eventType: number, data?: Object)
+    //    {
+    //        super(data);
 
-            this.caller = caller;
-            this.eventType = eventType;
-        }
-    }
+    //        this.caller = caller;
+    //        this.eventType = eventType;
+    //    }
+    //}
 
     /**
     * IEvent implementation
@@ -102,7 +102,7 @@
         public eventType: EventType = EventType.UNKNOWN;
 
         public sceneEvent: SceneEvent = null;
-        public guiEvent: GUIEvent = null;
+        //public guiEvent: GUIEvent = null;
 
         static sendSceneEvent(object: any, type: SceneEventType, core: EditorCore): void {
             var ev = new Event();
@@ -117,7 +117,7 @@
             var ev = new Event();
 
             ev.eventType = EventType.GUI_EVENT;
-            ev.guiEvent = new GUIEvent(object, type);
+            //ev.guiEvent = new GUIEvent(object, type);
 
             core.sendEvent(ev);
         }

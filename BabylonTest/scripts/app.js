@@ -470,21 +470,21 @@ var BABYLON;
         /**
         * GUI Event
         */
-        var GUIEvent = (function (_super) {
-            __extends(GUIEvent, _super);
-            /**
-            * Constructor
-            * @param caller: gui element calling the event
-            * @param eventType: the gui event type
-            */
-            function GUIEvent(caller, eventType, data) {
-                _super.call(this, data);
-                this.caller = caller;
-                this.eventType = eventType;
-            }
-            return GUIEvent;
-        }(BaseEvent));
-        EDITOR.GUIEvent = GUIEvent;
+        //export class GUIEvent extends BaseEvent {
+        //    public caller: GUI.IGUIElement;
+        //    public eventType: GUIEventType;
+        //    /**
+        //    * Constructor
+        //    * @param caller: gui element calling the event
+        //    * @param eventType: the gui event type
+        //    */
+        //    constructor(caller, eventType: number, data?: Object)
+        //    {
+        //        super(data);
+        //        this.caller = caller;
+        //        this.eventType = eventType;
+        //    }
+        //}
         /**
         * IEvent implementation
         */
@@ -492,8 +492,8 @@ var BABYLON;
             function Event() {
                 this.eventType = EventType.UNKNOWN;
                 this.sceneEvent = null;
-                this.guiEvent = null;
             }
+            //public guiEvent: GUIEvent = null;
             Event.sendSceneEvent = function (object, type, core) {
                 var ev = new Event();
                 ev.eventType = EventType.SCENE_EVENT;
@@ -503,7 +503,7 @@ var BABYLON;
             Event.sendGUIEvent = function (object, type, core) {
                 var ev = new Event();
                 ev.eventType = EventType.GUI_EVENT;
-                ev.guiEvent = new GUIEvent(object, type);
+                //ev.guiEvent = new GUIEvent(object, type);
                 core.sendEvent(ev);
             };
             return Event;
@@ -565,12 +565,12 @@ var BABYLON;
             * Event receiver
             */
             EditorMain.prototype.onEvent = function (event) {
-                if (event.eventType === EDITOR.EventType.GUI_EVENT) {
-                    if (event.guiEvent.eventType === EDITOR.GUIEventType.LAYOUT_CHANGED) {
-                        this.core.engine.resize();
-                        return true;
-                    }
-                }
+                //if (event.eventType === EventType.GUI_EVENT) {
+                //    if (event.guiEvent.eventType === GUIEventType.LAYOUT_CHANGED) {
+                //        this.core.engine.resize();
+                //        return true;
+                //    }
+                //}
                 return false;
             };
             /**
