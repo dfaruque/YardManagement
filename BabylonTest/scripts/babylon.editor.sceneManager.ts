@@ -1,4 +1,4 @@
-﻿module BABYLON.EDITOR {
+﻿namespace BABYLON.EDITOR {
     // Configured object interface
     interface IObjectConfiguration {
         mesh: AbstractMesh;
@@ -68,8 +68,8 @@
                 mesh.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickUpTrigger, (evt: ActionEvent) => {
                     if (scene.pointerX === mouseX && scene.pointerY === mouseY) {
                         Event.sendSceneEvent(mesh, SceneEventType.OBJECT_PICKED, core);
-                        currentMesh = mesh;
-                       this.setFocusOnObject(mesh);
+                        ///currentMesh = mesh;
+                        this.setFocusOnObject(mesh, core);
                     }
                 }));
 
@@ -86,7 +86,7 @@
         }
 
         // Sets the focus of the camera
-        static setFocusOnObject(object: any): void {
+        static setFocusOnObject(object: any, core): void {
             if (!object || !object.position)
                 return;
 

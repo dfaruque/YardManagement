@@ -8,7 +8,7 @@ function showNormals(mesh, size, color, sc) {
     var normals = mesh.getVerticesData(BABYLON.VertexBuffer.NormalKind);
     var positions = mesh.getVerticesData(BABYLON.VertexBuffer.PositionKind);
     color = color || BABYLON.Color3.White();
-    sc = sc || scene;
+    //sc = sc || scene;
     size = size || 1;
 
     var lines: BABYLON.Vector3[][] = [];

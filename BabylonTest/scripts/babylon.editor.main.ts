@@ -1,4 +1,4 @@
-﻿module BABYLON.EDITOR {
+﻿namespace BABYLON.EDITOR {
     export class EditorMain implements IDisposable, IEventReceiver {
         // public members
         public core: EditorCore;

@@ -1,4 +1,4 @@
-﻿module BABYLON.EDITOR {
+﻿namespace BABYLON.EDITOR {
     export class Tools {
         /**
         * Returns a vector3 string from a vector3

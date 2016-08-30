@@ -1,4 +1,4 @@
-﻿module BABYLON.EDITOR {
+﻿namespace BABYLON.EDITOR {
     export class EditorCore implements ICustomUpdate, IDisposable {
         // Public members
         public engine: Engine = null;

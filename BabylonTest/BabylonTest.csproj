@@ -72,12 +72,11 @@
     <TypeScriptCompile Include="showBlockGrid.ts" />
     <TypeScriptCompile Include="extends.ts" />
     <TypeScriptCompile Include="ManipulationHelpers.d.ts" />
-    <TypeScriptCompile Include="showAngleSector.ts" />
     <TypeScriptCompile Include="showNormals.ts" />
-    <TypeScriptCompile Include="showPath3D.ts" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
     <Content Include="showWorldAxis.ts" />
+    <Content Include="tsconfig.json" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -154,7 +153,7 @@
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
-    <TypeScriptOutFile />
+    <TypeScriptOutFile>scripts/app.js</TypeScriptOutFile>
     <TypeScriptOutDir />
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>False</TypeScriptNoEmitOnError>

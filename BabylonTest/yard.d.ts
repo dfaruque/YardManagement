@@ -7,9 +7,9 @@
 }
 
 declare class yardSizeVector {
-    width_z: number;
+    length_z: number;
     height_y: number;
-    length_x: number;
+    width_x: number;
 }
 
 //one TEU - 20 feet (6.1 m) x 8- foot(2.4 m) x 8- foot - 6 - inch(2.59 m)

@@ -1,4 +1,4 @@
-﻿module BABYLON.EDITOR {
+﻿namespace BABYLON.EDITOR {
     export interface IEnabledPostProcesses {
         hdr: boolean;
         attachHDR: boolean;
@@ -381,108 +381,48 @@
         ////    return water;
         ////}
 
-        static AddYardContainer(core: EditorCore, id, block: AbstractMesh, location: yardLocationVector, color: Color3): Mesh {
-            var yardContainer = Mesh.CreateBox("yardContainer" + id, 1, core.currentScene, false);
-            yardContainer.id = "yardContainer" + id;
-            yardContainer.parent = block;
-            yardContainer.scaling = new Vector3(multiplicationFactor, multiplicationFactor, 2 * multiplicationFactor)
+        static AddYardContainer(core: EditorCore, id, block: yardBlock, size: number, yardLocation: yardLocationVector, color: Color3): Mesh {
+            
+            var yContainer = Mesh.CreateBox("yardContainer" + id, 1, core.currentScene, false) as yardContainer;
+            yContainer.id = "yardContainer" + id;
+            yContainer.parent = block;
+            yContainer.scaling = new Vector3(8, 8.6, size);
 
-            yardContainer.position = new Vector3(
-                location.row_x * yardContainer.scaling.x - block._boundingInfo.maximum.x + location.row_x * multiplicationFactor / 4,
-                (location.level_y - 1) * yardContainer.scaling.y + yardContainer.scaling.y / 2,
-                location.column_z * yardContainer.scaling.z - block._boundingInfo.maximum.z + location.column_z * multiplicationFactor / 4);
+            yContainer.yardLocation=yardLocation;
+
+            //yardContainer.position = new Vector3(
+            //    (location.row_x - 1 / 2) * yardContainer.scaling.x + yardContainer.parent._boundingInfo.minimum.x,
+            //    yardContainer.scaling.y / 2,
+            //    (location.column_z - 1 / 2) * yardContainer.scaling.z + block._boundingInfo.minimum.z);
 
             var containerMaterial = new StandardMaterial("containerMaterial", core.currentScene);
             containerMaterial.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
             containerMaterial.specularColor = new BABYLON.Color3(0.4, 0.4, 0.4);
             containerMaterial.emissiveColor = color;
 
-            yardContainer.material = containerMaterial;
+            yContainer.material = containerMaterial;
 
-            core.shadowGenerator.getShadowMap().renderList.push(yardContainer);
+            core.shadowGenerator.getShadowMap().renderList.push(yContainer);
 
-            this.ConfigureObject(yardContainer, core);
+            this.ConfigureObject(yContainer, core);
 
             //yardContainer.checkCollisions = true;
-            yardContainer.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: multiplicationFactor, friction: 0.7, restitution: 0.5 });
+            yContainer.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: multiplicationFactor, friction: 0.7, restitution: 0.5 });
 
-            location.isEmpty = false;
-            return yardContainer;
+            yardLocation.isEmpty = false;
+            return yContainer;
         }
 
-        static AddYardBlockGroundMesh(core: EditorCore, id, columns, rows, levels): yardBlock {
-            var opt = {
-                width: columns * multiplicationFactor * 2,
-                height: rows * multiplicationFactor * 2,
-                //subdivisions: multiplicationFactor,
-                //updatable: false
-            };
-
-            var ground = MeshBuilder.CreateGround("block" + id,
-                opt, core.currentScene) as yardBlock;
-            ground.id = "block" + id;
-
-            ground.capacity = { column_z: columns, row_x: rows, level_y: levels, isEmpty: false };
-
-            ground.size = { width_z: opt.width, length_x: opt.height, height_y: 1 };
-
-            ground.position = Vector3.Zero();
-            var groundMaterial = new BABYLON.StandardMaterial("ground", core.currentScene);
-            groundMaterial.diffuseColor = new BABYLON.Color3(0.6, 0.5, 0.4);
-            groundMaterial.specularColor = new BABYLON.Color3(0.5, 0.6, 0.7);
-            groundMaterial.emissiveColor = BABYLON.Color3.Black();
-            ground.material = groundMaterial;
-            ground.receiveShadows = true;
-
-            this.ConfigureObject(ground, core);
-
-            //physics
-            ground.checkCollisions = true;
-            ground.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: 0 });
-
-            //yardlocations
-            ground.yardLocations = [];
-            for (var r = 1; r <= rows; r++)
-                for (var c = 1; c <= columns; c++) {
-                    for (var l = 1; l <= levels; l++) {
-                        ground.yardLocations.push({ column_z: c, row_x: r, level_y: l, isEmpty: true });
-                    }
-                    //slots
-                    ////var containerSlot = Mesh.CreatePlane("containerSlot" + id, 1, core.currentScene, false);
-                    ////    containerSlot.parent = block;
-                    ////    containerSlot.scaling = new Vector3(multiplicationFactor, multiplicationFactor, 2 * multiplicationFactor)
-
-                    ////    containerSlot.position = new Vector3(
-                    ////        r * containerSlot.scaling.x - ground._boundingInfo.maximum.x + r * multiplicationFactor / 4,
-                    ////        containerSlot.scaling.y / 2,
-                    ////        c * containerSlot.scaling.z - ground._boundingInfo.maximum.z + c * multiplicationFactor / 4);
-
-                    ////    var containerMaterial = new StandardMaterial("containerMaterial", core.currentScene);
-                    ////    containerMaterial.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
-                    ////    containerMaterial.specularColor = new BABYLON.Color3(0.4, 0.4, 0.4);
-                    ////    containerMaterial.emissiveColor = new BABYLON.Color3(1, 0.4, 0.4);
-
-                    ////    //var outputplaneTexture = new BABYLON.DynamicTexture("dynamic texture", 512, scene, true);
-                    ////    //outputplaneTexture.hasAlpha = true;
-                    ////    //containerMaterial.diffuseTexture = outputplaneTexture;
-                    ////    //containerMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-                    ////    //containerMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
-
-                    ////    containerSlot.material = containerMaterial;
-
-                    ////    containerSlot.showBoundingBox = true;
-
-                }
-
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        static AddYardBlockGroundMesh(core: EditorCore, id, containerSize, columns, rows, levels): yardBlock {
+            var scene = core.currentScene;
             // Tiled Ground Tutorial
 
             // Part 1 : Creation of Tiled Ground
             // Parameters
-            var xmin = ground._boundingInfo.minimum.x;
-            var zmin = ground._boundingInfo.minimum.z;
-            var xmax = ground._boundingInfo.maximum.x;
-            var zmax = ground._boundingInfo.maximum.z;
+            var xmin = -rows * 4; //8(width)/2=4
+            var xmax = rows * 4;
+            var zmin = -columns * containerSize / 2;
+            var zmax = columns * containerSize / 2;
             var precision = {
                 w: 2,
                 h: 2
@@ -492,10 +432,20 @@
                 w: rows
             };
             // Create the Tiled Ground
-            var tiledGround = BABYLON.Mesh.CreateTiledGround("Tiled Ground", xmin, zmin, xmax, zmax, subdivisions, precision, scene);
-            tiledGround.position.y = 1
+            var tiledGround = BABYLON.Mesh.CreateTiledGround("Tiled Ground", xmin, zmin, xmax, zmax, subdivisions, precision, scene) as yardBlock;
+            tiledGround.position.y = -1
+
+
+            tiledGround.capacity = { column_z: columns, row_x: rows, level_y: levels, isEmpty: false };
+
+            tiledGround.size = { length_z: zmax + (- zmin), width_x: xmax + (- xmin), height_y: 1 };
 
             // Part 2 : Create the multi material
+            var groundMaterial = new BABYLON.StandardMaterial("ground", core.currentScene);
+            groundMaterial.diffuseColor = new BABYLON.Color3(0.6, 0.5, 0.4);
+            groundMaterial.specularColor = new BABYLON.Color3(0.5, 0.6, 0.7);
+            groundMaterial.emissiveColor = BABYLON.Color3.Black();
+
             // Create differents materials
             var whiteMaterial = new BABYLON.StandardMaterial("White", scene);
             whiteMaterial.diffuseColor = new BABYLON.Color3(1, 1, 1);
@@ -525,10 +475,46 @@
                     base += tileIndicesLength;
                 }
             }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+            tiledGround.receiveShadows = true;
 
-            return ground;
+            this.ConfigureObject(tiledGround, core);
+
+            //yardlocations
+            tiledGround.yardLocations = [];
+            for (var r = 1; r <= rows; r++)
+                for (var c = 1; c <= columns; c++) {
+                    for (var l = 1; l <= levels; l++) {
+                        tiledGround.yardLocations.push({ column_z: c, row_x: r, level_y: l, isEmpty: true });
+                    }
+                    //slots
+                    var containerSlot = Mesh.CreateBox("containerSlot" + id, 1, core.currentScene, false);
+                    containerSlot.parent = tiledGround;
+                    containerSlot.scaling = new Vector3(8, 8.6, containerSize);
+
+                    containerSlot.position = new Vector3(
+                        (r - 1 / 2) * containerSlot.scaling.x + xmin,
+                        containerSlot.scaling.y / 2,
+                        (c - 1 / 2) * containerSlot.scaling.z + zmin);
+
+                    var containerMaterial = new StandardMaterial("containerMaterial", core.currentScene);
+                    containerMaterial.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+                    containerMaterial.specularColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+                    containerMaterial.emissiveColor = new BABYLON.Color3(1, 0.4, 0.4);
+
+                    var outputplaneTexture = new BABYLON.DynamicTexture("dynamic texture", 512, scene, true);
+                    outputplaneTexture.hasAlpha = true;
+                    containerMaterial.diffuseTexture = outputplaneTexture;
+                    containerMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+                    containerMaterial.emissiveColor = new BABYLON.Color3(1, 1, 1);
+
+                    containerSlot.material = containerMaterial;
+
+                    containerSlot.showBoundingBox = true;
+
+                }
+
+            return tiledGround;
         }
 
         static AddYardSkyMesh(core: EditorCore): Mesh {

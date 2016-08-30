@@ -1,8 +1,9 @@
 ﻿var blockGrid = function (block: BABYLON.yardBlock) {
+    var scene = block.getScene();
 
     var i, strip, stripx, stripz, rsm, sm, parent, parmat;
-    var gridwidth = block.size.width_z - multiplicationFactor;  // must be increments of 10
-    var griddepth = block.size.length_x - multiplicationFactor;
+    var gridwidth = block.size.length_z - multiplicationFactor;  // must be increments of 10
+    var griddepth = block.size.width_x - multiplicationFactor;
     var step_z = block.capacity.column_z * 2;
     var step_x = block.capacity.row_x * 2;
 

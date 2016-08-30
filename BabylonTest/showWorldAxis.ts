@@ -7,7 +7,7 @@
 // author : jerome
 // tag : debug, plotting, demos
 
-function showWorldAxis(size) {
+function showWorldAxis(size, scene) {
     var makeTextPlane = function (text, color, size) {
         var dynamicTexture = new BABYLON.DynamicTexture("DynamicTexture", 50, scene, true);
         dynamicTexture.hasAlpha = true;
