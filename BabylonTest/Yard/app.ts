@@ -1,4 +1,6 @@
 ﻿const multiplicationFactor = 10;
+const containerWidth = 8;
+const containerHeight = 8.6;
 
 namespace YARD {
     export class main {
@@ -51,6 +53,8 @@ namespace YARD {
             core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light);
 
             var block = new YARD.YARDBlock(core, 1, 20, 6, 9, 2);
+
+            //var block2 = new YARD.YARDBlock(core, 1, 20, 6, 10, 2);
 
             editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
 

@@ -1,6 +1,8 @@
 ﻿/// <reference path="babylon.d.ts" />
 declare function showWorldAxis(size: any, scene: any): void;
 declare const multiplicationFactor: number;
+declare const containerWidth: number;
+declare const containerHeight: number;
 declare namespace YARD {
     class main {
         constructor();
@@ -13,15 +15,17 @@ declare namespace YARD {
         capacity: YARDLocationVector;
         size: YARDSizeVector;
         yardLocations: YARDLocationVector[];
+        slotSize: YARDSizeVector;
         showTiles: boolean;
-        private xmin;
-        private xmax;
-        private zmin;
-        private zmax;
+        xmin: number;
+        xmax: number;
+        zmin: number;
+        zmax: number;
+        freeSpace: number;
         private groundMaterial;
         private multimat;
-        constructor(core: BABYLON.EDITOR.EditorCore, id: any, containerSize: any, columns: any, rows: any, levels: any);
-        createGridLines(rows: any, columns: any, rowHieght: any, columnWidth: any, scene: BABYLON.Scene): void;
+        constructor(core: BABYLON.EDITOR.EditorCore, id: any, containerLength: any, columns: any, rows: any, levels: any);
+        createGridLines(rows: any, columns: any, scene: BABYLON.Scene): void;
         createBoundingGrounds(scene: BABYLON.Scene): void;
         createTextPlate(text: string, position: BABYLON.Vector3, scene: BABYLON.Scene): void;
     }

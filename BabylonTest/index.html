@@ -103,29 +103,20 @@
                     .canvas-overlay {
                         /*border: 1px solid rgb(180, 180, 180);*/
                         position: absolute;
-                        padding: 10px 0px 0px 0px;
+                        padding: 10px 10px 10px 10px;
                         z-index: 1;
                         height: auto;
-                        background: rgba(128, 128, 128, 0.4);
-                        text-align: center;
+                        background: rgba(128, 128, 128, 0);
+                        
                     }
 
                     .canvas-overlay-btn {
-                        background: rgba(128, 128, 128, 0.4);
+                        background: rgba(128, 128, 128, 0.6);
                         border: none;
                     }
-                    /*.canvas-overlay-title {
-                        text-align: right;
-                        width: 100%;
-                        color: white;
-                        padding: 5px 5px 4px 0px;
-                        margin-left: -5px;
-                        font-weight: bold;
-                        background-color: black;
-                    }*/
                 </style>
                 <div class="canvas-overlay-container">
-                    <div class="canvas-overlay" style="left: 10px; top:10px; width: 120px;">
+                    <div class="canvas-overlay" style="left: 10px; top:10px; width: 80px; text-align: center;">
                         <div>
                             <button class="canvas-overlay-btn" @click="moveForward" title="North (Row--)">▲</button>
                             <div>
@@ -139,11 +130,13 @@
 
                             <button class="canvas-overlay-btn" @click="moveDown" title="Above (Level++)">↑</button>
                         </div>
+                    </div>
+
+                    <div class="canvas-overlay" style="left: 80px; top:10px; width:500px;">
                         <div>
-                            <button class="canvas-overlay-btn" @click="arrangeAll">Arrange All</button>
-                        </div>
-                        <div>
-                            <label style="font-weight:normal"><input type="checkbox" class="canvas-overlay-btn" @change="showGridLines" /> Show Tiles?</label>
+                                <button class="canvas-overlay-btn" @click="arrangeAll">Arrange All</button>
+                            <button class="canvas-overlay-btn" @click="arrangeAll">Reset Camera</button>
+                            <label class="canvas-overlay-btn" style="font-weight:normal; padding:0px 5px;"><input type="checkbox" class="canvas-overlay-btn" @change="showGridLines" /> Show Tiles?</label>
                         </div>
                     </div>
                 </div>

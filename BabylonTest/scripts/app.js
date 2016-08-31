@@ -48,6 +48,8 @@ function showWorldAxis(size, scene) {
 }
 ;
 var multiplicationFactor = 10;
+var containerWidth = 8;
+var containerHeight = 8.6;
 var YARD;
 (function (YARD) {
     var main = (function () {
@@ -92,6 +94,7 @@ var YARD;
             light.position = new BABYLON.Vector3(10 * multiplicationFactor, 10 * multiplicationFactor, 10 * multiplicationFactor);
             core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light);
             var block = new YARD.YARDBlock(core, 1, 20, 6, 9, 2);
+            //var block2 = new YARD.YARDBlock(core, 1, 20, 6, 10, 2);
             editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
             var yardLocations = block.yardLocations;
             var moveContainer = function (row_x, column_z, level_y) {
@@ -190,15 +193,16 @@ var YARD;
 var YARD;
 (function (YARD) {
     var YARDBlock = (function () {
-        function YARDBlock(core, id, containerSize, columns, rows, levels) {
+        function YARDBlock(core, id, containerLength, columns, rows, levels) {
             var scene = core.scene;
             // Tiled Ground Tutorial
+            this.freeSpace = 2;
             // Part 1 : Creation of Tiled Ground
             // Parameters
-            this.xmin = -rows * 4; //8(width)/2=4
-            this.xmax = rows * 4;
-            this.zmin = -columns * containerSize / 2;
-            this.zmax = columns * containerSize / 2;
+            this.xmin = -rows * (containerWidth + this.freeSpace) / 2; //8(width)/2=4
+            this.xmax = rows * (containerWidth + this.freeSpace) / 2;
+            this.zmin = -columns * (containerLength + this.freeSpace) / 2;
+            this.zmax = columns * (containerLength + this.freeSpace) / 2;
             var precision = {
                 w: 2,
                 h: 2
@@ -247,10 +251,14 @@ var YARD;
                 width_x: this.xmax + (-this.xmin),
                 height_y: 2
             };
+            this.slotSize = {
+                length_z: this.size.length_z / columns,
+                width_x: this.size.width_x / rows,
+                height_y: 8.6
+            };
             this.containers = [];
             //yardlocations
             this.yardLocations = [];
-            var containerSize;
             var linePoints = [];
             for (var r = 1; r <= rows; r++) {
                 for (var c = 1; c <= columns; c++) {
@@ -259,7 +267,7 @@ var YARD;
                     }
                 }
             }
-            this.createGridLines(rows, columns, 8, containerSize, scene);
+            this.createGridLines(rows, columns, scene);
             this.createBoundingGrounds(scene);
         }
         Object.defineProperty(YARDBlock.prototype, "showTiles", {
@@ -273,19 +281,19 @@ var YARD;
             configurable: true
         });
         ;
-        YARDBlock.prototype.createGridLines = function (rows, columns, rowHieght, columnWidth, scene) {
+        YARDBlock.prototype.createGridLines = function (rows, columns, scene) {
             //Draw grid 
             var spoint;
             var epoint;
             for (var r = 0; r <= rows; r++) {
-                spoint = new BABYLON.Vector3(this.xmin + r * rowHieght, 0.1, this.zmin);
-                epoint = new BABYLON.Vector3(this.xmin + r * rowHieght, 0.1, this.zmax);
+                spoint = new BABYLON.Vector3(this.xmin + r * this.slotSize.width_x, 0.1, this.zmin);
+                epoint = new BABYLON.Vector3(this.xmin + r * this.slotSize.width_x, 0.1, this.zmax);
                 var lines = BABYLON.Mesh.CreateLines("girdLineMesh", [spoint, epoint], scene);
                 lines.color = BABYLON.Color3.Gray();
             }
             for (var c = 0; c <= columns; c++) {
-                spoint = new BABYLON.Vector3(this.xmin, 0.1, this.zmin + c * columnWidth);
-                epoint = new BABYLON.Vector3(this.xmax, 0.1, this.zmin + c * columnWidth);
+                spoint = new BABYLON.Vector3(this.xmin, 0.1, this.zmin + c * this.slotSize.length_z);
+                epoint = new BABYLON.Vector3(this.xmax, 0.1, this.zmin + c * this.slotSize.length_z);
                 var lines = BABYLON.Mesh.CreateLines("girdLineMesh", [spoint, epoint], scene);
                 lines.color = BABYLON.Color3.Gray();
             }
@@ -296,24 +304,28 @@ var YARD;
             leftzplane.position = new BABYLON.Vector3(this.xmin - 5, 0, 0);
             leftzplane.rotation = new BABYLON.Vector3(0, -Math.PI / 2, 0);
             leftzplane.material = this.groundMaterial;
+            leftzplane.receiveShadows = true;
             this.createTextPlate('North', leftzplane.position.clone().add(new BABYLON.Vector3(-10, 10, 0)), scene);
             //front
             var rightzplane = BABYLON.Mesh.CreateGround("rzp", this.size.length_z, 10, 1, scene);
             rightzplane.position = new BABYLON.Vector3(this.xmax + 5, 0, 0);
             rightzplane.rotation = new BABYLON.Vector3(0, -Math.PI / 2, 0);
             rightzplane.material = this.groundMaterial;
+            rightzplane.receiveShadows = true;
             this.createTextPlate('South', rightzplane.position.clone().add(new BABYLON.Vector3(10, 10, 0)), scene);
             //left
             var frontxplane = BABYLON.Mesh.CreateGround("fxp", this.size.width_x + 20, 10, 1, scene);
             frontxplane.position = new BABYLON.Vector3(0, 0, this.zmin - 5);
             frontxplane.rotation = new BABYLON.Vector3(0, 0, 0);
             frontxplane.material = this.groundMaterial;
+            frontxplane.receiveShadows = true;
             this.createTextPlate('East', frontxplane.position.clone().add(new BABYLON.Vector3(0, 10, -10)), scene);
             //right
             var rearxplane = BABYLON.Mesh.CreateGround("rxp", this.size.width_x + 20, 10, 1, scene);
             rearxplane.position = new BABYLON.Vector3(0, 0, this.zmax + 5);
             rearxplane.rotation = new BABYLON.Vector3(0, 0, 0);
             rearxplane.material = this.groundMaterial;
+            rearxplane.receiveShadows = true;
             this.createTextPlate('West', rearxplane.position.clone().add(new BABYLON.Vector3(0, 10, 10)), scene);
             //hight
             //var yplane = BABYLON.Mesh.CreateGround("yp", 5, this.size.height_y + 10, 1, scene);
@@ -384,8 +396,8 @@ var YARD;
             },
             set: function (theValue) {
                 this._yardLocation = theValue;
-                var block = this.mesh.parent;
-                this.mesh.position = new BABYLON.Vector3((theValue.row_x - 1 / 2) * this.mesh.scaling.x + block._boundingInfo.minimum.x, (theValue.level_y - 1) * this.mesh.scaling.y + this.mesh.scaling.y / 2, (theValue.column_z - 1 / 2) * this.mesh.scaling.z + block._boundingInfo.minimum.z);
+                //var block = this.mesh.parent as BABYLON.Mesh;
+                this.mesh.position = new BABYLON.Vector3(this.block.xmin + (theValue.row_x - 1 / 2) * this.block.slotSize.width_x, (theValue.level_y - 1) * this.mesh.scaling.y + this.mesh.scaling.y / 2, this.block.zmin + (theValue.column_z - 1 / 2) * this.block.slotSize.length_z);
             },
             enumerable: true,
             configurable: true

@@ -21,12 +21,12 @@
         public set yardLocation(theValue: YARDLocationVector) {
             this._yardLocation = theValue;
 
-            var block = this.mesh.parent as BABYLON.Mesh;
+            //var block = this.mesh.parent as BABYLON.Mesh;
 
             this.mesh.position = new BABYLON.Vector3(
-                (theValue.row_x - 1 / 2) * this.mesh.scaling.x + block._boundingInfo.minimum.x,
+                this.block.xmin + (theValue.row_x - 1 / 2) * this.block.slotSize.width_x,
                 (theValue.level_y - 1) * this.mesh.scaling.y + this.mesh.scaling.y / 2,
-                (theValue.column_z - 1 / 2) * this.mesh.scaling.z + block._boundingInfo.minimum.z);
+                this.block.zmin + (theValue.column_z - 1 / 2) * this.block.slotSize.length_z);
         };
 
         constructor(core: BABYLON.EDITOR.EditorCore, id, block: YARD.YARDBlock, size: number, yardLocation: YARDLocationVector, color: BABYLON.Color3) {
@@ -56,6 +56,7 @@
 
             this.block = block;
             block.containers.push(this);
+
             yardLocation.isEmpty = false;
             this.yardLocation = yardLocation;
         }
