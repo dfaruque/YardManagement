@@ -44,7 +44,7 @@ namespace YARD {
             core.camera.checkCollisions = true;
             //scene.disablePhysicsEngine();
 
-            scene.clearColor = BABYLON.Color3.Black();
+            scene.clearColor = BABYLON.Color3.White();
 
             var light = new BABYLON.DirectionalLight("New DirectionalLight", new BABYLON.Vector3(1, -1, -1), scene);
             light.position = new BABYLON.Vector3(10 * multiplicationFactor, 10 * multiplicationFactor, 10 * multiplicationFactor);
@@ -55,6 +55,26 @@ namespace YARD {
             editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
 
             var yardLocations = block.yardLocations;
+
+            var moveContainer = (row_x, column_z, level_y) => {
+                var yardLocation = yardLocations.filter(f => f.isEmpty == true
+                    && f.row_x == selectedContainer.yardLocation.row_x + row_x
+                    && f.column_z == selectedContainer.yardLocation.column_z + column_z
+                    && f.level_y == selectedContainer.yardLocation.level_y + level_y)[0];
+
+                if (yardLocation) {
+
+                    var currentYardLocation = yardLocations.filter(f =>
+                        f.row_x == selectedContainer.yardLocation.row_x
+                        && f.column_z == selectedContainer.yardLocation.column_z
+                        && f.level_y == selectedContainer.yardLocation.level_y)[0];
+                    currentYardLocation.isEmpty = true;
+
+                    selectedContainer.yardLocation = yardLocation;
+                }
+                else
+                    alert('Invalid move.');
+            };
 
             var vm = new Vue({
                 el: '#divConsole',
@@ -70,8 +90,8 @@ namespace YARD {
                     }
 
                     editorMain.createRenderLoop();
-
-                    showWorldAxis(50, scene);
+                    //var sih = new ManipulationHelpers.SimpleInteractionHelper(scene);
+                    //showWorldAxis(50, scene);
                 },
                 data: {
                     scene: scene,
@@ -149,25 +169,6 @@ namespace YARD {
                 },
             });
 
-            var moveContainer = (row_x, column_z, level_y) => {
-                var yardLocation = yardLocations.filter(f => f.isEmpty == true
-                    && f.row_x == selectedContainer.yardLocation.row_x + row_x
-                    && f.column_z == selectedContainer.yardLocation.column_z + column_z
-                    && f.level_y == selectedContainer.yardLocation.level_y + level_y)[0];
-
-                if (yardLocation) {
-
-                    var currentYardLocation = yardLocations.filter(f =>
-                        f.row_x == selectedContainer.yardLocation.row_x
-                        && f.column_z == selectedContainer.yardLocation.column_z
-                        && f.level_y == selectedContainer.yardLocation.level_y)[0];
-                    currentYardLocation.isEmpty = true;
-
-                    selectedContainer.yardLocation = yardLocation;
-                }
-                else
-                    alert('Invalid move.');
-            };
         }
     }
 }

@@ -6,15 +6,14 @@
     <title>Babylon.js sample code</title>
     <!-- Babylon.js -->
     <!--<script src="http://www.babylonjs.com/hand.minified-1.2.js"></script>-->
-    <script src="http://www.babylonjs.com/cannon.js"></script>
+    <!--<script src="http://www.babylonjs.com/cannon.js"></script>-->
     <!--<script src="http://www.babylonjs.com/oimo.js"></script>
     <script src="http://www.babylonjs.com/babylon.js"></script>-->
     <script src="scripts/hand.minified-1.2.js"></script>
-    <script src="scripts/Oimo.js"></script>
+    <!--<script src="scripts/Oimo.js"></script>-->
     <script src="scripts/babylon.js"></script>
 
     <script src="scripts/jquery-3.1.0.min.js"></script>
-
     <link rel="stylesheet" href="app.css" type="text/css" />
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
 </head>
@@ -46,42 +45,6 @@
                             <div class="btn-block">
                                 <input type="button" @click="addContainer" value="Add Container" class="btn btn-default" />
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">
-                            Selected Container
-                        </h3>
-                    </div>
-                    <div class="panel-body">
-                        <div>
-                            <div>Name: <span class="label label-info" text="currentMesh.name"></span></div>
-                            <div>
-                                <input type="button" @click="moveForward" value="▲" />
-                                <input type="button" @click="moveBackword" value="▼" />
-                            </div>
-                            <div>
-                                <input type="button" @click="moveLeft" value="◄" />
-                                <input type="button" @click="moveRight" value="►" />
-                            </div>
-                            <div>
-                                <input type="button" @click="moveUp" value=" ↓ " />
-                                <input type="button" @click="moveDown" value=" ↑ " />
-                            </div>
-                            <div class="btn-group">
-                                <input type="button" @click="arrangeAll" value="Arrange All" class="btn btn-default" />
-                                <input type="button" @click="arrangeSelected" value="Arrange Selected" class="btn btn-default" />
-
-
-                            </div>
-                            <div>
-                                <label>Show Grid Lines?</label>
-                                <input type="checkbox" @change="showGridLines" class="checkbox checkbox-inline" />
-
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -123,16 +86,79 @@
                     </div>
                     <div class="list-group-item">
                         <span class="badge">14</span>Help
-                    </div> <a class="list-group-item active"><span class="badge">14</span>Help</a>
+                    </div>
+                    <a class="list-group-item active"><span class="badge">14</span>Help</a>
                 </div>
+
+                <style>
+                    .canvas-overlay-container {
+                        position: absolute;
+                        /*font-family: Segoe UI, Arial;*/
+                        font-size: 14px;
+                        color: white;
+                        left: 330.75px;
+                        top: 0px;
+                    }
+
+                    .canvas-overlay {
+                        /*border: 1px solid rgb(180, 180, 180);*/
+                        position: absolute;
+                        padding: 10px 0px 0px 0px;
+                        z-index: 1;
+                        height: auto;
+                        background: rgba(128, 128, 128, 0.4);
+                        text-align: center;
+                    }
+
+                    .canvas-overlay-btn {
+                        background: rgba(128, 128, 128, 0.4);
+                        border: none;
+                    }
+                    /*.canvas-overlay-title {
+                        text-align: right;
+                        width: 100%;
+                        color: white;
+                        padding: 5px 5px 4px 0px;
+                        margin-left: -5px;
+                        font-weight: bold;
+                        background-color: black;
+                    }*/
+                </style>
+                <div class="canvas-overlay-container">
+                    <div class="canvas-overlay" style="left: 10px; top:10px; width: 120px;">
+                        <div>
+                            <button class="canvas-overlay-btn" @click="moveForward" title="Row -">▲</button>
+                            <div>
+                                <button class="canvas-overlay-btn" @click="moveLeft" title="Column -">◄</button>
+                                <button class="canvas-overlay-btn" @click="moveRight" title="Column +">►</button>
+                            </div>
+                            <button class="canvas-overlay-btn" @click="moveBackword" title="Row +">▼</button>
+                        </div>
+                        <div>
+                            <button class="canvas-overlay-btn" @click="moveUp" title="Level -">↓</button>
+
+                            <button class="canvas-overlay-btn" @click="moveDown" title="Level +">↑</button>
+                        </div>
+                        <div>
+                            <button class="canvas-overlay-btn" @click="arrangeAll">Arrange All</button>
+                        </div>
+                        <div>
+                            <label style="font-weight:normal"><input type="checkbox" class="canvas-overlay-btn" @change="showGridLines" /> Show Tiles?</label>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div class="col-md-9">
                 <canvas id="BABYLON-EDITOR-MAIN-CANVAS"></canvas>
 
             </div>
+
         </div>
     </div>
+
     <script src="scripts/vue.js"></script>
+    <script src="ManipulationHelpers.js"></script>
 
     <script src="scripts/app.js"></script>
     <script>

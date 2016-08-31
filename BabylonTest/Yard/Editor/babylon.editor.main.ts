@@ -21,7 +21,9 @@
         public static get DummyNodeID(): string {
             return "BABYLON-EDITOR-DUMMY-NODE";
         }
-
+        public get MAINCANVASId(): string {
+            return "BABYLON-EDITOR-MAIN-CANVAS";
+        }
         /**
         * Constructor
         */
@@ -111,7 +113,8 @@
         * Creates the babylon engine
         */
         private _createBabylonEngine(): void {
-            this.core.canvas = <HTMLCanvasElement>document.getElementById("BABYLON-EDITOR-MAIN-CANVAS");
+            $("#" + this.MAINCANVASId).height(window.innerHeight);
+            this.core.canvas = <HTMLCanvasElement>document.getElementById(this.MAINCANVASId);
 
             this.core.engine = new Engine(this.core.canvas, this.antialias, this.options);
             this.core.scene = new Scene(this.core.engine);
@@ -124,7 +127,7 @@
                 if (this.core.isPlaying) {
                     this.core.isPlaying = false;
                 }
-
+                $("#" + this.MAINCANVASId).height(window.innerHeight);
                 this.core.engine.resize();
             });
         }

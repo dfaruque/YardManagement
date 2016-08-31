@@ -159,6 +159,7 @@ declare namespace BABYLON.EDITOR {
         renderMainScene: boolean;
         renderHelpers: boolean;
         static DummyNodeID: string;
+        MAINCANVASId: string;
         /**
         * Constructor
         */

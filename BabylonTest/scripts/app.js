@@ -87,13 +87,30 @@ var YARD;
             //scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.CannonJSPlugin());
             core.camera.checkCollisions = true;
             //scene.disablePhysicsEngine();
-            scene.clearColor = BABYLON.Color3.Black();
+            scene.clearColor = BABYLON.Color3.White();
             var light = new BABYLON.DirectionalLight("New DirectionalLight", new BABYLON.Vector3(1, -1, -1), scene);
             light.position = new BABYLON.Vector3(10 * multiplicationFactor, 10 * multiplicationFactor, 10 * multiplicationFactor);
             core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light);
             var block = new YARD.YARDBlock(core, 1, 20, 6, 9, 2);
             editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
             var yardLocations = block.yardLocations;
+            var moveContainer = function (row_x, column_z, level_y) {
+                var yardLocation = yardLocations.filter(function (f) { return f.isEmpty == true
+                    && f.row_x == selectedContainer.yardLocation.row_x + row_x
+                    && f.column_z == selectedContainer.yardLocation.column_z + column_z
+                    && f.level_y == selectedContainer.yardLocation.level_y + level_y; })[0];
+                if (yardLocation) {
+                    var currentYardLocation = yardLocations.filter(function (f) {
+                        return f.row_x == selectedContainer.yardLocation.row_x
+                            && f.column_z == selectedContainer.yardLocation.column_z
+                            && f.level_y == selectedContainer.yardLocation.level_y;
+                    })[0];
+                    currentYardLocation.isEmpty = true;
+                    selectedContainer.yardLocation = yardLocation;
+                }
+                else
+                    alert('Invalid move.');
+            };
             var vm = new Vue({
                 el: '#divConsole',
                 ready: function () {
@@ -104,7 +121,8 @@ var YARD;
                         }
                     }
                     editorMain.createRenderLoop();
-                    showWorldAxis(50, scene);
+                    //var sih = new ManipulationHelpers.SimpleInteractionHelper(scene);
+                    //showWorldAxis(50, scene);
                 },
                 data: {
                     scene: scene,
@@ -164,23 +182,6 @@ var YARD;
                     },
                 },
             });
-            var moveContainer = function (row_x, column_z, level_y) {
-                var yardLocation = yardLocations.filter(function (f) { return f.isEmpty == true
-                    && f.row_x == selectedContainer.yardLocation.row_x + row_x
-                    && f.column_z == selectedContainer.yardLocation.column_z + column_z
-                    && f.level_y == selectedContainer.yardLocation.level_y + level_y; })[0];
-                if (yardLocation) {
-                    var currentYardLocation = yardLocations.filter(function (f) {
-                        return f.row_x == selectedContainer.yardLocation.row_x
-                            && f.column_z == selectedContainer.yardLocation.column_z
-                            && f.level_y == selectedContainer.yardLocation.level_y;
-                    })[0];
-                    currentYardLocation.isEmpty = true;
-                    selectedContainer.yardLocation = yardLocation;
-                }
-                else
-                    alert('Invalid move.');
-            };
         }
         return main;
     }());
@@ -561,6 +562,13 @@ var BABYLON;
                 enumerable: true,
                 configurable: true
             });
+            Object.defineProperty(EditorMain.prototype, "MAINCANVASId", {
+                get: function () {
+                    return "BABYLON-EDITOR-MAIN-CANVAS";
+                },
+                enumerable: true,
+                configurable: true
+            });
             /**
             * Event receiver
             */
@@ -614,7 +622,8 @@ var BABYLON;
             */
             EditorMain.prototype._createBabylonEngine = function () {
                 var _this = this;
-                this.core.canvas = document.getElementById("BABYLON-EDITOR-MAIN-CANVAS");
+                $("#" + this.MAINCANVASId).height(window.innerHeight);
+                this.core.canvas = document.getElementById(this.MAINCANVASId);
                 this.core.engine = new BABYLON.Engine(this.core.canvas, this.antialias, this.options);
                 this.core.scene = new BABYLON.Scene(this.core.engine);
                 this.core.scene.animations = [];
@@ -624,6 +633,7 @@ var BABYLON;
                     if (_this.core.isPlaying) {
                         _this.core.isPlaying = false;
                     }
+                    $("#" + _this.MAINCANVASId).height(window.innerHeight);
                     _this.core.engine.resize();
                 });
             };
