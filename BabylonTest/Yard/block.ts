@@ -15,10 +15,10 @@
                 this.mesh.material = this.groundMaterial;
         };
 
-            private xmin :number;
-            private xmax :number;
-            private zmin :number;
-            private zmax: number;
+        private xmin: number;
+        private xmax: number;
+        private zmin: number;
+        private zmax: number;
 
         private groundMaterial: BABYLON.StandardMaterial;
         private multimat: BABYLON.MultiMaterial;
@@ -85,12 +85,31 @@
 
             BABYLON.EDITOR.SceneManager.ConfigureObject(tiledGround, core);
 
+
+
+            this.mesh = tiledGround;
+
+            this.capacity = { column_z: columns, row_x: rows, level_y: levels, isEmpty: false };
+
+            this.size = {
+                length_z: this.zmax + (- this.zmin),
+                width_x: this.xmax + (- this.xmin),
+                height_y: 2
+            };
+
+            this.containers = [];
+
             //yardlocations
             this.yardLocations = [];
-            for (var r = 1; r <= rows; r++)
+
+            var containerSize
+            var linePoints: BABYLON.Vector3[] = [];
+
+            for (var r = 1; r <= rows; r++) {
                 for (var c = 1; c <= columns; c++) {
                     for (var l = 1; l <= levels; l++) {
                         this.yardLocations.push({ column_z: c, row_x: r, level_y: l, isEmpty: true });
+
                     }
                     ////slots
                     //var containerSlot = Mesh.CreateBox("containerSlot" + id, 1, core.currentScene, false);
@@ -119,45 +138,43 @@
 
                 }
 
-            this.mesh = tiledGround;
+            }
 
-            this.capacity = { column_z: columns, row_x: rows, level_y: levels, isEmpty: false };
 
-            this.size = {
-                length_z: this.zmax + (- this.zmin),
-                width_x: this.xmax + (- this.xmin),
-                height_y: 2
-            };
+            this.createGridLines(rows, columns, 8, containerSize, scene);
 
-            this.containers = [];
 
             this.createBoundingGrounds(scene);
-            ////Draw grid 
-            //var startpos;
-            ////X Axis
-            //for (var i = 0; i < 11; i++) {
-            //    startpos = new BABYLON.Vector3(0.0, i * 250, 1000.0);
-            //    var lines = BABYLON.Mesh.CreateLines("lineMesh", [startpos, startpos.add(new BABYLON.Vector3(2500, 0, 0))], scene);
-            //}
 
-            ////Y Axis
-            //for (var i = 0; i < 11; i++) {
-            //    startpos = new BABYLON.Vector3(i * 250, 0, 1000);
-            //    var lines = BABYLON.Mesh.CreateLines("lineMesh2", [startpos, startpos.add(new BABYLON.Vector3(0, 2500, 0))], scene);
-            //}
+        }
 
-            //-----------------------
-            
+        createGridLines(rows, columns, rowHieght, columnWidth, scene: BABYLON.Scene) {
+            //Draw grid 
+            var spoint: BABYLON.Vector3;
+            var epoint: BABYLON.Vector3;
+
+            for (var r = 0; r <= rows; r++) {
+
+                spoint = new BABYLON.Vector3(this.xmin + r * rowHieght, 0.1, this.zmin);
+                epoint = new BABYLON.Vector3(this.xmin + r * rowHieght, 0.1, this.zmax);
+
+                var lines = BABYLON.Mesh.CreateLines("girdLineMesh", [spoint, epoint], scene);
+                lines.color = BABYLON.Color3.Gray();
+
+            }
+            for (var c = 0; c <= columns; c++) {
+
+                spoint = new BABYLON.Vector3(this.xmin, 0.1, this.zmin + c * columnWidth);
+                epoint = new BABYLON.Vector3(this.xmax, 0.1, this.zmin + c * columnWidth);
+
+                var lines = BABYLON.Mesh.CreateLines("girdLineMesh", [spoint, epoint], scene);
+                lines.color = BABYLON.Color3.Gray();
+            }
         }
 
         createBoundingGrounds(scene: BABYLON.Scene) {
             //rear
             var leftzplane = BABYLON.Mesh.CreateGround("lzp", this.size.length_z, 10, 1, scene);
-            //var lzpmat = new BABYLON.StandardMaterial("lzpmat", scene);
-            //lzpmat.backFaceCulling = false;
-            //lzpmat.specularColor = new BABYLON.Color3(1, 1, 1);
-            //lzpmat.emissiveColor = new BABYLON.Color3(1, 1, 1);
-            //leftzplane.material = lzpmat;
             leftzplane.position = new BABYLON.Vector3(this.xmin - 5, 0, 0);
             leftzplane.rotation = new BABYLON.Vector3(0, -Math.PI / 2, 0);
             leftzplane.material = this.groundMaterial;
@@ -165,11 +182,6 @@
 
             //front
             var rightzplane = BABYLON.Mesh.CreateGround("rzp", this.size.length_z, 10, 1, scene);
-            //var rzpmat = new BABYLON.StandardMaterial("rzpmat", scene);
-            //// var tex1 = new BABYLON.Texture("textures/zStrip.jpg", scene);
-            ////rzpmat.diffuseTexture = tex1;
-            //rzpmat.backFaceCulling = false;
-            //rightzplane.material = rzpmat;
             rightzplane.position = new BABYLON.Vector3(this.xmax + 5, 0, 0);
             rightzplane.rotation = new BABYLON.Vector3(0, -Math.PI / 2, 0);
             rightzplane.material = this.groundMaterial;
@@ -178,11 +190,6 @@
 
             //left
             var frontxplane = BABYLON.Mesh.CreateGround("fxp", this.size.width_x + 20, 10, 1, scene);
-            //var fxpmat = new BABYLON.StandardMaterial("fxpmat", scene);
-            ////tex1 = new BABYLON.Texture("textures/xStrip.jpg", scene);
-            ////fxpmat.diffuseTexture = tex1;
-            //fxpmat.backFaceCulling = false;
-            //frontxplane.material = fxpmat;
             frontxplane.position = new BABYLON.Vector3(0, 0, this.zmin - 5);
             frontxplane.rotation = new BABYLON.Vector3(0, 0, 0);
             frontxplane.material = this.groundMaterial;
@@ -191,11 +198,6 @@
 
             //right
             var rearxplane = BABYLON.Mesh.CreateGround("rxp", this.size.width_x + 20, 10, 1, scene);
-            //var rxpmat = new BABYLON.StandardMaterial("rxpmat", scene);
-            //// var tex1 = new BABYLON.Texture("textures/zStrip.jpg", scene);
-            ////rxpmat.diffuseTexture = tex1;
-            //rxpmat.backFaceCulling = false;
-            //rearxplane.material = rxpmat;
             rearxplane.position = new BABYLON.Vector3(0, 0, this.zmax + 5);
             rearxplane.rotation = new BABYLON.Vector3(0, 0, 0);
             rearxplane.material = this.groundMaterial;

@@ -21,6 +21,7 @@ declare namespace YARD {
         private groundMaterial;
         private multimat;
         constructor(core: BABYLON.EDITOR.EditorCore, id: any, containerSize: any, columns: any, rows: any, levels: any);
+        createGridLines(rows: any, columns: any, rowHieght: any, columnWidth: any, scene: BABYLON.Scene): void;
         createBoundingGrounds(scene: BABYLON.Scene): void;
         createTextPlate(text: string, position: BABYLON.Vector3, scene: BABYLON.Scene): void;
     }

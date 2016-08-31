@@ -72,8 +72,8 @@ namespace YARD {
 
                     selectedContainer.yardLocation = yardLocation;
                 }
-                else
-                    alert('Invalid move.');
+                //else
+                //    alert('Invalid move.');
             };
 
             var vm = new Vue({
