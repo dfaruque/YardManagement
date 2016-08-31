@@ -127,17 +127,17 @@
                 <div class="canvas-overlay-container">
                     <div class="canvas-overlay" style="left: 10px; top:10px; width: 120px;">
                         <div>
-                            <button class="canvas-overlay-btn" @click="moveForward" title="Row -">▲</button>
+                            <button class="canvas-overlay-btn" @click="moveForward" title="North (Row--)">▲</button>
                             <div>
-                                <button class="canvas-overlay-btn" @click="moveLeft" title="Column -">◄</button>
-                                <button class="canvas-overlay-btn" @click="moveRight" title="Column +">►</button>
+                                <button class="canvas-overlay-btn" @click="moveLeft" title="East (Column--)">◄</button>
+                                <button class="canvas-overlay-btn" @click="moveRight" title="West (Column++)">►</button>
                             </div>
-                            <button class="canvas-overlay-btn" @click="moveBackword" title="Row +">▼</button>
+                            <button class="canvas-overlay-btn" @click="moveBackword" title="South (Row++)">▼</button>
                         </div>
                         <div>
-                            <button class="canvas-overlay-btn" @click="moveUp" title="Level -">↓</button>
+                            <button class="canvas-overlay-btn" @click="moveUp" title="Below (Level--)">↓</button>
 
-                            <button class="canvas-overlay-btn" @click="moveDown" title="Level +">↑</button>
+                            <button class="canvas-overlay-btn" @click="moveDown" title="Above (Level++)">↑</button>
                         </div>
                         <div>
                             <button class="canvas-overlay-btn" @click="arrangeAll">Arrange All</button>

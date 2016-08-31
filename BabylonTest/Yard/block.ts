@@ -14,6 +14,12 @@
             else
                 this.mesh.material = this.groundMaterial;
         };
+
+            private xmin :number;
+            private xmax :number;
+            private zmin :number;
+            private zmax: number;
+
         private groundMaterial: BABYLON.StandardMaterial;
         private multimat: BABYLON.MultiMaterial;
         constructor(core: BABYLON.EDITOR.EditorCore, id, containerSize, columns, rows, levels) {
@@ -22,10 +28,11 @@
 
             // Part 1 : Creation of Tiled Ground
             // Parameters
-            var xmin = -rows * 4; //8(width)/2=4
-            var xmax = rows * 4;
-            var zmin = -columns * containerSize / 2;
-            var zmax = columns * containerSize / 2;
+            this.xmin = -rows * 4; //8(width)/2=4
+            this.xmax = rows * 4;
+            this.zmin = -columns * containerSize / 2;
+            this.zmax = columns * containerSize / 2;
+
             var precision = {
                 w: 2,
                 h: 2
@@ -35,8 +42,8 @@
                 w: rows
             };
             // Create the Tiled Ground
-            var tiledGround = BABYLON.Mesh.CreateTiledGround("Tiled Ground", xmin, zmin, xmax, zmax, subdivisions, precision, scene);
-            tiledGround.position.y = -1
+            var tiledGround = BABYLON.Mesh.CreateTiledGround("Tiled Ground", this.xmin, this.zmin, this.xmax, this.zmax, subdivisions, precision, scene);
+            //tiledGround.position.y = -1
 
             // Part 2 : Create the multi material
             this.groundMaterial = new BABYLON.StandardMaterial("ground", core.scene);
@@ -116,10 +123,111 @@
 
             this.capacity = { column_z: columns, row_x: rows, level_y: levels, isEmpty: false };
 
-            this.size = { length_z: zmax + (- zmin), width_x: xmax + (- xmin), height_y: 1 };
+            this.size = {
+                length_z: this.zmax + (- this.zmin),
+                width_x: this.xmax + (- this.xmin),
+                height_y: 2
+            };
 
             this.containers = [];
 
+            this.createBoundingGrounds(scene);
+            ////Draw grid 
+            //var startpos;
+            ////X Axis
+            //for (var i = 0; i < 11; i++) {
+            //    startpos = new BABYLON.Vector3(0.0, i * 250, 1000.0);
+            //    var lines = BABYLON.Mesh.CreateLines("lineMesh", [startpos, startpos.add(new BABYLON.Vector3(2500, 0, 0))], scene);
+            //}
+
+            ////Y Axis
+            //for (var i = 0; i < 11; i++) {
+            //    startpos = new BABYLON.Vector3(i * 250, 0, 1000);
+            //    var lines = BABYLON.Mesh.CreateLines("lineMesh2", [startpos, startpos.add(new BABYLON.Vector3(0, 2500, 0))], scene);
+            //}
+
+            //-----------------------
+            
+        }
+
+        createBoundingGrounds(scene: BABYLON.Scene) {
+            //rear
+            var leftzplane = BABYLON.Mesh.CreateGround("lzp", this.size.length_z, 10, 1, scene);
+            //var lzpmat = new BABYLON.StandardMaterial("lzpmat", scene);
+            //lzpmat.backFaceCulling = false;
+            //lzpmat.specularColor = new BABYLON.Color3(1, 1, 1);
+            //lzpmat.emissiveColor = new BABYLON.Color3(1, 1, 1);
+            //leftzplane.material = lzpmat;
+            leftzplane.position = new BABYLON.Vector3(this.xmin - 5, 0, 0);
+            leftzplane.rotation = new BABYLON.Vector3(0, -Math.PI / 2, 0);
+            leftzplane.material = this.groundMaterial;
+            this.createTextPlate('North', leftzplane.position.clone().add(new BABYLON.Vector3(-10, 10, 0)), scene);
+
+            //front
+            var rightzplane = BABYLON.Mesh.CreateGround("rzp", this.size.length_z, 10, 1, scene);
+            //var rzpmat = new BABYLON.StandardMaterial("rzpmat", scene);
+            //// var tex1 = new BABYLON.Texture("textures/zStrip.jpg", scene);
+            ////rzpmat.diffuseTexture = tex1;
+            //rzpmat.backFaceCulling = false;
+            //rightzplane.material = rzpmat;
+            rightzplane.position = new BABYLON.Vector3(this.xmax + 5, 0, 0);
+            rightzplane.rotation = new BABYLON.Vector3(0, -Math.PI / 2, 0);
+            rightzplane.material = this.groundMaterial;
+
+            this.createTextPlate('South', rightzplane.position.clone().add(new BABYLON.Vector3(10, 10, 0)), scene);
+
+            //left
+            var frontxplane = BABYLON.Mesh.CreateGround("fxp", this.size.width_x + 20, 10, 1, scene);
+            //var fxpmat = new BABYLON.StandardMaterial("fxpmat", scene);
+            ////tex1 = new BABYLON.Texture("textures/xStrip.jpg", scene);
+            ////fxpmat.diffuseTexture = tex1;
+            //fxpmat.backFaceCulling = false;
+            //frontxplane.material = fxpmat;
+            frontxplane.position = new BABYLON.Vector3(0, 0, this.zmin - 5);
+            frontxplane.rotation = new BABYLON.Vector3(0, 0, 0);
+            frontxplane.material = this.groundMaterial;
+
+            this.createTextPlate('East', frontxplane.position.clone().add(new BABYLON.Vector3(0, 10, -10)), scene);
+
+            //right
+            var rearxplane = BABYLON.Mesh.CreateGround("rxp", this.size.width_x + 20, 10, 1, scene);
+            //var rxpmat = new BABYLON.StandardMaterial("rxpmat", scene);
+            //// var tex1 = new BABYLON.Texture("textures/zStrip.jpg", scene);
+            ////rxpmat.diffuseTexture = tex1;
+            //rxpmat.backFaceCulling = false;
+            //rearxplane.material = rxpmat;
+            rearxplane.position = new BABYLON.Vector3(0, 0, this.zmax + 5);
+            rearxplane.rotation = new BABYLON.Vector3(0, 0, 0);
+            rearxplane.material = this.groundMaterial;
+
+            this.createTextPlate('West', rearxplane.position.clone().add(new BABYLON.Vector3(0, 10, 10)), scene);
+
+            //hight
+            //var yplane = BABYLON.Mesh.CreateGround("yp", 5, this.size.height_y + 10, 1, scene);
+            ////var ypmat = new BABYLON.StandardMaterial("ypmat", scene);
+            //////tex1 = new BABYLON.Texture("textures/yStrip.jpg", scene);
+            //////ypmat.diffuseTexture = tex1;
+            ////ypmat.backFaceCulling = false;
+            ////yplane.material = ypmat;
+            //yplane.position = new BABYLON.Vector3(0, 2.3, -0.5);
+            //yplane.rotation = new BABYLON.Vector3(-Math.PI / 2, 0, 0);
+        }
+
+        createTextPlate(text: string, position: BABYLON.Vector3, scene: BABYLON.Scene) {
+
+            var textPlaneTexture = new BABYLON.DynamicTexture("dynamic texture", 512, scene, true);
+            textPlaneTexture.drawText(text, null, 150, "bold 140px verdana", "gray", "transparent");
+            textPlaneTexture.hasAlpha = true;
+
+            var textPlane = BABYLON.Mesh.CreatePlane("textPlane", 10, scene, false);
+            textPlane.billboardMode = BABYLON.AbstractMesh.BILLBOARDMODE_ALL;
+            var pmat = new BABYLON.StandardMaterial("textPlane", scene);
+            pmat.diffuseTexture = textPlaneTexture;
+            pmat.specularColor = new BABYLON.Color3(0, 0, 0);
+            pmat.emissiveColor = new BABYLON.Color3(0.5, 0.5, 0.5);
+            pmat.backFaceCulling = false;
+            textPlane.material = pmat
+            textPlane.position = position;
         }
 
     }
