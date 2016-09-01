@@ -55,25 +55,12 @@ var YARD;
     var main = (function () {
         function main() {
             var containerNo = 1;
-            var inputLocation = { column_z: 1, row_x: 1, level_y: 1, isEmpty: null };
-            var isShowGrid = true;
-            var yard = {
-                name: 'yard1',
-                blocks: [{
-                        name: 'block1',
-                        size: {
-                            width: 100, heigth: 40,
-                            length: 200
-                        },
-                        containerSize: 20,
-                        position: { x: 0, y: 0, z: 0 },
-                        slots: []
-                    }]
-            };
+            var inputLocation = { column_z: 1, row_x: 1, level_y: 1, yardContainer: null };
             var selectedContainer;
+            //configuration
             var editorMain = new BABYLON.EDITOR.EditorMain("BABYLON-EDITOR-MAIN", true);
+            editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
             var core = editorMain.core;
-            var scene = core.scene;
             core.eventReceivers.push({
                 onEvent: function (event) {
                     if (event.sceneEvent.eventType == BABYLON.EDITOR.SceneEventType.OBJECT_PICKED) {
@@ -83,49 +70,67 @@ var YARD;
                     return false;
                 }
             });
-            //scene.debugLayer.show();
-            scene.collisionsEnabled = true;
-            scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
-            //scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.CannonJSPlugin());
-            core.camera.checkCollisions = true;
-            //scene.disablePhysicsEngine();
+            var scene = core.scene;
             scene.clearColor = BABYLON.Color3.White();
             var light = new BABYLON.DirectionalLight("New DirectionalLight", new BABYLON.Vector3(1, -1, -1), scene);
             light.position = new BABYLON.Vector3(10 * multiplicationFactor, 10 * multiplicationFactor, 10 * multiplicationFactor);
             core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light);
+            var camera = core.camera;
+            //camera.checkCollisions = true;
+            var moveContainer = function (container, row_x, column_z, level_y) {
+                var yardLocations = container.block.yardLocations;
+                if (container.yardLocation.level_y + level_y > container.block.capacity.level_y) {
+                    container.yardLocation = {
+                        row_x: container.yardLocation.row_x + row_x,
+                        column_z: container.yardLocation.column_z + column_z,
+                        level_y: container.yardLocation.level_y + level_y,
+                        yardContainer: container
+                    };
+                }
+                else {
+                    var moveToLocation = yardLocations.filter(function (f) {
+                        return (f.yardContainer == null || f.yardContainer == container)
+                            && f.row_x == container.yardLocation.row_x + row_x
+                            && f.column_z == container.yardLocation.column_z + column_z
+                            && f.level_y == container.yardLocation.level_y + level_y;
+                    })[0];
+                    if (moveToLocation) {
+                        var moveFromLocation = yardLocations.filter(function (f) {
+                            return f.row_x == container.yardLocation.row_x
+                                && f.column_z == container.yardLocation.column_z
+                                && f.level_y == container.yardLocation.level_y;
+                        })[0];
+                        if (moveFromLocation)
+                            moveFromLocation.yardContainer = null;
+                        container.yardLocation = moveToLocation;
+                        moveToLocation.yardContainer = container;
+                        //physics
+                        if (container.yardLocation.level_y < container.block.capacity.level_y) {
+                            var aboveLocation = yardLocations.filter(function (f) {
+                                return f.yardContainer
+                                    && f.row_x == moveFromLocation.row_x
+                                    && f.column_z == moveFromLocation.column_z
+                                    && f.level_y == moveFromLocation.level_y + 1;
+                            })[0];
+                            if (aboveLocation) {
+                                var aboveContainer = aboveLocation.yardContainer;
+                                aboveLocation.yardContainer = null;
+                                moveContainer(aboveContainer, 0, 0, -1);
+                            }
+                        }
+                    }
+                }
+            };
+            //Implementation goes here............................
             var block = new YARD.YARDBlock(core, 1, 20, 6, 9, 2, new BABYLON.Vector3(0, 0, 0));
             //var block2 = new YARD.YARDBlock(core, 2, 20, 6, 9, 2, new BABYLON.Vector3(0, 0, -block.size.length_z - block.boundingGroundSize));
             //var block3 = new YARD.YARDBlock(core, 3, 20, 6, 9, 2, new BABYLON.Vector3(0, 0, block.size.length_z + block.boundingGroundSize));
-            editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
-            var yardLocations = block.yardLocations;
-            var moveContainer = function (row_x, column_z, level_y) {
-                var yardLocation = yardLocations.filter(function (f) { return f.isEmpty == true
-                    && f.row_x == selectedContainer.yardLocation.row_x + row_x
-                    && f.column_z == selectedContainer.yardLocation.column_z + column_z
-                    && f.level_y == selectedContainer.yardLocation.level_y + level_y; })[0];
-                if (yardLocation) {
-                    var currentYardLocation = yardLocations.filter(function (f) {
-                        return f.row_x == selectedContainer.yardLocation.row_x
-                            && f.column_z == selectedContainer.yardLocation.column_z
-                            && f.level_y == selectedContainer.yardLocation.level_y;
-                    })[0];
-                    currentYardLocation.isEmpty = true;
-                    selectedContainer.yardLocation = yardLocation;
-                    //physic
-                    if (selectedContainer.yardLocation.level_y < block.capacity.level_y) {
-                    }
-                }
-                //else
-                //    alert('Invalid move.');
-            };
             var vm = new Vue({
                 el: '#divConsole',
                 ready: function () {
                     //populate bummy containers
-                    for (var i = 1; i < 9; i++) {
-                        if (i <= 6) {
-                            new YARD.YARDContainer(core, containerNo++, block, 20, yardLocations[i], new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
-                        }
+                    for (var i = 0; i < block.yardLocations.length / 3; i++) {
+                        new YARD.YARDContainer(core, containerNo++, block, 20, block.yardLocations[i], new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
                     }
                     editorMain.createRenderLoop();
                     //var sih = new ManipulationHelpers.SimpleInteractionHelper(scene);
@@ -147,7 +152,7 @@ var YARD;
                 computed: {},
                 methods: {
                     addContainer: function () {
-                        var yardLocation = yardLocations.filter(function (f) { return f.isEmpty == true && f.column_z == inputLocation.column_z && f.row_x == inputLocation.row_x && f.level_y == inputLocation.level_y; })[0];
+                        var yardLocation = block.yardLocations.filter(function (f) { return f.yardContainer == null && f.column_z == inputLocation.column_z && f.row_x == inputLocation.row_x && f.level_y == inputLocation.level_y; })[0];
                         if (yardLocation) {
                             var con = new YARD.YARDContainer(core, containerNo++, block, 20, yardLocation, new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
                         }
@@ -156,11 +161,11 @@ var YARD;
                         }
                     },
                     arrangeAll: function () {
-                        yardLocations.forEach(function (f) { return f.isEmpty = true; });
+                        block.yardLocations.forEach(function (f) { return f.yardContainer = null; });
                         for (var i = 0; i < block.containers.length; i++) {
-                            var nextPosition = yardLocations[i];
-                            nextPosition.isEmpty = false;
-                            block.containers[i].yardLocation = nextPosition;
+                            var nextPosition = block.yardLocations[i];
+                            nextPosition.yardContainer = block.containers[i];
+                            nextPosition.yardContainer.yardLocation = nextPosition;
                         }
                     },
                     arrangeSelected: function () {
@@ -173,22 +178,22 @@ var YARD;
                         block.showTiles = event.target.checked;
                     },
                     moveUp: function () {
-                        moveContainer(0, 0, -1);
+                        moveContainer(selectedContainer, 0, 0, -1);
                     },
                     moveDown: function () {
-                        moveContainer(0, 0, 1);
+                        moveContainer(selectedContainer, 0, 0, 1);
                     },
                     moveLeft: function () {
-                        moveContainer(0, -1, 0);
+                        moveContainer(selectedContainer, 0, -1, 0);
                     },
                     moveRight: function () {
-                        moveContainer(0, 1, 0);
+                        moveContainer(selectedContainer, 0, 1, 0);
                     },
                     moveForward: function () {
-                        moveContainer(-1, 0, 0);
+                        moveContainer(selectedContainer, -1, 0, 0);
                     },
                     moveBackword: function () {
-                        moveContainer(1, 0, 0);
+                        moveContainer(selectedContainer, 1, 0, 0);
                     },
                 },
             });
@@ -202,7 +207,7 @@ var YARD;
     var YARDBlock = (function () {
         function YARDBlock(core, id, containerLength, columns, rows, levels, position) {
             var scene = core.scene;
-            this.freeSpace = 4;
+            this.freeSpace = 5;
             this.boundingGroundSize = 10;
             // Tiled Ground
             // Part 1 : Creation of Tiled Ground
@@ -253,7 +258,7 @@ var YARD;
             tiledGround.receiveShadows = true;
             BABYLON.EDITOR.SceneManager.ConfigureObject(tiledGround, core);
             this.mesh = tiledGround;
-            this.capacity = { column_z: columns, row_x: rows, level_y: levels, isEmpty: false };
+            this.capacity = { column_z: columns, row_x: rows, level_y: levels, yardContainer: null };
             this.size = {
                 length_z: this.zmax + (-this.zmin),
                 width_x: this.xmax + (-this.xmin),
@@ -271,7 +276,7 @@ var YARD;
             for (var r = 1; r <= rows; r++) {
                 for (var c = 1; c <= columns; c++) {
                     for (var l = 1; l <= levels; l++) {
-                        this.yardLocations.push({ column_z: c, row_x: r, level_y: l, isEmpty: true });
+                        this.yardLocations.push({ column_z: c, row_x: r, level_y: l, yardContainer: null });
                     }
                 }
             }
@@ -384,7 +389,7 @@ var YARD;
             this.mesh.container = this;
             this.block = block;
             block.containers.push(this);
-            yardLocation.isEmpty = false;
+            yardLocation.yardContainer = this;
             this.yardLocation = yardLocation;
         }
         Object.defineProperty(YARDContainer.prototype, "block", {

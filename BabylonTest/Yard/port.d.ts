@@ -3,8 +3,8 @@
     row_x: number;
     level_y: number;
 
-    isEmpty: boolean;
-    //yardContainer: YARD.YARDContainer;
+    //isEmpty: boolean;
+    yardContainer: YARD.YARDContainer;
 }
 
 //actual size

@@ -20,7 +20,6 @@
         }
         public set yardLocation(theValue: YARDLocationVector) {
             this._yardLocation = theValue;
-
             //var block = this.mesh.parent as BABYLON.Mesh;
 
             this.mesh.position = new BABYLON.Vector3(
@@ -57,7 +56,8 @@
             this.block = block;
             block.containers.push(this);
 
-            yardLocation.isEmpty = false;
+            yardLocation.yardContainer = this;
+
             this.yardLocation = yardLocation;
         }
 

@@ -28,7 +28,7 @@
         private multimat: BABYLON.MultiMaterial;
         constructor(core: BABYLON.EDITOR.EditorCore, id, containerLength, columns, rows, levels, position: BABYLON.Vector3) {
             var scene = core.scene;
-            this.freeSpace = 4;
+            this.freeSpace = 5;
             this.boundingGroundSize = 10;
 
             // Tiled Ground
@@ -96,7 +96,7 @@
 
             this.mesh = tiledGround;
 
-            this.capacity = { column_z: columns, row_x: rows, level_y: levels, isEmpty: false };
+            this.capacity = { column_z: columns, row_x: rows, level_y: levels, yardContainer: null };
 
             this.size = {
                 length_z: this.zmax + (- this.zmin),
@@ -119,7 +119,7 @@
             for (var r = 1; r <= rows; r++) {
                 for (var c = 1; c <= columns; c++) {
                     for (var l = 1; l <= levels; l++) {
-                        this.yardLocations.push({ column_z: c, row_x: r, level_y: l, isEmpty: true });
+                        this.yardLocations.push({ column_z: c, row_x: r, level_y: l, yardContainer: null });
 
                     }
                     ////slots
