@@ -63,7 +63,7 @@ declare namespace BABYLON.EDITOR {
         updates: Array<ICustomUpdate>;
         eventReceivers: Array<IEventReceiver>;
         editor: EditorMain;
-        shadowGenerator: any;
+        shadowGenerator: BABYLON.ShadowGenerator;
         /**
         * Constructor
         */

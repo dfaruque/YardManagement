@@ -28,17 +28,17 @@ namespace YARD {
             var scene = core.scene;
             scene.clearColor = BABYLON.Color3.White();
 
-            var light = new BABYLON.DirectionalLight("New DirectionalLight", new BABYLON.Vector3(1, -1, -1), scene);
-            light.position = new BABYLON.Vector3(10 * multiplicationFactor, 10 * multiplicationFactor, 10 * multiplicationFactor);
-            core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light);
-
-            var camera = core.camera;
-            //camera.checkCollisions = true;
 
             var moveContainer = (container: YARDContainer, row_x, column_z, level_y) => {
                 var yardLocations = container.block.yardLocations;
 
                 if (container.yardLocation.level_y + level_y > container.block.capacity.level_y) {
+                    var moveFromLocation = yardLocations.filter(f =>
+                        f.row_x == container.yardLocation.row_x
+                        && f.column_z == container.yardLocation.column_z
+                        && (f.level_y == container.block.capacity.level_y))[0];
+
+                    moveFromLocation.yardContainer = null;
 
                     container.yardLocation = {
                         row_x: container.yardLocation.row_x + row_x,
@@ -94,6 +94,25 @@ namespace YARD {
             var block = new YARD.YARDBlock(core, 1, 20, 6, 9, 2, new BABYLON.Vector3(0, 0, 0));
             //var block2 = new YARD.YARDBlock(core, 2, 20, 6, 9, 2, new BABYLON.Vector3(0, 0, -block.size.length_z - block.boundingGroundSize));
             //var block3 = new YARD.YARDBlock(core, 3, 20, 6, 9, 2, new BABYLON.Vector3(0, 0, block.size.length_z + block.boundingGroundSize));
+            var light = new BABYLON.DirectionalLight("New DirectionalLight", new BABYLON.Vector3(10, -20, -10), scene);
+            light.intensity = 0.7;
+            //light.position = new BABYLON.Vector3(-10 * multiplicationFactor, 10 * multiplicationFactor, -10 * multiplicationFactor);
+            //var lightSphere = BABYLON.MeshBuilder.CreateSphere('lightSpere', { diameter: multiplicationFactor}, scene);
+            //lightSphere.position = light.position;
+
+            var light2 = new BABYLON.PointLight("New DirectionalLight", new BABYLON.Vector3(-100, 1000, 0), scene);
+            light2.intensity = 0.2;
+            light2.radius = block.size.length_z;
+            //light2.position = new BABYLON.Vector3(10 * multiplicationFactor, 10 * multiplicationFactor, 10 * multiplicationFactor);
+            //var light2Sphere = BABYLON.MeshBuilder.CreateSphere('light2Spere', { diameter: multiplicationFactor }, scene);
+            //light2Sphere.position = light2.position;
+
+            core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light);
+            //core.shadowGenerator.useBlurVarianceShadowMap = true;
+            //core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light2);
+
+            var camera = core.camera;
+            //camera.checkCollisions = true;
 
             var vm = new Vue({
                 el: '#divConsole',
@@ -101,11 +120,14 @@ namespace YARD {
                 ready: () => {
 
                     //populate bummy containers
-                    for (var i = 0; i < block.yardLocations.length / 3; i++) {
+                    for (var i = 0; i < block.yardLocations.length / 2; i++) {
                         new YARD.YARDContainer(core, containerNo++, block, 20,
                             block.yardLocations[i],
                             new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
                     }
+                    new YARD.YARDContainer(core, containerNo++, block, 20,
+                        block.yardLocations[block.yardLocations.length / 2],
+                        new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
 
                     editorMain.createRenderLoop();
                     //var sih = new ManipulationHelpers.SimpleInteractionHelper(scene);

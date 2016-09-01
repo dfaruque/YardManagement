@@ -17,7 +17,7 @@
 
         public editor: EditorMain = null;
 
-        public shadowGenerator = null;
+        public shadowGenerator: BABYLON.ShadowGenerator = null;
 
         /**
         * Constructor
