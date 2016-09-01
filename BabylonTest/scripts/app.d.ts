@@ -195,6 +195,7 @@ declare namespace BABYLON.EDITOR {
         * Creates the editor camera
         */
         private _createBabylonCamera();
+        resetCamera(): void;
         /**
         * Creates the render loop
         */

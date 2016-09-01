@@ -140,14 +140,23 @@
             //camera.panningSensibility = 50;
             //camera.attachControl(this.core.canvas, false, false);
 
-            var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, multiplicationFactor, new BABYLON.Vector3(0, 0, 0), this.core.scene);
+            var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, multiplicationFactor, BABYLON.Vector3.Zero(), this.core.scene);
 
             camera.lowerBetaLimit = 0.1;
             camera.upperBetaLimit = (Math.PI / 2) * 0.99;
             camera.lowerRadiusLimit = multiplicationFactor;
 
-            camera.setPosition(new BABYLON.Vector3(multiplicationFactor * 8, multiplicationFactor * 8 * 2, 0));
+            //camera.setPosition(new BABYLON.Vector3(multiplicationFactor * 8, multiplicationFactor * 8 * 2, 0));
             this.core.camera = camera;
+            this.resetCamera();
+        }
+
+        public resetCamera() {
+            this.core.camera.alpha = 0;
+            this.core.camera.beta = 0;
+            this.core.camera.target = BABYLON.Vector3.Zero();
+            this.core.camera.setPosition(new BABYLON.Vector3(multiplicationFactor * 8, multiplicationFactor * 8 * 2, 0));
+
         }
 
         /**

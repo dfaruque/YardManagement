@@ -143,6 +143,12 @@ namespace YARD {
 
 
                     },
+                    resetCamera: () => {
+
+                        editorMain.resetCamera();
+
+
+                    },
                     showGridLines: (event) => {
 
                         block.showTiles = event.target.checked;
