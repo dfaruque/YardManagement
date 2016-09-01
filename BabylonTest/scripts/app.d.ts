@@ -22,9 +22,10 @@ declare namespace YARD {
         zmin: number;
         zmax: number;
         freeSpace: number;
+        boundingGroundSize: number;
         private groundMaterial;
         private multimat;
-        constructor(core: BABYLON.EDITOR.EditorCore, id: any, containerLength: any, columns: any, rows: any, levels: any);
+        constructor(core: BABYLON.EDITOR.EditorCore, id: any, containerLength: any, columns: any, rows: any, levels: any, position: BABYLON.Vector3);
         createGridLines(rows: any, columns: any, scene: BABYLON.Scene): void;
         createBoundingGrounds(scene: BABYLON.Scene): void;
         createTextPlate(text: string, position: BABYLON.Vector3, scene: BABYLON.Scene): void;
@@ -44,6 +45,10 @@ declare namespace YARD {
 declare module BABYLON {
     class MyMesh extends Mesh {
         container: YARD.YARDContainer;
+    }
+}
+declare namespace YARD {
+    class YARDMain {
     }
 }
 declare namespace BABYLON.EDITOR {

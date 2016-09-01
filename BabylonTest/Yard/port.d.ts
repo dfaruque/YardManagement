@@ -4,8 +4,10 @@
     level_y: number;
 
     isEmpty: boolean;
+    //yardContainer: YARD.YARDContainer;
 }
 
+//actual size
 declare class YARDSizeVector {
     length_z: number;
     height_y: number;

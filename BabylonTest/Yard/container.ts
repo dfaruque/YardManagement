@@ -1,6 +1,6 @@
 ﻿namespace YARD {
 
-    export class YARDContainer {
+     export class YARDContainer {
         name: string;
         mesh: BABYLON.MyMesh;
 

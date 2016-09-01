@@ -22,13 +22,16 @@
         zmin: number;
         zmax: number;
         freeSpace: number;
+        boundingGroundSize: number;
 
         private groundMaterial: BABYLON.StandardMaterial;
         private multimat: BABYLON.MultiMaterial;
-        constructor(core: BABYLON.EDITOR.EditorCore, id, containerLength, columns, rows, levels) {
+        constructor(core: BABYLON.EDITOR.EditorCore, id, containerLength, columns, rows, levels, position: BABYLON.Vector3) {
             var scene = core.scene;
-            // Tiled Ground Tutorial
-            this.freeSpace = 2;
+            this.freeSpace = 4;
+            this.boundingGroundSize = 10;
+
+            // Tiled Ground
             // Part 1 : Creation of Tiled Ground
             // Parameters
             this.xmin = -rows * (containerWidth + this.freeSpace) / 2; //8(width)/2=4
@@ -44,9 +47,10 @@
                 h: columns,
                 w: rows
             };
+
             // Create the Tiled Ground
             var tiledGround = BABYLON.Mesh.CreateTiledGround("Tiled Ground", this.xmin, this.zmin, this.xmax, this.zmax, subdivisions, precision, scene);
-            //tiledGround.position.y = -1
+            tiledGround.position = position;
 
             // Part 2 : Create the multi material
             this.groundMaterial = new BABYLON.StandardMaterial("ground", core.scene);
@@ -181,16 +185,16 @@
 
         createBoundingGrounds(scene: BABYLON.Scene) {
             //rear
-            var leftzplane = BABYLON.Mesh.CreateGround("lzp", this.size.length_z, 10, 1, scene);
-            leftzplane.position = new BABYLON.Vector3(this.xmin - 5, 0, 0);
+            var leftzplane = BABYLON.Mesh.CreateGround("lzp", this.size.length_z, this.boundingGroundSize, 1, scene);
+            leftzplane.position = new BABYLON.Vector3(this.xmin - this.boundingGroundSize/2, 0, 0);
             leftzplane.rotation = new BABYLON.Vector3(0, -Math.PI / 2, 0);
             leftzplane.material = this.groundMaterial;
             leftzplane.receiveShadows = true;
             this.createTextPlate('North', leftzplane.position.clone().add(new BABYLON.Vector3(-10, 10, 0)), scene);
 
             //front
-            var rightzplane = BABYLON.Mesh.CreateGround("rzp", this.size.length_z, 10, 1, scene);
-            rightzplane.position = new BABYLON.Vector3(this.xmax + 5, 0, 0);
+            var rightzplane = BABYLON.Mesh.CreateGround("rzp", this.size.length_z, this.boundingGroundSize, 1, scene);
+            rightzplane.position = new BABYLON.Vector3(this.xmax + this.boundingGroundSize/2, 0, 0);
             rightzplane.rotation = new BABYLON.Vector3(0, -Math.PI / 2, 0);
             rightzplane.material = this.groundMaterial;
             rightzplane.receiveShadows = true;
@@ -198,8 +202,8 @@
             this.createTextPlate('South', rightzplane.position.clone().add(new BABYLON.Vector3(10, 10, 0)), scene);
 
             //left
-            var frontxplane = BABYLON.Mesh.CreateGround("fxp", this.size.width_x + 20, 10, 1, scene);
-            frontxplane.position = new BABYLON.Vector3(0, 0, this.zmin - 5);
+            var frontxplane = BABYLON.Mesh.CreateGround("fxp", this.size.width_x + this.boundingGroundSize*2, this.boundingGroundSize, 1, scene);
+            frontxplane.position = new BABYLON.Vector3(0, 0, this.zmin - this.boundingGroundSize/2);
             frontxplane.rotation = new BABYLON.Vector3(0, 0, 0);
             frontxplane.material = this.groundMaterial;
             frontxplane.receiveShadows = true;
@@ -207,8 +211,8 @@
             this.createTextPlate('East', frontxplane.position.clone().add(new BABYLON.Vector3(0, 10, -10)), scene);
 
             //right
-            var rearxplane = BABYLON.Mesh.CreateGround("rxp", this.size.width_x + 20, 10, 1, scene);
-            rearxplane.position = new BABYLON.Vector3(0, 0, this.zmax + 5);
+            var rearxplane = BABYLON.Mesh.CreateGround("rxp", this.size.width_x + this.boundingGroundSize*2, this.boundingGroundSize, 1, scene);
+            rearxplane.position = new BABYLON.Vector3(0, 0, this.zmax + this.boundingGroundSize/2);
             rearxplane.rotation = new BABYLON.Vector3(0, 0, 0);
             rearxplane.material = this.groundMaterial;
             rearxplane.receiveShadows = true;

@@ -39,6 +39,7 @@ namespace YARD {
                     return false;
                 }
             });
+
             //scene.debugLayer.show();
             scene.collisionsEnabled = true;
             scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
@@ -52,9 +53,9 @@ namespace YARD {
             light.position = new BABYLON.Vector3(10 * multiplicationFactor, 10 * multiplicationFactor, 10 * multiplicationFactor);
             core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light);
 
-            var block = new YARD.YARDBlock(core, 1, 20, 6, 9, 2);
-
-            //var block2 = new YARD.YARDBlock(core, 1, 20, 6, 10, 2);
+            var block = new YARD.YARDBlock(core, 1, 20, 6, 9, 2, new BABYLON.Vector3(0, 0, 0));
+            //var block2 = new YARD.YARDBlock(core, 2, 20, 6, 9, 2, new BABYLON.Vector3(0, 0, -block.size.length_z - block.boundingGroundSize));
+            //var block3 = new YARD.YARDBlock(core, 3, 20, 6, 9, 2, new BABYLON.Vector3(0, 0, block.size.length_z + block.boundingGroundSize));
 
             editorMain.transformer.transformerType = BABYLON.EDITOR.TransformerType.POSITION;
 
@@ -75,6 +76,12 @@ namespace YARD {
                     currentYardLocation.isEmpty = true;
 
                     selectedContainer.yardLocation = yardLocation;
+
+                    //physic
+                    if (selectedContainer.yardLocation.level_y < block.capacity.level_y) {
+
+                    }
+
                 }
                 //else
                 //    alert('Invalid move.');

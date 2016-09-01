@@ -80,6 +80,7 @@
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
+    <TypeScriptCompile Include="Yard\yardMain.ts" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Yard\app.ts" />
@@ -93,7 +94,7 @@
     <TypeScriptCompile Include="Yard\Editor\babylon.editor.d.ts" />
     <TypeScriptCompile Include="scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="scripts\typings\vue\vue.d.ts" />
-    <TypeScriptCompile Include="Yard\yard.d.ts" />
+    <TypeScriptCompile Include="Yard\port.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
