@@ -87,7 +87,8 @@ var YARD;
                                 && f.column_z == container.yardLocation.column_z
                                 && (f.level_y == container.block.capacity.level_y);
                         })[0];
-                        moveFromLocation.yardContainer = null;
+                        if (moveFromLocation)
+                            moveFromLocation.yardContainer = null;
                         container.yardLocation = {
                             row_x: row_x,
                             column_z: column_z,
@@ -97,8 +98,7 @@ var YARD;
                     }
                     else {
                         var moveToLocation = slots.filter(function (f) {
-                            return (f.yardContainer == null || f.yardContainer == container)
-                                && f.row_x == row_x
+                            return f.row_x == row_x
                                 && f.column_z == column_z
                                 && f.level_y == level_y;
                         })[0];
@@ -106,24 +106,54 @@ var YARD;
                             var moveFromLocation = slots.filter(function (f) {
                                 return f.row_x == container.yardLocation.row_x
                                     && f.column_z == container.yardLocation.column_z
-                                    && f.level_y == container.yardLocation.level_y;
+                                    && (f.level_y == container.yardLocation.level_y);
                             })[0];
-                            if (moveFromLocation)
-                                moveFromLocation.yardContainer = null;
-                            container.yardLocation = moveToLocation;
-                            moveToLocation.yardContainer = container;
-                            //physics
-                            if (container.yardLocation.level_y < container.block.capacity.level_y) {
+                            var isFree = (moveToLocation.yardContainer == null || moveToLocation.yardContainer == container);
+                            if (isFree) {
+                                if (moveFromLocation)
+                                    moveFromLocation.yardContainer = null;
+                                var belowLocation = slots.filter(function (f) {
+                                    return f.yardContainer == null
+                                        && f.row_x == row_x
+                                        && f.column_z == column_z
+                                        && f.level_y == level_y - 1;
+                                })[0];
+                                if (belowLocation) {
+                                    container.yardLocation = belowLocation;
+                                    belowLocation.yardContainer = container;
+                                }
+                                else {
+                                    container.yardLocation = moveToLocation;
+                                    moveToLocation.yardContainer = container;
+                                    //physics
+                                    if (container.yardLocation.level_y < container.block.capacity.level_y) {
+                                        var aboveLocation = slots.filter(function (f) {
+                                            return f.yardContainer
+                                                && f.row_x == moveFromLocation.row_x
+                                                && f.column_z == moveFromLocation.column_z
+                                                && f.level_y == moveFromLocation.level_y + 1;
+                                        })[0];
+                                        if (aboveLocation) {
+                                            var aboveContainer = aboveLocation.yardContainer;
+                                            aboveLocation.yardContainer = null;
+                                            moveContainer(aboveContainer, aboveContainer.yardLocation.row_x, aboveContainer.yardLocation.column_z, aboveContainer.yardLocation.level_y - 1);
+                                        }
+                                    }
+                                }
+                            }
+                            else {
                                 var aboveLocation = slots.filter(function (f) {
-                                    return f.yardContainer
-                                        && f.row_x == moveFromLocation.row_x
-                                        && f.column_z == moveFromLocation.column_z
-                                        && f.level_y == moveFromLocation.level_y + 1;
+                                    return f.yardContainer == null
+                                        && f.row_x == row_x
+                                        && f.column_z == column_z
+                                        && f.level_y == level_y + 1;
                                 })[0];
                                 if (aboveLocation) {
-                                    var aboveContainer = aboveLocation.yardContainer;
                                     aboveLocation.yardContainer = null;
-                                    moveContainer(aboveContainer, aboveContainer.yardLocation.row_x, aboveContainer.yardLocation.column_z, aboveContainer.yardLocation.level_y - 1);
+                                    moveContainer(selectedContainer, row_x, column_z, level_y + 1);
+                                }
+                                else {
+                                    selectedContainer.yardLocation = selectedContainer.yardLocation;
                                 }
                             }
                         }
