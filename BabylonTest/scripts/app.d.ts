@@ -14,7 +14,7 @@ declare namespace YARD {
         containers: YARD.YARDContainer[];
         capacity: YARDLocationVector;
         size: YARDSizeVector;
-        yardLocations: YARDLocationVector[];
+        slots: YARDLocationVector[];
         slotSize: YARDSizeVector;
         showTiles: boolean;
         xmin: number;
@@ -39,6 +39,7 @@ declare namespace YARD {
         block: YARD.YARDBlock;
         private _yardLocation;
         yardLocation: YARDLocationVector;
+        nearestSlot: YARDLocationVector;
         constructor(core: BABYLON.EDITOR.EditorCore, id: any, block: YARD.YARDBlock, size: number, yardLocation: YARDLocationVector, color: BABYLON.Color3);
     }
 }

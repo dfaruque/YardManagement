@@ -1,6 +1,6 @@
 ﻿namespace YARD {
 
-     export class YARDContainer {
+    export class YARDContainer {
         name: string;
         mesh: BABYLON.MyMesh;
 
@@ -22,11 +22,24 @@
             this._yardLocation = theValue;
             //var block = this.mesh.parent as BABYLON.Mesh;
 
-            this.mesh.position = new BABYLON.Vector3(
-                this.block.xmin + (theValue.row_x - 1 / 2) * this.block.slotSize.width_x,
-                (theValue.level_y - 1) * this.mesh.scaling.y + this.mesh.scaling.y / 2,
-                this.block.zmin + (theValue.column_z - 1 / 2) * this.block.slotSize.length_z);
+            this.mesh.position.x = this.block.xmin + theValue.row_x * this.block.slotSize.width_x - this.block.slotSize.width_x / 2;
+            this.mesh.position.z = this.block.zmin + theValue.column_z * this.block.slotSize.length_z - this.block.slotSize.length_z / 2;
+            this.mesh.position.y = theValue.level_y * this.mesh.scaling.y - this.mesh.scaling.y / 2;
         };
+
+        public get nearestSlot(): YARDLocationVector {
+            var r: YARDLocationVector = {
+                row_x: Math.round((this.mesh.position.x + this.block.slotSize.width_x / 2 - this.block.xmin) / this.block.slotSize.width_x),
+                column_z: Math.round((this.mesh.position.z + this.block.slotSize.length_z / 2 - this.block.zmin) / this.block.slotSize.length_z),
+                level_y: Math.round((this.mesh.position.y + this.mesh.scaling.y / 2) / this.mesh.scaling.y),
+                yardContainer: this
+            };
+            r.row_x = r.row_x > this.block.capacity.row_x ? this.block.capacity.row_x : r.row_x;
+            r.column_z = r.column_z > this.block.capacity.column_z ? this.block.capacity.column_z : r.column_z;
+            r.level_y = r.level_y > this.block.capacity.level_y ? this.block.capacity.level_y : r.level_y;
+
+            return r;
+        }
 
         constructor(core: BABYLON.EDITOR.EditorCore, id, block: YARD.YARDBlock, size: number, yardLocation: YARDLocationVector, color: BABYLON.Color3) {
             this.name = "yardContainer" + id;

@@ -137,14 +137,15 @@
         */
         private _createBabylonCamera(): void {
             //var camera = new ArcRotateCamera("EditorCamera", 0, 0, 10, Vector3.Zero(), this.core.currentScene);
-            //camera.panningSensibility = 50;
-            //camera.attachControl(this.core.canvas, false, false);
 
             var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, multiplicationFactor, BABYLON.Vector3.Zero(), this.core.scene);
 
             camera.lowerBetaLimit = 0.1;
             camera.upperBetaLimit = (Math.PI / 2) * 0.99;
             camera.lowerRadiusLimit = multiplicationFactor;
+
+            camera.panningSensibility = 50;
+            camera.attachControl(this.core.canvas, false, false);
 
             //camera.setPosition(new BABYLON.Vector3(multiplicationFactor * 8, multiplicationFactor * 8 * 2, 0));
             this.core.camera = camera;

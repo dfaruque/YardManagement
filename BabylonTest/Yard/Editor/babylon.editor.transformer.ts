@@ -38,9 +38,9 @@
         private _vectorToModify: Vector3 = null;
         private _selectedTransform: string = "";
         private _distance: number = 0;
-        private _multiplier: number = 20;
+        private _multiplier: number = 100;
         private _ctrlIsDown: boolean = false;
-
+         
         /**
         * Constructor
         * @param core: the editor core instance

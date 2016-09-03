@@ -30,10 +30,10 @@ namespace YARD {
 
 
             var moveContainer = (container: YARDContainer, row_x, column_z, level_y) => {
-                var yardLocations = container.block.yardLocations;
+                var slots = container.block.slots;
 
                 if (container.yardLocation.level_y + level_y > container.block.capacity.level_y) {
-                    var moveFromLocation = yardLocations.filter(f =>
+                    var moveFromLocation = slots.filter(f =>
                         f.row_x == container.yardLocation.row_x
                         && f.column_z == container.yardLocation.column_z
                         && (f.level_y == container.block.capacity.level_y))[0];
@@ -48,14 +48,14 @@ namespace YARD {
                     };
                 }
                 else {
-                    var moveToLocation = yardLocations.filter(f =>
+                    var moveToLocation = slots.filter(f =>
                         (f.yardContainer == null || f.yardContainer == container)
                         && f.row_x == container.yardLocation.row_x + row_x
                         && f.column_z == container.yardLocation.column_z + column_z
                         && f.level_y == container.yardLocation.level_y + level_y)[0];
 
                     if (moveToLocation) {
-                        var moveFromLocation = yardLocations.filter(f =>
+                        var moveFromLocation = slots.filter(f =>
                             f.row_x == container.yardLocation.row_x
                             && f.column_z == container.yardLocation.column_z
                             && f.level_y == container.yardLocation.level_y)[0];
@@ -68,7 +68,7 @@ namespace YARD {
                         //physics
 
                         if (container.yardLocation.level_y < container.block.capacity.level_y) {
-                            var aboveLocation = yardLocations.filter(f =>
+                            var aboveLocation = slots.filter(f =>
                                 f.yardContainer
                                 && f.row_x == moveFromLocation.row_x
                                 && f.column_z == moveFromLocation.column_z
@@ -120,13 +120,13 @@ namespace YARD {
                 ready: () => {
 
                     //populate bummy containers
-                    for (var i = 0; i < block.yardLocations.length / 2; i++) {
+                    for (var i = 0; i < block.slots.length / 2; i++) {
                         new YARD.YARDContainer(core, containerNo++, block, 20,
-                            block.yardLocations[i],
+                            block.slots[i],
                             new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
                     }
                     new YARD.YARDContainer(core, containerNo++, block, 20,
-                        block.yardLocations[block.yardLocations.length / 2],
+                        block.slots[block.slots.length / 2],
                         new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
 
                     editorMain.createRenderLoop();
@@ -155,7 +155,7 @@ namespace YARD {
 
                 methods: {
                     addContainer: function () {
-                        var yardLocation = block.yardLocations.filter(f => f.yardContainer == null && f.column_z == inputLocation.column_z && f.row_x == inputLocation.row_x && f.level_y == inputLocation.level_y)[0];
+                        var yardLocation = block.slots.filter(f => f.yardContainer == null && f.column_z == inputLocation.column_z && f.row_x == inputLocation.row_x && f.level_y == inputLocation.level_y)[0];
 
                         if (yardLocation) {
                             var con = new YARD.YARDContainer(core, containerNo++, block, 20,
@@ -167,10 +167,10 @@ namespace YARD {
                         }
                     },
                     arrangeAll: () => {
-                        block.yardLocations.forEach(f => f.yardContainer = null);
+                        block.slots.forEach(f => f.yardContainer = null);
 
                         for (var i = 0; i < block.containers.length; i++) {
-                            var nextPosition = block.yardLocations[i];
+                            var nextPosition = block.slots[i];
 
                             nextPosition.yardContainer = block.containers[i];
 
@@ -178,8 +178,16 @@ namespace YARD {
                         }
                     },
                     arrangeSelected: () => {
-                        //setPositionInBlock(selectedContainer);
+                        if (selectedContainer) {
+                            var moveFromLocation = selectedContainer.block.slots.filter(f =>
+                                f.row_x == selectedContainer.yardLocation.row_x
+                                && f.column_z == selectedContainer.yardLocation.column_z
+                                && (f.level_y == selectedContainer.block.capacity.level_y))[0];
 
+                            moveFromLocation.yardContainer = null;
+
+                            selectedContainer.yardLocation = selectedContainer.nearestSlot;
+                        }
 
                     },
                     resetCamera: () => {

@@ -1,14 +1,22 @@
-﻿declare class YARDLocationVector{
+﻿declare interface YARDLocationVector{
     column_z: number;
     row_x: number;
     level_y: number;
 
+    xmin?: number;
+    xmax?: number;
+    zmin?: number;
+    zmax?: number;
+    ymin?: number;
+    ymax?: number;
+
+    position?: BABYLON.Vector3;
     //isEmpty: boolean;
     yardContainer: YARD.YARDContainer;
 }
 
 //actual size
-declare class YARDSizeVector {
+declare interface YARDSizeVector {
     length_z: number;
     height_y: number;
     width_x: number;

@@ -6,7 +6,7 @@
         capacity: YARDLocationVector;
 
         size: YARDSizeVector;
-        yardLocations: YARDLocationVector[];
+        slots: YARDLocationVector[];
 
         slotSize: YARDSizeVector;
 
@@ -112,14 +112,20 @@
             this.containers = [];
 
             //yardlocations
-            this.yardLocations = [];
+            this.slots = [];
 
             var linePoints: BABYLON.Vector3[] = [];
 
             for (var r = 1; r <= rows; r++) {
                 for (var c = 1; c <= columns; c++) {
                     for (var l = 1; l <= levels; l++) {
-                        this.yardLocations.push({ column_z: c, row_x: r, level_y: l, yardContainer: null });
+                        var ss: YARDLocationVector = { column_z: c, row_x: r, level_y: l, yardContainer: null };
+
+                        ss.position = new BABYLON.Vector3(this.xmin + (r - 1 / 2) * this.slotSize.width_x,
+                            (l - 1) * this.mesh.scaling.y + this.mesh.scaling.y / 2,
+                            this.zmin + (c - 1 / 2) * this.slotSize.length_z);
+
+                        this.slots.push(ss);
 
                     }
                     ////slots

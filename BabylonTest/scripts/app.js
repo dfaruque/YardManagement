@@ -73,9 +73,9 @@ var YARD;
             var scene = core.scene;
             scene.clearColor = BABYLON.Color3.White();
             var moveContainer = function (container, row_x, column_z, level_y) {
-                var yardLocations = container.block.yardLocations;
+                var slots = container.block.slots;
                 if (container.yardLocation.level_y + level_y > container.block.capacity.level_y) {
-                    var moveFromLocation = yardLocations.filter(function (f) {
+                    var moveFromLocation = slots.filter(function (f) {
                         return f.row_x == container.yardLocation.row_x
                             && f.column_z == container.yardLocation.column_z
                             && (f.level_y == container.block.capacity.level_y);
@@ -89,14 +89,14 @@ var YARD;
                     };
                 }
                 else {
-                    var moveToLocation = yardLocations.filter(function (f) {
+                    var moveToLocation = slots.filter(function (f) {
                         return (f.yardContainer == null || f.yardContainer == container)
                             && f.row_x == container.yardLocation.row_x + row_x
                             && f.column_z == container.yardLocation.column_z + column_z
                             && f.level_y == container.yardLocation.level_y + level_y;
                     })[0];
                     if (moveToLocation) {
-                        var moveFromLocation = yardLocations.filter(function (f) {
+                        var moveFromLocation = slots.filter(function (f) {
                             return f.row_x == container.yardLocation.row_x
                                 && f.column_z == container.yardLocation.column_z
                                 && f.level_y == container.yardLocation.level_y;
@@ -107,7 +107,7 @@ var YARD;
                         moveToLocation.yardContainer = container;
                         //physics
                         if (container.yardLocation.level_y < container.block.capacity.level_y) {
-                            var aboveLocation = yardLocations.filter(function (f) {
+                            var aboveLocation = slots.filter(function (f) {
                                 return f.yardContainer
                                     && f.row_x == moveFromLocation.row_x
                                     && f.column_z == moveFromLocation.column_z
@@ -146,10 +146,10 @@ var YARD;
                 el: '#divConsole',
                 ready: function () {
                     //populate bummy containers
-                    for (var i = 0; i < block.yardLocations.length / 2; i++) {
-                        new YARD.YARDContainer(core, containerNo++, block, 20, block.yardLocations[i], new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+                    for (var i = 0; i < block.slots.length / 2; i++) {
+                        new YARD.YARDContainer(core, containerNo++, block, 20, block.slots[i], new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
                     }
-                    new YARD.YARDContainer(core, containerNo++, block, 20, block.yardLocations[block.yardLocations.length / 2], new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
+                    new YARD.YARDContainer(core, containerNo++, block, 20, block.slots[block.slots.length / 2], new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
                     editorMain.createRenderLoop();
                     //var sih = new ManipulationHelpers.SimpleInteractionHelper(scene);
                     //showWorldAxis(50, scene);
@@ -170,7 +170,7 @@ var YARD;
                 computed: {},
                 methods: {
                     addContainer: function () {
-                        var yardLocation = block.yardLocations.filter(function (f) { return f.yardContainer == null && f.column_z == inputLocation.column_z && f.row_x == inputLocation.row_x && f.level_y == inputLocation.level_y; })[0];
+                        var yardLocation = block.slots.filter(function (f) { return f.yardContainer == null && f.column_z == inputLocation.column_z && f.row_x == inputLocation.row_x && f.level_y == inputLocation.level_y; })[0];
                         if (yardLocation) {
                             var con = new YARD.YARDContainer(core, containerNo++, block, 20, yardLocation, new BABYLON.Color3(Math.random(), Math.random(), Math.random()));
                         }
@@ -179,15 +179,23 @@ var YARD;
                         }
                     },
                     arrangeAll: function () {
-                        block.yardLocations.forEach(function (f) { return f.yardContainer = null; });
+                        block.slots.forEach(function (f) { return f.yardContainer = null; });
                         for (var i = 0; i < block.containers.length; i++) {
-                            var nextPosition = block.yardLocations[i];
+                            var nextPosition = block.slots[i];
                             nextPosition.yardContainer = block.containers[i];
                             nextPosition.yardContainer.yardLocation = nextPosition;
                         }
                     },
                     arrangeSelected: function () {
-                        //setPositionInBlock(selectedContainer);
+                        if (selectedContainer) {
+                            var moveFromLocation = selectedContainer.block.slots.filter(function (f) {
+                                return f.row_x == selectedContainer.yardLocation.row_x
+                                    && f.column_z == selectedContainer.yardLocation.column_z
+                                    && (f.level_y == selectedContainer.block.capacity.level_y);
+                            })[0];
+                            moveFromLocation.yardContainer = null;
+                            selectedContainer.yardLocation = selectedContainer.nearestSlot;
+                        }
                     },
                     resetCamera: function () {
                         editorMain.resetCamera();
@@ -289,12 +297,14 @@ var YARD;
             };
             this.containers = [];
             //yardlocations
-            this.yardLocations = [];
+            this.slots = [];
             var linePoints = [];
             for (var r = 1; r <= rows; r++) {
                 for (var c = 1; c <= columns; c++) {
                     for (var l = 1; l <= levels; l++) {
-                        this.yardLocations.push({ column_z: c, row_x: r, level_y: l, yardContainer: null });
+                        var ss = { column_z: c, row_x: r, level_y: l, yardContainer: null };
+                        ss.position = new BABYLON.Vector3(this.xmin + (r - 1 / 2) * this.slotSize.width_x, (l - 1) * this.mesh.scaling.y + this.mesh.scaling.y / 2, this.zmin + (c - 1 / 2) * this.slotSize.length_z);
+                        this.slots.push(ss);
                     }
                 }
             }
@@ -428,12 +438,30 @@ var YARD;
             set: function (theValue) {
                 this._yardLocation = theValue;
                 //var block = this.mesh.parent as BABYLON.Mesh;
-                this.mesh.position = new BABYLON.Vector3(this.block.xmin + (theValue.row_x - 1 / 2) * this.block.slotSize.width_x, (theValue.level_y - 1) * this.mesh.scaling.y + this.mesh.scaling.y / 2, this.block.zmin + (theValue.column_z - 1 / 2) * this.block.slotSize.length_z);
+                this.mesh.position.x = this.block.xmin + theValue.row_x * this.block.slotSize.width_x - this.block.slotSize.width_x / 2;
+                this.mesh.position.z = this.block.zmin + theValue.column_z * this.block.slotSize.length_z - this.block.slotSize.length_z / 2;
+                this.mesh.position.y = theValue.level_y * this.mesh.scaling.y - this.mesh.scaling.y / 2;
             },
             enumerable: true,
             configurable: true
         });
         ;
+        Object.defineProperty(YARDContainer.prototype, "nearestSlot", {
+            get: function () {
+                var r = {
+                    row_x: Math.round((this.mesh.position.x + this.block.slotSize.width_x / 2 - this.block.xmin) / this.block.slotSize.width_x),
+                    column_z: Math.round((this.mesh.position.z + this.block.slotSize.length_z / 2 - this.block.zmin) / this.block.slotSize.length_z),
+                    level_y: Math.round((this.mesh.position.y + this.mesh.scaling.y / 2) / this.mesh.scaling.y),
+                    yardContainer: this
+                };
+                r.row_x = r.row_x > this.block.capacity.row_x ? this.block.capacity.row_x : r.row_x;
+                r.column_z = r.column_z > this.block.capacity.column_z ? this.block.capacity.column_z : r.column_z;
+                r.level_y = r.level_y > this.block.capacity.level_y ? this.block.capacity.level_y : r.level_y;
+                return r;
+            },
+            enumerable: true,
+            configurable: true
+        });
         return YARDContainer;
     }());
     YARD.YARDContainer = YARDContainer;
@@ -769,12 +797,12 @@ var BABYLON;
             */
             EditorMain.prototype._createBabylonCamera = function () {
                 //var camera = new ArcRotateCamera("EditorCamera", 0, 0, 10, Vector3.Zero(), this.core.currentScene);
-                //camera.panningSensibility = 50;
-                //camera.attachControl(this.core.canvas, false, false);
                 var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, multiplicationFactor, BABYLON.Vector3.Zero(), this.core.scene);
                 camera.lowerBetaLimit = 0.1;
                 camera.upperBetaLimit = (Math.PI / 2) * 0.99;
                 camera.lowerRadiusLimit = multiplicationFactor;
+                camera.panningSensibility = 50;
+                camera.attachControl(this.core.canvas, false, false);
                 //camera.setPosition(new BABYLON.Vector3(multiplicationFactor * 8, multiplicationFactor * 8 * 2, 0));
                 this.core.camera = camera;
                 this.resetCamera();
@@ -1087,7 +1115,7 @@ var BABYLON;
                 this._vectorToModify = null;
                 this._selectedTransform = "";
                 this._distance = 0;
-                this._multiplier = 20;
+                this._multiplier = 100;
                 this._ctrlIsDown = false;
                 //Initialize
                 this.core = core;
