@@ -178,6 +178,12 @@
                 var lines = BABYLON.Mesh.CreateLines("girdLineMesh", [spoint, epoint], scene);
                 lines.color = BABYLON.Color3.Gray();
 
+                if (r == rows) {
+                    //this.createTextPlate('Row', new BABYLON.Vector3(this.xmin - this.slotSize.width_x / 2, 5, this.zmin - this.slotSize.length_z / 2), scene);
+                } else
+                    this.createTextPlate((r + 1).toString(), spoint.clone().add(new BABYLON.Vector3(this.slotSize.width_x / 2, 5, -this.freeSpace * 2)), scene);
+
+
             }
             for (var c = 0; c <= columns; c++) {
 
@@ -186,13 +192,18 @@
 
                 var lines = BABYLON.Mesh.CreateLines("girdLineMesh", [spoint, epoint], scene);
                 lines.color = BABYLON.Color3.Gray();
+
+                if (c == columns) {
+                    //this.createTextPlate('Column', new BABYLON.Vector3(this.xmin - this.slotSize.width_x / 2, 5, this.zmin + this.slotSize.length_z / 2), scene);
+                } else
+                    this.createTextPlate((c + 1).toString(), spoint.clone().add(new BABYLON.Vector3(-this.freeSpace * 2, 5, this.slotSize.length_z / 2)), scene);
             }
         }
 
         createBoundingGrounds(scene: BABYLON.Scene) {
             //rear
             var leftzplane = BABYLON.Mesh.CreateGround("lzp", this.size.length_z, this.boundingGroundSize, 1, scene);
-            leftzplane.position = new BABYLON.Vector3(this.xmin - this.boundingGroundSize/2, 0, 0);
+            leftzplane.position = new BABYLON.Vector3(this.xmin - this.boundingGroundSize / 2, 0, 0);
             leftzplane.rotation = new BABYLON.Vector3(0, -Math.PI / 2, 0);
             leftzplane.material = this.groundMaterial;
             leftzplane.receiveShadows = true;
@@ -200,7 +211,7 @@
 
             //front
             var rightzplane = BABYLON.Mesh.CreateGround("rzp", this.size.length_z, this.boundingGroundSize, 1, scene);
-            rightzplane.position = new BABYLON.Vector3(this.xmax + this.boundingGroundSize/2, 0, 0);
+            rightzplane.position = new BABYLON.Vector3(this.xmax + this.boundingGroundSize / 2, 0, 0);
             rightzplane.rotation = new BABYLON.Vector3(0, -Math.PI / 2, 0);
             rightzplane.material = this.groundMaterial;
             rightzplane.receiveShadows = true;
@@ -208,8 +219,8 @@
             this.createTextPlate('South', rightzplane.position.clone().add(new BABYLON.Vector3(10, 10, 0)), scene);
 
             //left
-            var frontxplane = BABYLON.Mesh.CreateGround("fxp", this.size.width_x + this.boundingGroundSize*2, this.boundingGroundSize, 1, scene);
-            frontxplane.position = new BABYLON.Vector3(0, 0, this.zmin - this.boundingGroundSize/2);
+            var frontxplane = BABYLON.Mesh.CreateGround("fxp", this.size.width_x + this.boundingGroundSize * 2, this.boundingGroundSize, 1, scene);
+            frontxplane.position = new BABYLON.Vector3(0, 0, this.zmin - this.boundingGroundSize / 2);
             frontxplane.rotation = new BABYLON.Vector3(0, 0, 0);
             frontxplane.material = this.groundMaterial;
             frontxplane.receiveShadows = true;
@@ -217,8 +228,8 @@
             this.createTextPlate('East', frontxplane.position.clone().add(new BABYLON.Vector3(0, 10, -10)), scene);
 
             //right
-            var rearxplane = BABYLON.Mesh.CreateGround("rxp", this.size.width_x + this.boundingGroundSize*2, this.boundingGroundSize, 1, scene);
-            rearxplane.position = new BABYLON.Vector3(0, 0, this.zmax + this.boundingGroundSize/2);
+            var rearxplane = BABYLON.Mesh.CreateGround("rxp", this.size.width_x + this.boundingGroundSize * 2, this.boundingGroundSize, 1, scene);
+            rearxplane.position = new BABYLON.Vector3(0, 0, this.zmax + this.boundingGroundSize / 2);
             rearxplane.rotation = new BABYLON.Vector3(0, 0, 0);
             rearxplane.material = this.groundMaterial;
             rearxplane.receiveShadows = true;
@@ -246,8 +257,8 @@
             textPlane.billboardMode = BABYLON.AbstractMesh.BILLBOARDMODE_ALL;
             var pmat = new BABYLON.StandardMaterial("textPlane", scene);
             pmat.diffuseTexture = textPlaneTexture;
-            pmat.specularColor = new BABYLON.Color3(0, 0, 0);
-            pmat.emissiveColor = new BABYLON.Color3(0.5, 0.5, 0.5);
+            pmat.specularColor = new BABYLON.Color3(0.3, 0.3, 0.3);
+            pmat.emissiveColor = new BABYLON.Color3(1, 1, 1);
             pmat.backFaceCulling = false;
             textPlane.material = pmat
             textPlane.position = position;

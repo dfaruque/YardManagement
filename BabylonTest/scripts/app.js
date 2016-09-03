@@ -81,21 +81,6 @@ var YARD;
             var moveContainer = function (container, row_x, column_z, level_y) {
                 if (container.yardLocation.row_x != row_x || container.yardLocation.column_z != column_z || container.yardLocation.level_y != level_y) {
                     var slots = container.block.slots;
-                    //if (level_y > container.block.capacity.level_y) {
-                    //    var moveFromLocation = slots.filter(f =>
-                    //        f.row_x == container.yardLocation.row_x
-                    //        && f.column_z == container.yardLocation.column_z
-                    //        && (f.level_y == container.block.capacity.level_y))[0];
-                    //    if (moveFromLocation)
-                    //        moveFromLocation.yardContainer = null;
-                    //    container.yardLocation = {
-                    //        row_x: row_x,
-                    //        column_z: column_z,
-                    //        level_y: level_y,
-                    //        yardContainer: container
-                    //    };
-                    //}
-                    //else {
                     var moveToLocation = slots.filter(function (f) {
                         return f.row_x == row_x
                             && f.column_z == column_z
@@ -369,12 +354,20 @@ var YARD;
                 epoint = new BABYLON.Vector3(this.xmin + r * this.slotSize.width_x, 0.1, this.zmax);
                 var lines = BABYLON.Mesh.CreateLines("girdLineMesh", [spoint, epoint], scene);
                 lines.color = BABYLON.Color3.Gray();
+                if (r == rows) {
+                }
+                else
+                    this.createTextPlate((r + 1).toString(), spoint.clone().add(new BABYLON.Vector3(this.slotSize.width_x / 2, 5, -this.freeSpace * 2)), scene);
             }
             for (var c = 0; c <= columns; c++) {
                 spoint = new BABYLON.Vector3(this.xmin, 0.1, this.zmin + c * this.slotSize.length_z);
                 epoint = new BABYLON.Vector3(this.xmax, 0.1, this.zmin + c * this.slotSize.length_z);
                 var lines = BABYLON.Mesh.CreateLines("girdLineMesh", [spoint, epoint], scene);
                 lines.color = BABYLON.Color3.Gray();
+                if (c == columns) {
+                }
+                else
+                    this.createTextPlate((c + 1).toString(), spoint.clone().add(new BABYLON.Vector3(-this.freeSpace * 2, 5, this.slotSize.length_z / 2)), scene);
             }
         };
         YARDBlock.prototype.createBoundingGrounds = function (scene) {
@@ -424,8 +417,8 @@ var YARD;
             textPlane.billboardMode = BABYLON.AbstractMesh.BILLBOARDMODE_ALL;
             var pmat = new BABYLON.StandardMaterial("textPlane", scene);
             pmat.diffuseTexture = textPlaneTexture;
-            pmat.specularColor = new BABYLON.Color3(0, 0, 0);
-            pmat.emissiveColor = new BABYLON.Color3(0.5, 0.5, 0.5);
+            pmat.specularColor = new BABYLON.Color3(0.3, 0.3, 0.3);
+            pmat.emissiveColor = new BABYLON.Color3(1, 1, 1);
             pmat.backFaceCulling = false;
             textPlane.material = pmat;
             textPlane.position = position;
@@ -1480,9 +1473,9 @@ var BABYLON;
             // Create transformers
             Transformer.prototype._createTransformers = function () {
                 var colors = [
-                    new BABYLON.Color3(1, 0.5, 0.5),
-                    new BABYLON.Color3(0.5, 1, 0.5),
-                    new BABYLON.Color3(0.5, 0.5, 1)
+                    new BABYLON.Color3(1, 0.1, 0.1),
+                    new BABYLON.Color3(0.1, 1, 0.1),
+                    new BABYLON.Color3(0.1, 0.1, 1)
                 ];
                 var x = null;
                 var y = null;

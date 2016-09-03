@@ -45,23 +45,6 @@ namespace YARD {
                 if (container.yardLocation.row_x != row_x || container.yardLocation.column_z != column_z || container.yardLocation.level_y != level_y) {
                     var slots = container.block.slots;
 
-                    //if (level_y > container.block.capacity.level_y) {
-                    //    var moveFromLocation = slots.filter(f =>
-                    //        f.row_x == container.yardLocation.row_x
-                    //        && f.column_z == container.yardLocation.column_z
-                    //        && (f.level_y == container.block.capacity.level_y))[0];
-
-                    //    if (moveFromLocation)
-                    //        moveFromLocation.yardContainer = null;
-
-                    //    container.yardLocation = {
-                    //        row_x: row_x,
-                    //        column_z: column_z,
-                    //        level_y: level_y,
-                    //        yardContainer: container
-                    //    };
-                    //}
-                    //else {
                     var moveToLocation = slots.filter(f =>
                         f.row_x == row_x
                         && f.column_z == column_z
@@ -135,7 +118,6 @@ namespace YARD {
                                 selectedContainer.yardLocation = selectedContainer.yardLocation;
                             }
                         }
-                        //}
                     }
                 }
             };
