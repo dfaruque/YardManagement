@@ -87,7 +87,7 @@
 
             $(window).keyup((event: KeyboardEvent) => {
                 if (!event.ctrlKey && this._ctrlIsDown === true) {
-                    this._multiplier = 10;
+                    this._multiplier = 100;
                     this._ctrlIsDown = false;
                     this._pickPosition = true;
                 }
@@ -120,10 +120,10 @@
             //this._lightTexture.hasAlpha = true;
             //this._scene.textures.pop();
 
-            this._helperPlane = Mesh.CreatePlane("HelperPlane", 1, this._scene, false);
-            this._helperPlane.billboardMode = Mesh.BILLBOARDMODE_ALL;
-            this._scene.meshes.pop();
-            this._helperPlane.material = this._planeMaterial;
+            //this._helperPlane = Mesh.CreatePlane("HelperPlane", 1, this._scene, false);
+            //this._helperPlane.billboardMode = Mesh.BILLBOARDMODE_ALL;
+            //this._scene.meshes.pop();
+            //this._helperPlane.material = this._planeMaterial;
         }
 
         // Event receiver
@@ -200,53 +200,53 @@
         public onPostUpdate(): void {
             //this._helperPlane.setEnabled(!this.core.isPlaying && this.core.editor.renderHelpers);
 
-            if ((this.core.isPlaying && this.core.scene.activeCamera !== this.core.camera) || !this.core.editor.renderHelpers)
-                return;
+            //if ((this.core.isPlaying && this.core.scene.activeCamera !== this.core.camera) || !this.core.editor.renderHelpers)
+            //    return;
 
-            var engine = this._scene.getEngine();
-            engine.setAlphaTesting(true);
+            //var engine = this._scene.getEngine();
+            //engine.setAlphaTesting(true);
 
-            if (this._planeMaterial.isReady(this._helperPlane)) {
-                this._subMesh = this._helperPlane.subMeshes[0];
-                var effect = this._planeMaterial.getEffect();
-                this._batch = this._helperPlane._getInstancesRenderList(this._subMesh._id);
+            //if (this._planeMaterial.isReady(this._helperPlane)) {
+            //    this._subMesh = this._helperPlane.subMeshes[0];
+            //    var effect = this._planeMaterial.getEffect();
+            //    this._batch = this._helperPlane._getInstancesRenderList(this._subMesh._id);
 
-                engine.enableEffect(effect);
-                this._helperPlane._bind(this._subMesh, effect, Material.TriangleFillMode);
+            //    engine.enableEffect(effect);
+            //    this._helperPlane._bind(this._subMesh, effect, Material.TriangleFillMode);
 
-                // Cameras
-                this._planeMaterial.diffuseTexture = this._cameraTexture;
-                this._renderHelperPlane(this.core.scene.cameras, (obj: Camera) => {
-                    if (obj === this.core.scene.activeCamera)
-                        return false;
+            //    // Cameras
+            //    this._planeMaterial.diffuseTexture = this._cameraTexture;
+            //    this._renderHelperPlane(this.core.scene.cameras, (obj: Camera) => {
+            //        if (obj === this.core.scene.activeCamera)
+            //            return false;
 
-                    this._helperPlane.position.copyFrom(obj.position);
-                    return true;
-                });
+            //        this._helperPlane.position.copyFrom(obj.position);
+            //        return true;
+            //    });
 
-                // Sounds
-                this._planeMaterial.diffuseTexture = this._soundTexture;
-                for (var i = 0; i < this.core.scene.soundTracks.length; i++) {
-                    var soundTrack = this.core.scene.soundTracks[i];
-                    this._renderHelperPlane(soundTrack.soundCollection, (obj: Sound) => {
-                        if (!obj.spatialSound)
-                            return false;
+            //    // Sounds
+            //    this._planeMaterial.diffuseTexture = this._soundTexture;
+            //    for (var i = 0; i < this.core.scene.soundTracks.length; i++) {
+            //        var soundTrack = this.core.scene.soundTracks[i];
+            //        this._renderHelperPlane(soundTrack.soundCollection, (obj: Sound) => {
+            //            if (!obj.spatialSound)
+            //                return false;
 
-                        this._helperPlane.position.copyFrom((<any>obj)._position);
-                        return true;
-                    });
-                }
+            //            this._helperPlane.position.copyFrom((<any>obj)._position);
+            //            return true;
+            //        });
+            //    }
 
-                // Lights
-                this._planeMaterial.diffuseTexture = this._lightTexture;
-                this._renderHelperPlane(this.core.scene.lights, (obj: Light) => {
-                    if (!obj.getAbsolutePosition)
-                        return false;
+            //    // Lights
+            //    this._planeMaterial.diffuseTexture = this._lightTexture;
+            //    this._renderHelperPlane(this.core.scene.lights, (obj: Light) => {
+            //        if (!obj.getAbsolutePosition)
+            //            return false;
 
-                    this._helperPlane.position.copyFrom(obj.getAbsolutePosition());
-                    return true;
-                });
-            }
+            //        this._helperPlane.position.copyFrom(obj.getAbsolutePosition());
+            //        return true;
+            //    });
+            //}
         }
 
         // Get transformer type (POSITION, ROTATION or SCALING)

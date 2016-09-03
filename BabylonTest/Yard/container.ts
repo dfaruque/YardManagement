@@ -47,13 +47,14 @@
             yContainer.id = this.name;
 
             var containerMaterial = new BABYLON.StandardMaterial("containerMaterial", core.scene);
-            containerMaterial.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
-            containerMaterial.specularColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+            containerMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+            containerMaterial.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
             containerMaterial.emissiveColor = color;
 
             yContainer.material = containerMaterial;
 
             core.shadowGenerator.getShadowMap().renderList.push(yContainer);
+            yContainer.receiveShadows = true;
 
             BABYLON.EDITOR.SceneManager.ConfigureObject(yContainer, core);
 

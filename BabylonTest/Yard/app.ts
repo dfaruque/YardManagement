@@ -21,6 +21,18 @@ namespace YARD {
                         if (event.sceneEvent.object.container)
                             selectedContainer = event.sceneEvent.object.container;
                     }
+                    else if (event.sceneEvent.eventType == BABYLON.EDITOR.SceneEventType.OBJECT_CHANGED) {
+                        if (event.sceneEvent.object.container === selectedContainer) {
+
+                            var nearestSlot = selectedContainer.nearestSlot;
+ 
+                                moveContainer(selectedContainer,
+                                    nearestSlot.row_x,
+                                    nearestSlot.column_z,
+                                    nearestSlot.level_y);
+
+                        }
+                    }
                     return false;
                 }
             });
@@ -30,66 +42,68 @@ namespace YARD {
 
 
             var moveContainer = (container: YARDContainer, row_x, column_z, level_y) => {
-                var slots = container.block.slots;
+                if (container.yardLocation.row_x != row_x || container.yardLocation.column_z != column_z || container.yardLocation.level_y != level_y) {
+                    var slots = container.block.slots;
 
-                if (level_y > container.block.capacity.level_y) {
-                    var moveFromLocation = slots.filter(f =>
-                        f.row_x == container.yardLocation.row_x
-                        && f.column_z == container.yardLocation.column_z
-                        && (f.level_y == container.block.capacity.level_y))[0];
-
-                    moveFromLocation.yardContainer = null;
-
-                    container.yardLocation = {
-                        row_x: row_x,
-                        column_z: column_z,
-                        level_y: level_y,
-                        yardContainer: container
-                    };
-                }
-                else {
-                    var moveToLocation = slots.filter(f =>
-                        (f.yardContainer == null || f.yardContainer == container)
-                        && f.row_x == row_x
-                        && f.column_z == column_z
-                        && f.level_y == level_y)[0];
-
-                    if (moveToLocation) {
+                    if (level_y > container.block.capacity.level_y) {
                         var moveFromLocation = slots.filter(f =>
                             f.row_x == container.yardLocation.row_x
                             && f.column_z == container.yardLocation.column_z
-                            && f.level_y == container.yardLocation.level_y)[0];
+                            && (f.level_y == container.block.capacity.level_y))[0];
 
-                        if (moveFromLocation)
-                            moveFromLocation.yardContainer = null;
+                        moveFromLocation.yardContainer = null;
 
-                        container.yardLocation = moveToLocation;
-                        moveToLocation.yardContainer = container;
-                        //physics
-
-                        if (container.yardLocation.level_y < container.block.capacity.level_y) {
-                            var aboveLocation = slots.filter(f =>
-                                f.yardContainer
-                                && f.row_x == moveFromLocation.row_x
-                                && f.column_z == moveFromLocation.column_z
-                                && f.level_y == moveFromLocation.level_y + 1)[0];
-
-                            if (aboveLocation) {
-                                var aboveContainer = aboveLocation.yardContainer;
-                                aboveLocation.yardContainer = null;
-
-                                moveContainer(aboveContainer,
-                                    aboveContainer.yardLocation.row_x,
-                                    aboveContainer.yardLocation.column_z,
-                                    aboveContainer.yardLocation.level_y - 1)
-
-                            }
-                        }
-
-
+                        container.yardLocation = {
+                            row_x: row_x,
+                            column_z: column_z,
+                            level_y: level_y,
+                            yardContainer: container
+                        };
                     }
-                    //else
-                    //    alert('Invalid move.');
+                    else {
+                        var moveToLocation = slots.filter(f =>
+                            (f.yardContainer == null || f.yardContainer == container)
+                            && f.row_x == row_x
+                            && f.column_z == column_z
+                            && f.level_y == level_y)[0];
+
+                        if (moveToLocation) {
+                            var moveFromLocation = slots.filter(f =>
+                                f.row_x == container.yardLocation.row_x
+                                && f.column_z == container.yardLocation.column_z
+                                && f.level_y == container.yardLocation.level_y)[0];
+
+                            if (moveFromLocation)
+                                moveFromLocation.yardContainer = null;
+
+                            container.yardLocation = moveToLocation;
+                            moveToLocation.yardContainer = container;
+                            //physics
+
+                            if (container.yardLocation.level_y < container.block.capacity.level_y) {
+                                var aboveLocation = slots.filter(f =>
+                                    f.yardContainer
+                                    && f.row_x == moveFromLocation.row_x
+                                    && f.column_z == moveFromLocation.column_z
+                                    && f.level_y == moveFromLocation.level_y + 1)[0];
+
+                                if (aboveLocation) {
+                                    var aboveContainer = aboveLocation.yardContainer;
+                                    aboveLocation.yardContainer = null;
+
+                                    moveContainer(aboveContainer,
+                                        aboveContainer.yardLocation.row_x,
+                                        aboveContainer.yardLocation.column_z,
+                                        aboveContainer.yardLocation.level_y - 1)
+
+                                }
+                            }
+
+
+                        }
+                        //else
+                        //    alert('Invalid move.');
+                    }
                 }
             };
 
@@ -103,10 +117,12 @@ namespace YARD {
             //light.position = new BABYLON.Vector3(-10 * multiplicationFactor, 10 * multiplicationFactor, -10 * multiplicationFactor);
             //var lightSphere = BABYLON.MeshBuilder.CreateSphere('lightSpere', { diameter: multiplicationFactor}, scene);
             //lightSphere.position = light.position;
+            var hemiLight = new BABYLON.HemisphericLight("light1m", new BABYLON.Vector3(0, 0, 0), scene);
+            hemiLight.intensity = 0.3;
 
-            var light2 = new BABYLON.PointLight("New DirectionalLight", new BABYLON.Vector3(-100, 1000, 0), scene);
-            light2.intensity = 0.2;
-            light2.radius = block.size.length_z;
+            //var light2 = new BABYLON.PointLight("New DirectionalLight", new BABYLON.Vector3(-100, 1000, 0), scene);
+            //light2.intensity = 0.2;
+            //light2.radius = block.size.length_z;
             //light2.position = new BABYLON.Vector3(10 * multiplicationFactor, 10 * multiplicationFactor, 10 * multiplicationFactor);
             //var light2Sphere = BABYLON.MeshBuilder.CreateSphere('light2Spere', { diameter: multiplicationFactor }, scene);
             //light2Sphere.position = light2.position;

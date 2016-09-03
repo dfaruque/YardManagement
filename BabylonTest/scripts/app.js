@@ -67,56 +67,64 @@ var YARD;
                         if (event.sceneEvent.object.container)
                             selectedContainer = event.sceneEvent.object.container;
                     }
+                    else if (event.sceneEvent.eventType == BABYLON.EDITOR.SceneEventType.OBJECT_CHANGED) {
+                        if (event.sceneEvent.object.container === selectedContainer) {
+                            var nearestSlot = selectedContainer.nearestSlot;
+                            moveContainer(selectedContainer, nearestSlot.row_x, nearestSlot.column_z, nearestSlot.level_y);
+                        }
+                    }
                     return false;
                 }
             });
             var scene = core.scene;
             scene.clearColor = BABYLON.Color3.White();
             var moveContainer = function (container, row_x, column_z, level_y) {
-                var slots = container.block.slots;
-                if (level_y > container.block.capacity.level_y) {
-                    var moveFromLocation = slots.filter(function (f) {
-                        return f.row_x == container.yardLocation.row_x
-                            && f.column_z == container.yardLocation.column_z
-                            && (f.level_y == container.block.capacity.level_y);
-                    })[0];
-                    moveFromLocation.yardContainer = null;
-                    container.yardLocation = {
-                        row_x: row_x,
-                        column_z: column_z,
-                        level_y: level_y,
-                        yardContainer: container
-                    };
-                }
-                else {
-                    var moveToLocation = slots.filter(function (f) {
-                        return (f.yardContainer == null || f.yardContainer == container)
-                            && f.row_x == row_x
-                            && f.column_z == column_z
-                            && f.level_y == level_y;
-                    })[0];
-                    if (moveToLocation) {
+                if (container.yardLocation.row_x != row_x || container.yardLocation.column_z != column_z || container.yardLocation.level_y != level_y) {
+                    var slots = container.block.slots;
+                    if (level_y > container.block.capacity.level_y) {
                         var moveFromLocation = slots.filter(function (f) {
                             return f.row_x == container.yardLocation.row_x
                                 && f.column_z == container.yardLocation.column_z
-                                && f.level_y == container.yardLocation.level_y;
+                                && (f.level_y == container.block.capacity.level_y);
                         })[0];
-                        if (moveFromLocation)
-                            moveFromLocation.yardContainer = null;
-                        container.yardLocation = moveToLocation;
-                        moveToLocation.yardContainer = container;
-                        //physics
-                        if (container.yardLocation.level_y < container.block.capacity.level_y) {
-                            var aboveLocation = slots.filter(function (f) {
-                                return f.yardContainer
-                                    && f.row_x == moveFromLocation.row_x
-                                    && f.column_z == moveFromLocation.column_z
-                                    && f.level_y == moveFromLocation.level_y + 1;
+                        moveFromLocation.yardContainer = null;
+                        container.yardLocation = {
+                            row_x: row_x,
+                            column_z: column_z,
+                            level_y: level_y,
+                            yardContainer: container
+                        };
+                    }
+                    else {
+                        var moveToLocation = slots.filter(function (f) {
+                            return (f.yardContainer == null || f.yardContainer == container)
+                                && f.row_x == row_x
+                                && f.column_z == column_z
+                                && f.level_y == level_y;
+                        })[0];
+                        if (moveToLocation) {
+                            var moveFromLocation = slots.filter(function (f) {
+                                return f.row_x == container.yardLocation.row_x
+                                    && f.column_z == container.yardLocation.column_z
+                                    && f.level_y == container.yardLocation.level_y;
                             })[0];
-                            if (aboveLocation) {
-                                var aboveContainer = aboveLocation.yardContainer;
-                                aboveLocation.yardContainer = null;
-                                moveContainer(aboveContainer, aboveContainer.yardLocation.row_x, aboveContainer.yardLocation.column_z, aboveContainer.yardLocation.level_y - 1);
+                            if (moveFromLocation)
+                                moveFromLocation.yardContainer = null;
+                            container.yardLocation = moveToLocation;
+                            moveToLocation.yardContainer = container;
+                            //physics
+                            if (container.yardLocation.level_y < container.block.capacity.level_y) {
+                                var aboveLocation = slots.filter(function (f) {
+                                    return f.yardContainer
+                                        && f.row_x == moveFromLocation.row_x
+                                        && f.column_z == moveFromLocation.column_z
+                                        && f.level_y == moveFromLocation.level_y + 1;
+                                })[0];
+                                if (aboveLocation) {
+                                    var aboveContainer = aboveLocation.yardContainer;
+                                    aboveLocation.yardContainer = null;
+                                    moveContainer(aboveContainer, aboveContainer.yardLocation.row_x, aboveContainer.yardLocation.column_z, aboveContainer.yardLocation.level_y - 1);
+                                }
                             }
                         }
                     }
@@ -131,9 +139,11 @@ var YARD;
             //light.position = new BABYLON.Vector3(-10 * multiplicationFactor, 10 * multiplicationFactor, -10 * multiplicationFactor);
             //var lightSphere = BABYLON.MeshBuilder.CreateSphere('lightSpere', { diameter: multiplicationFactor}, scene);
             //lightSphere.position = light.position;
-            var light2 = new BABYLON.PointLight("New DirectionalLight", new BABYLON.Vector3(-100, 1000, 0), scene);
-            light2.intensity = 0.2;
-            light2.radius = block.size.length_z;
+            var hemiLight = new BABYLON.HemisphericLight("light1m", new BABYLON.Vector3(0, 0, 0), scene);
+            hemiLight.intensity = 0.3;
+            //var light2 = new BABYLON.PointLight("New DirectionalLight", new BABYLON.Vector3(-100, 1000, 0), scene);
+            //light2.intensity = 0.2;
+            //light2.radius = block.size.length_z;
             //light2.position = new BABYLON.Vector3(10 * multiplicationFactor, 10 * multiplicationFactor, 10 * multiplicationFactor);
             //var light2Sphere = BABYLON.MeshBuilder.CreateSphere('light2Spere', { diameter: multiplicationFactor }, scene);
             //light2Sphere.position = light2.position;
@@ -404,11 +414,12 @@ var YARD;
             var yContainer = BABYLON.Mesh.CreateBox(this.name, 1, core.scene, false);
             yContainer.id = this.name;
             var containerMaterial = new BABYLON.StandardMaterial("containerMaterial", core.scene);
-            containerMaterial.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
-            containerMaterial.specularColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+            containerMaterial.diffuseColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+            containerMaterial.specularColor = new BABYLON.Color3(0.1, 0.1, 0.1);
             containerMaterial.emissiveColor = color;
             yContainer.material = containerMaterial;
             core.shadowGenerator.getShadowMap().renderList.push(yContainer);
+            yContainer.receiveShadows = true;
             BABYLON.EDITOR.SceneManager.ConfigureObject(yContainer, core);
             //yardContainer.checkCollisions = true;
             //yContainer.setPhysicsState(BABYLON.PhysicsEngine.BoxImpostor, { mass: multiplicationFactor, friction: 0.7, restitution: 0.5 });
@@ -1150,7 +1161,7 @@ var BABYLON;
                 });
                 $(window).keyup(function (event) {
                     if (!event.ctrlKey && _this._ctrlIsDown === true) {
-                        _this._multiplier = 10;
+                        _this._multiplier = 100;
                         _this._ctrlIsDown = false;
                         _this._pickPosition = true;
                     }
@@ -1176,10 +1187,10 @@ var BABYLON;
                 //this._lightTexture = new Texture("../css/images/light.png", this._scene);
                 //this._lightTexture.hasAlpha = true;
                 //this._scene.textures.pop();
-                this._helperPlane = BABYLON.Mesh.CreatePlane("HelperPlane", 1, this._scene, false);
-                this._helperPlane.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-                this._scene.meshes.pop();
-                this._helperPlane.material = this._planeMaterial;
+                //this._helperPlane = Mesh.CreatePlane("HelperPlane", 1, this._scene, false);
+                //this._helperPlane.billboardMode = Mesh.BILLBOARDMODE_ALL;
+                //this._scene.meshes.pop();
+                //this._helperPlane.material = this._planeMaterial;
             };
             // Event receiver
             Transformer.prototype.onEvent = function (event) {
@@ -1241,45 +1252,44 @@ var BABYLON;
             // On post update
             Transformer.prototype.onPostUpdate = function () {
                 //this._helperPlane.setEnabled(!this.core.isPlaying && this.core.editor.renderHelpers);
-                var _this = this;
-                if ((this.core.isPlaying && this.core.scene.activeCamera !== this.core.camera) || !this.core.editor.renderHelpers)
-                    return;
-                var engine = this._scene.getEngine();
-                engine.setAlphaTesting(true);
-                if (this._planeMaterial.isReady(this._helperPlane)) {
-                    this._subMesh = this._helperPlane.subMeshes[0];
-                    var effect = this._planeMaterial.getEffect();
-                    this._batch = this._helperPlane._getInstancesRenderList(this._subMesh._id);
-                    engine.enableEffect(effect);
-                    this._helperPlane._bind(this._subMesh, effect, BABYLON.Material.TriangleFillMode);
-                    // Cameras
-                    this._planeMaterial.diffuseTexture = this._cameraTexture;
-                    this._renderHelperPlane(this.core.scene.cameras, function (obj) {
-                        if (obj === _this.core.scene.activeCamera)
-                            return false;
-                        _this._helperPlane.position.copyFrom(obj.position);
-                        return true;
-                    });
-                    // Sounds
-                    this._planeMaterial.diffuseTexture = this._soundTexture;
-                    for (var i = 0; i < this.core.scene.soundTracks.length; i++) {
-                        var soundTrack = this.core.scene.soundTracks[i];
-                        this._renderHelperPlane(soundTrack.soundCollection, function (obj) {
-                            if (!obj.spatialSound)
-                                return false;
-                            _this._helperPlane.position.copyFrom(obj._position);
-                            return true;
-                        });
-                    }
-                    // Lights
-                    this._planeMaterial.diffuseTexture = this._lightTexture;
-                    this._renderHelperPlane(this.core.scene.lights, function (obj) {
-                        if (!obj.getAbsolutePosition)
-                            return false;
-                        _this._helperPlane.position.copyFrom(obj.getAbsolutePosition());
-                        return true;
-                    });
-                }
+                //if ((this.core.isPlaying && this.core.scene.activeCamera !== this.core.camera) || !this.core.editor.renderHelpers)
+                //    return;
+                //var engine = this._scene.getEngine();
+                //engine.setAlphaTesting(true);
+                //if (this._planeMaterial.isReady(this._helperPlane)) {
+                //    this._subMesh = this._helperPlane.subMeshes[0];
+                //    var effect = this._planeMaterial.getEffect();
+                //    this._batch = this._helperPlane._getInstancesRenderList(this._subMesh._id);
+                //    engine.enableEffect(effect);
+                //    this._helperPlane._bind(this._subMesh, effect, Material.TriangleFillMode);
+                //    // Cameras
+                //    this._planeMaterial.diffuseTexture = this._cameraTexture;
+                //    this._renderHelperPlane(this.core.scene.cameras, (obj: Camera) => {
+                //        if (obj === this.core.scene.activeCamera)
+                //            return false;
+                //        this._helperPlane.position.copyFrom(obj.position);
+                //        return true;
+                //    });
+                //    // Sounds
+                //    this._planeMaterial.diffuseTexture = this._soundTexture;
+                //    for (var i = 0; i < this.core.scene.soundTracks.length; i++) {
+                //        var soundTrack = this.core.scene.soundTracks[i];
+                //        this._renderHelperPlane(soundTrack.soundCollection, (obj: Sound) => {
+                //            if (!obj.spatialSound)
+                //                return false;
+                //            this._helperPlane.position.copyFrom((<any>obj)._position);
+                //            return true;
+                //        });
+                //    }
+                //    // Lights
+                //    this._planeMaterial.diffuseTexture = this._lightTexture;
+                //    this._renderHelperPlane(this.core.scene.lights, (obj: Light) => {
+                //        if (!obj.getAbsolutePosition)
+                //            return false;
+                //        this._helperPlane.position.copyFrom(obj.getAbsolutePosition());
+                //        return true;
+                //    });
+                //}
             };
             Object.defineProperty(Transformer.prototype, "transformerType", {
                 // Get transformer type (POSITION, ROTATION or SCALING)
