@@ -32,7 +32,7 @@ namespace YARD {
             var moveContainer = (container: YARDContainer, row_x, column_z, level_y) => {
                 var slots = container.block.slots;
 
-                if (container.yardLocation.level_y + level_y > container.block.capacity.level_y) {
+                if (level_y > container.block.capacity.level_y) {
                     var moveFromLocation = slots.filter(f =>
                         f.row_x == container.yardLocation.row_x
                         && f.column_z == container.yardLocation.column_z
@@ -41,18 +41,18 @@ namespace YARD {
                     moveFromLocation.yardContainer = null;
 
                     container.yardLocation = {
-                        row_x: container.yardLocation.row_x + row_x,
-                        column_z: container.yardLocation.column_z + column_z,
-                        level_y: container.yardLocation.level_y + level_y,
+                        row_x: row_x,
+                        column_z: column_z,
+                        level_y: level_y,
                         yardContainer: container
                     };
                 }
                 else {
                     var moveToLocation = slots.filter(f =>
                         (f.yardContainer == null || f.yardContainer == container)
-                        && f.row_x == container.yardLocation.row_x + row_x
-                        && f.column_z == container.yardLocation.column_z + column_z
-                        && f.level_y == container.yardLocation.level_y + level_y)[0];
+                        && f.row_x == row_x
+                        && f.column_z == column_z
+                        && f.level_y == level_y)[0];
 
                     if (moveToLocation) {
                         var moveFromLocation = slots.filter(f =>
@@ -77,7 +77,11 @@ namespace YARD {
                             if (aboveLocation) {
                                 var aboveContainer = aboveLocation.yardContainer;
                                 aboveLocation.yardContainer = null;
-                                moveContainer(aboveContainer, 0, 0, -1)
+
+                                moveContainer(aboveContainer,
+                                    aboveContainer.yardLocation.row_x,
+                                    aboveContainer.yardLocation.column_z,
+                                    aboveContainer.yardLocation.level_y - 1)
 
                             }
                         }
@@ -179,14 +183,16 @@ namespace YARD {
                     },
                     arrangeSelected: () => {
                         if (selectedContainer) {
-                            var moveFromLocation = selectedContainer.block.slots.filter(f =>
-                                f.row_x == selectedContainer.yardLocation.row_x
-                                && f.column_z == selectedContainer.yardLocation.column_z
-                                && (f.level_y == selectedContainer.block.capacity.level_y))[0];
+                            //var moveFromLocation = selectedContainer.block.slots.filter(f =>
+                            //    f.row_x == selectedContainer.yardLocation.row_x
+                            //    && f.column_z == selectedContainer.yardLocation.column_z
+                            //    && (f.level_y == selectedContainer.block.capacity.level_y))[0];
 
-                            moveFromLocation.yardContainer = null;
+                            //moveFromLocation.yardContainer = null;
 
-                            selectedContainer.yardLocation = selectedContainer.nearestSlot;
+                            var nearestSlot = selectedContainer.nearestSlot;
+
+                            moveContainer(selectedContainer, nearestSlot.row_x, nearestSlot.column_z, nearestSlot.level_y);
                         }
 
                     },
@@ -203,24 +209,42 @@ namespace YARD {
                     },
 
                     moveUp: () => {
-                        moveContainer(selectedContainer, 0, 0, -1);
+                        moveContainer(selectedContainer,
+                            selectedContainer.yardLocation.row_x,
+                            selectedContainer.yardLocation.column_z,
+                            selectedContainer.yardLocation.level_y - 1);
                     },
                     moveDown: () => {
-                        moveContainer(selectedContainer, 0, 0, 1);
+                        moveContainer(selectedContainer,
+                            selectedContainer.yardLocation.row_x,
+                            selectedContainer.yardLocation.column_z,
+                            selectedContainer.yardLocation.level_y + 1);
 
                     },
                     moveLeft: () => {
-                        moveContainer(selectedContainer, 0, -1, 0);
+                        moveContainer(selectedContainer,
+                            selectedContainer.yardLocation.row_x,
+                            selectedContainer.yardLocation.column_z - 1,
+                            selectedContainer.yardLocation.level_y);
                     },
                     moveRight: () => {
-                        moveContainer(selectedContainer, 0, 1, 0);
+                        moveContainer(selectedContainer,
+                            selectedContainer.yardLocation.row_x,
+                            selectedContainer.yardLocation.column_z + 1,
+                            selectedContainer.yardLocation.level_y);
                     },
                     moveForward: () => {
-                        moveContainer(selectedContainer, -1, 0, 0);
+                        moveContainer(selectedContainer,
+                            selectedContainer.yardLocation.row_x - 1,
+                            selectedContainer.yardLocation.column_z,
+                            selectedContainer.yardLocation.level_y);
 
                     },
                     moveBackword: () => {
-                        moveContainer(selectedContainer, 1, 0, 0);
+                        moveContainer(selectedContainer,
+                            selectedContainer.yardLocation.row_x + 1,
+                            selectedContainer.yardLocation.column_z,
+                            selectedContainer.yardLocation.level_y);
 
                     },
                 },
