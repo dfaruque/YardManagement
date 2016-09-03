@@ -45,97 +45,97 @@ namespace YARD {
                 if (container.yardLocation.row_x != row_x || container.yardLocation.column_z != column_z || container.yardLocation.level_y != level_y) {
                     var slots = container.block.slots;
 
-                    if (level_y > container.block.capacity.level_y) {
+                    //if (level_y > container.block.capacity.level_y) {
+                    //    var moveFromLocation = slots.filter(f =>
+                    //        f.row_x == container.yardLocation.row_x
+                    //        && f.column_z == container.yardLocation.column_z
+                    //        && (f.level_y == container.block.capacity.level_y))[0];
+
+                    //    if (moveFromLocation)
+                    //        moveFromLocation.yardContainer = null;
+
+                    //    container.yardLocation = {
+                    //        row_x: row_x,
+                    //        column_z: column_z,
+                    //        level_y: level_y,
+                    //        yardContainer: container
+                    //    };
+                    //}
+                    //else {
+                    var moveToLocation = slots.filter(f =>
+                        f.row_x == row_x
+                        && f.column_z == column_z
+                        && f.level_y == level_y)[0];
+
+                    if (moveToLocation) {
                         var moveFromLocation = slots.filter(f =>
                             f.row_x == container.yardLocation.row_x
                             && f.column_z == container.yardLocation.column_z
-                            && (f.level_y == container.block.capacity.level_y))[0];
+                            && (f.level_y == container.yardLocation.level_y))[0];
 
-                        if (moveFromLocation)
-                            moveFromLocation.yardContainer = null;
+                        var isFree = (moveToLocation.yardContainer == null || moveToLocation.yardContainer == container);
 
-                        container.yardLocation = {
-                            row_x: row_x,
-                            column_z: column_z,
-                            level_y: level_y,
-                            yardContainer: container
-                        };
-                    }
-                    else {
-                        var moveToLocation = slots.filter(f =>
-                            f.row_x == row_x
-                            && f.column_z == column_z
-                            && f.level_y == level_y)[0];
+                        if (isFree) {
 
-                        if (moveToLocation) {
-                            var moveFromLocation = slots.filter(f =>
-                                f.row_x == container.yardLocation.row_x
-                                && f.column_z == container.yardLocation.column_z
-                                && (f.level_y == container.yardLocation.level_y))[0];
+                            if (moveFromLocation)
+                                moveFromLocation.yardContainer = null;
 
-                            var isFree = (moveToLocation.yardContainer == null || moveToLocation.yardContainer == container);
+                            var belowLocation = slots.filter(f =>
+                                f.yardContainer == null
+                                && f.row_x == row_x
+                                && f.column_z == column_z
+                                && f.level_y == level_y - 1)[0];
 
-                            if (isFree) {
-                                
-                                if (moveFromLocation)
-                                    moveFromLocation.yardContainer = null;
-
-                                var belowLocation = slots.filter(f =>
-                                    f.yardContainer == null
-                                    && f.row_x == row_x
-                                    && f.column_z == column_z
-                                    && f.level_y == level_y - 1)[0];
-
-                                if (belowLocation) {
-                                    container.yardLocation = belowLocation;
-                                    belowLocation.yardContainer = container;
-                                }
-                                else {
-                                    container.yardLocation = moveToLocation;
-                                    moveToLocation.yardContainer = container;
-                                    //physics
-
-                                    if (container.yardLocation.level_y < container.block.capacity.level_y) {
-                                        var aboveLocation = slots.filter(f =>
-                                            f.yardContainer
-                                            && f.row_x == moveFromLocation.row_x
-                                            && f.column_z == moveFromLocation.column_z
-                                            && f.level_y == moveFromLocation.level_y + 1)[0];
-
-                                        if (aboveLocation) {
-                                            var aboveContainer = aboveLocation.yardContainer;
-                                            aboveLocation.yardContainer = null;
-
-                                            moveContainer(aboveContainer,
-                                                aboveContainer.yardLocation.row_x,
-                                                aboveContainer.yardLocation.column_z,
-                                                aboveContainer.yardLocation.level_y - 1)
-
-                                        }
-                                    }
-                                }
-
+                            if (belowLocation) {
+                                container.yardLocation = belowLocation;
+                                belowLocation.yardContainer = container;
                             }
                             else {
-                                var aboveLocation = slots.filter(f =>
-                                    f.yardContainer == null
-                                    && f.row_x == row_x
-                                    && f.column_z == column_z
-                                    && f.level_y == level_y + 1)[0];
+                                container.yardLocation = moveToLocation;
+                                moveToLocation.yardContainer = container;
+                                //physics
 
-                                if (aboveLocation) {
-                                    aboveLocation.yardContainer = null;
+                                if (container.yardLocation.level_y < container.block.capacity.level_y) {
+                                    var aboveLocation = slots.filter(f =>
+                                        f.yardContainer
+                                        && f.row_x == moveFromLocation.row_x
+                                        && f.column_z == moveFromLocation.column_z
+                                        && f.level_y == moveFromLocation.level_y + 1)[0];
 
-                                    moveContainer(selectedContainer,
-                                        row_x,
-                                        column_z,
-                                        level_y + 1)
+                                    if (aboveLocation) {
+                                        var aboveContainer = aboveLocation.yardContainer;
+                                        aboveLocation.yardContainer = null;
 
-                                } else {
-                                    selectedContainer.yardLocation = selectedContainer.yardLocation;
+                                        moveContainer(aboveContainer,
+                                            aboveContainer.yardLocation.row_x,
+                                            aboveContainer.yardLocation.column_z,
+                                            aboveContainer.yardLocation.level_y - 1)
+
+                                    }
                                 }
                             }
+
                         }
+                        else {
+                            var aboveLocation = slots.filter(f =>
+                                f.yardContainer == null
+                                && f.row_x == row_x
+                                && f.column_z == column_z
+                                && f.level_y == level_y + 1)[0];
+
+                            if (aboveLocation) {
+                                aboveLocation.yardContainer = null;
+
+                                moveContainer(selectedContainer,
+                                    row_x,
+                                    column_z,
+                                    level_y + 1)
+
+                            } else {
+                                selectedContainer.yardLocation = selectedContainer.yardLocation;
+                            }
+                        }
+                        //}
                     }
                 }
             };
