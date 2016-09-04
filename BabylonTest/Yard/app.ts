@@ -119,6 +119,8 @@ namespace YARD {
                             }
                         }
                     }
+                } else {
+                    container.yardLocation = container.yardLocation;
                 }
             };
 
@@ -143,7 +145,8 @@ namespace YARD {
             //light2Sphere.position = light2.position;
 
             core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light);
-            //core.shadowGenerator.useBlurVarianceShadowMap = true;
+
+            core.shadowGenerator.usePoissonSampling = true;
             //core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light2);
 
             var camera = core.camera;

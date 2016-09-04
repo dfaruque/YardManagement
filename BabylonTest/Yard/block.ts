@@ -28,8 +28,8 @@
         private multimat: BABYLON.MultiMaterial;
         constructor(core: BABYLON.EDITOR.EditorCore, id, containerLength, columns, rows, levels, position: BABYLON.Vector3) {
             var scene = core.scene;
-            this.freeSpace = 5;
-            this.boundingGroundSize = 10;
+            this.freeSpace = containerLength/4;
+            this.boundingGroundSize = containerLength/2;
 
             // Tiled Ground
             // Part 1 : Creation of Tiled Ground
@@ -250,10 +250,10 @@
         createTextPlate(text: string, position: BABYLON.Vector3, scene: BABYLON.Scene) {
 
             var textPlaneTexture = new BABYLON.DynamicTexture("dynamic texture", 512, scene, true);
-            textPlaneTexture.drawText(text, null, 150, "bold 140px verdana", "gray", "transparent");
+            textPlaneTexture.drawText(text, null, 150, "bold 160px verdana", "gray", "transparent");
             textPlaneTexture.hasAlpha = true;
 
-            var textPlane = BABYLON.Mesh.CreatePlane("textPlane", 10, scene, false);
+            var textPlane = BABYLON.Mesh.CreatePlane("textPlane", this.boundingGroundSize, scene, false);
             textPlane.billboardMode = BABYLON.AbstractMesh.BILLBOARDMODE_ALL;
             var pmat = new BABYLON.StandardMaterial("textPlane", scene);
             pmat.diffuseTexture = textPlaneTexture;

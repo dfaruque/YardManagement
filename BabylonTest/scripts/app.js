@@ -142,6 +142,9 @@ var YARD;
                         }
                     }
                 }
+                else {
+                    container.yardLocation = container.yardLocation;
+                }
             };
             //Implementation goes here............................
             var block = new YARD.YARDBlock(core, 1, 20, 6, 9, 2, new BABYLON.Vector3(0, 0, 0));
@@ -161,7 +164,7 @@ var YARD;
             //var light2Sphere = BABYLON.MeshBuilder.CreateSphere('light2Spere', { diameter: multiplicationFactor }, scene);
             //light2Sphere.position = light2.position;
             core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light);
-            //core.shadowGenerator.useBlurVarianceShadowMap = true;
+            core.shadowGenerator.usePoissonSampling = true;
             //core.shadowGenerator = new BABYLON.ShadowGenerator(2048, light2);
             var camera = core.camera;
             //camera.checkCollisions = true;
@@ -256,8 +259,8 @@ var YARD;
     var YARDBlock = (function () {
         function YARDBlock(core, id, containerLength, columns, rows, levels, position) {
             var scene = core.scene;
-            this.freeSpace = 5;
-            this.boundingGroundSize = 10;
+            this.freeSpace = containerLength / 4;
+            this.boundingGroundSize = containerLength / 2;
             // Tiled Ground
             // Part 1 : Creation of Tiled Ground
             // Parameters
@@ -411,9 +414,9 @@ var YARD;
         };
         YARDBlock.prototype.createTextPlate = function (text, position, scene) {
             var textPlaneTexture = new BABYLON.DynamicTexture("dynamic texture", 512, scene, true);
-            textPlaneTexture.drawText(text, null, 150, "bold 140px verdana", "gray", "transparent");
+            textPlaneTexture.drawText(text, null, 150, "bold 160px verdana", "gray", "transparent");
             textPlaneTexture.hasAlpha = true;
-            var textPlane = BABYLON.Mesh.CreatePlane("textPlane", 10, scene, false);
+            var textPlane = BABYLON.Mesh.CreatePlane("textPlane", this.boundingGroundSize, scene, false);
             textPlane.billboardMode = BABYLON.AbstractMesh.BILLBOARDMODE_ALL;
             var pmat = new BABYLON.StandardMaterial("textPlane", scene);
             pmat.diffuseTexture = textPlaneTexture;
