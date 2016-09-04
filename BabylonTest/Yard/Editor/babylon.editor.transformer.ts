@@ -496,7 +496,7 @@
             mesh.scaling = this._sharedScale;
             mesh.isPickable = true;
 
-            var mesh2 = Mesh.CreateCylinder("PositionTransformerCross" + id, 2, 0, 3, 8, 1, this._scene, true);
+            var mesh2 = Mesh.CreateCylinder("PositionTransformerCross" + id, 4, 0, 3, 20, 1, this._scene, true);
             mesh2.isPickable = true;
             mesh2.parent = mesh;
             mesh2.scaling = new Vector3(1.3, 1.3, 1.3);

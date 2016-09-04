@@ -1522,7 +1522,7 @@ var BABYLON;
                 var mesh = BABYLON.Mesh.CreateCylinder("PositionTransformer" + id, 8, 0.4, 0.4, 8, 1, this._scene, true);
                 mesh.scaling = this._sharedScale;
                 mesh.isPickable = true;
-                var mesh2 = BABYLON.Mesh.CreateCylinder("PositionTransformerCross" + id, 2, 0, 3, 8, 1, this._scene, true);
+                var mesh2 = BABYLON.Mesh.CreateCylinder("PositionTransformerCross" + id, 4, 0, 3, 20, 1, this._scene, true);
                 mesh2.isPickable = true;
                 mesh2.parent = mesh;
                 mesh2.scaling = new BABYLON.Vector3(1.3, 1.3, 1.3);
